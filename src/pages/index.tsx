@@ -7,18 +7,26 @@ import Brand from '../components/brand/brand';
 import UserCard from '../components/user-card/user-card';
 
 const Header = styled.header`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xs};
+  margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
 `;
 
-const UserList = styled.ul`
-  margin-top: ${({ theme }) => theme.spacingStack.xs};
-  margin-bottom: ${({ theme }) => theme.spacingStack.xs};
-`;
+interface ThemeInterface {
+  theme: {
+    spacingStack: {
+      xxs: String,
+    },
+  },
+}
 
 const DescriptionWrapper = styled.div`
   ${({ theme }: ThemeInterface) => `
     margin-bottom: ${theme.spacingStack.xxs};
   `}
+`;
+
+const UserList = styled.ul`
+  margin-top: ${({ theme }) => theme.spacingStack.xs};
+  margin-bottom: ${({ theme }) => theme.spacingStack.xs};
 `;
 
 interface User {
@@ -38,14 +46,6 @@ const renderCards = (users: User[], onClick: OnClickCallback) => users.map(({ us
     avatarURI={avatarURI}
   />
 ));
-
-interface ThemeInterface {
-  theme: {
-    spacingStack: {
-      xxs: String,
-    },
-  },
-}
 
 /**
  * Component that containts index page
@@ -76,14 +76,14 @@ const IndexPage = () => {
   
   return (
     <Main>
-      <SEO title="Home" />
+      <SEO title="Authentication" />
       <Header>
         <Brand />
       </Header>
       <DescriptionWrapper>
         <SmallText>{`Entre no ${appName} através IDa!`}</SmallText>
       </DescriptionWrapper>
-      <Subtitle>Escolha uma conta para continuar</Subtitle>
+      <Subtitle type="h3">Escolha uma conta para continuar</Subtitle>
       <UserList>
         {renderCards(users, handleClick)}
       </UserList>

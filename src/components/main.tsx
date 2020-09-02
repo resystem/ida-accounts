@@ -21,7 +21,7 @@ const MainContent = styled.main`
     position: relative;
     background-color: ${theme.brandColor.secondary.darkest};
     padding: ${theme.spacingSquish.md};
-    min-height: 100vh;
+    height: 100vh;
 
     &:after {
       content: '';
@@ -41,6 +41,7 @@ const MainContent = styled.main`
 
 const Wrapper = styled.div`
   position: relative;
+  height: 100%;
   z-index: 2;
 `;
 
