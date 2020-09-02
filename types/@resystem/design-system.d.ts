@@ -4,4 +4,5 @@ declare module '@resystem/design-system' {
     export const SmallText: Any;
     export const Title: Any
     export const Subtitle: Any
+    export const ButtonText: Any
 }
