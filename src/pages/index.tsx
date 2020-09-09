@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { navigate } from "@reach/router"  
 import styled from 'styled-components';
 import { ButtonText, SmallText, Subtitle } from '@resystem/design-system';
 import Main from '../components/main';
 import SEO from '../components/seo';
 import Brand from '../components/brand/brand';
 import UserCard from '../components/user-card/user-card';
+import { basicSignin } from '../controllers/user.controller';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -32,15 +34,27 @@ const UserList = styled.ul`
 interface User {
   id: string;
   username: string;
+  token: string;
   avatarURI?: string | null;
 }
 
-type OnClickCallback = (id: string) => void;
+interface LocalUser {
+  ida: string;
+  user: {
+    username: string;
+  };
+  token: string;
+}
 
-const renderCards = (users: User[], onClick: OnClickCallback) => users.map(({ username, avatarURI, id }) => (
+type OnClickCallback = (token: string, id: string, username: string) => void;
+
+const renderCards = (users: User[], onClick: OnClickCallback) => users.map(({
+  username, avatarURI, id, token,
+}) => (
   <UserCard
     key={id}
     id={id}
+    token={token}
     onClick={onClick}
     username={username}
     avatarURI={avatarURI}
@@ -55,23 +69,28 @@ const IndexPage = () => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
+    const localUsers = window.localStorage.getItem('ida@users') || '{}';
+    const parsedLocalUsers = JSON.parse(localUsers).users || [];
     setAppName('SOM');
-    setUsers([
-      {
-        id: 'test1',
-        username: 'teste1',
-        avatarURI: 'https://static.quizur.com/i/b/570eca39a7a9c8.16476469manga-naruto.jpg',
-      },
-      {
-        id: 'test2',
-        username: 'teste3',
-        avatarURI: null,
-      },
-    ]);
+
+    if (parsedLocalUsers.length < 1) {
+      navigate('/signin/auth');
+      return;
+    }
+
+    setUsers(parsedLocalUsers.map(({ ida, token, user }: LocalUser) => ({
+      id: ida,
+      token,
+      username: user.username,
+      avatarURI: null,
+    })));
   }, []);
 
-  const handleClick = (id: string) : void => {
-    console.log(id);
+  useEffect(() => {
+  }, [appName]);
+
+  const handleClick = (token: string, id: string, username: string) : void => {
+    basicSignin({ username, token, ida: id, appSource: null });
   };
   
   return (
@@ -87,7 +106,13 @@ const IndexPage = () => {
       <UserList>
         {renderCards(users, handleClick)}
       </UserList>
-      <ButtonText white small>Entrar com outra conta</ButtonText>
+      <ButtonText
+        white
+        small
+        onClick={() => { navigate('/signin/auth'); }}
+      >
+        Entrar com outra conta
+      </ButtonText>
     </Main>
   );
 };

@@ -5,23 +5,25 @@ import { CardWrapper } from './user-card.style';
 
 interface Props {
   id: string;
+  token: string;
   username: string;
   avatarURI?: string | null;
-  onClick(id: string): void;
+  onClick(token: string, id: string, username: string): void;
 } 
 
 /**
  * Component that containts default styles for all pages
  * @param {object} props components proptypes
- * @param {string} props.id user`s id
+ * @param {string} props.id user id
+ * @param {string} props.token user token
  * @param {string} props.username user`s username
  * @param {avatarURI} props.avatarURI user`s avatar link
  */
 const Card = ({
-  id, username, avatarURI, onClick,
+  id, token, username, avatarURI, onClick,
 }: Props) => (
   <CardWrapper
-    onClick={() => onClick(id)}
+    onClick={() => onClick(token, id, username)}
   >
     <Avatar
       username={username}

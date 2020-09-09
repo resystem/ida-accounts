@@ -20,6 +20,7 @@ export const InitialUsername = styled.div`
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   font-size: ${({ theme }) => theme.fontSize.sm};
   line-height: 1em;
+  text-transform: uppercase;
   color: ${({ theme }) => theme.brandColor.primary.darkest};
 `;
 

@@ -20,6 +20,7 @@ const renderAvatar = (uri: string, username: string) => (
 const renderUsernameInitial = (username: string) => (
   <InitialUsername>
     {username[0]}
+    {username[1]}
   </InitialUsername>
 );
 
