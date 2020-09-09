@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  ButtonText, SmallText, Subtitle, Button,
+  ButtonText,
+  SmallText,
+  Subtitle,
+  Button,
   TextInput,
 } from '@resystem/design-system';
 import Main from '../../components/main';
@@ -36,14 +39,6 @@ const Form = styled.form`
   grid-gap: ${({ theme }) => theme.spacingStack.xxxs};
 `;
 
-interface ThemeInterface {
-  theme: {
-    spacingStack: {
-      xxs: String,
-    },
-  },
-}
-
 const Footer = styled.footer`
   display: flex;
   flex-direction: column;
@@ -73,7 +68,9 @@ const Auth = () => {
           </Header>
           <SmallText>{`Entre no ${appName} através IDa!`}</SmallText>
           <Space />
-          <Subtitle type="h3">Agora utilizamos a IDa para autenticar seu login</Subtitle>
+          <Subtitle type="h3">
+            Agora utilizamos a IDa para autenticar seu login
+          </Subtitle>
           <Form>
             <TextInput
               value={username}
@@ -90,7 +87,9 @@ const Auth = () => {
         </Content>
         <Footer>
           <div>
-            <ButtonText white small>Esqueceu sua senha?</ButtonText>
+            <ButtonText white small>
+              Esqueceu sua senha?
+            </ButtonText>
           </div>
           <SmallSpace />
           <div>

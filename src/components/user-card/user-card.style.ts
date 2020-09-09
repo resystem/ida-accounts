@@ -5,13 +5,13 @@ import styled from 'styled-components';
  * @param {ReactNode} children component that to will be render inside to Layout
  */
 export const CardWrapper = styled.div`
-	display: grid;
-	grid-template-columns: 44px 1fr;
-	align-items: center;
-	grid-gap: 16px;
-	cursor: pointer;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  align-items: center;
+  grid-gap: 16px;
+  cursor: pointer;
 
-	& + & {
-		margin-top: 16px;
-	}
+  & + & {
+    margin-top: 16px;
+  }
 `;

@@ -16,5 +16,8 @@
     "noEmit": true,
     "skipLibCheck": true,
     "moduleResolution": "node"
-  }
+  },
+  "files":[
+    "./src/css/styled.d.ts"
+  ]
 }

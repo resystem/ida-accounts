@@ -13,9 +13,9 @@ const Header = styled.header`
 interface ThemeInterface {
   theme: {
     spacingStack: {
-      xxs: String,
-    },
-  },
+      xxs: string;
+    };
+  };
 }
 
 const DescriptionWrapper = styled.div`
@@ -37,15 +37,16 @@ interface User {
 
 type OnClickCallback = (id: string) => void;
 
-const renderCards = (users: User[], onClick: OnClickCallback) => users.map(({ username, avatarURI, id }) => (
-  <UserCard
-    key={id}
-    id={id}
-    onClick={onClick}
-    username={username}
-    avatarURI={avatarURI}
-  />
-));
+const renderCards = (users: User[], onClick: OnClickCallback) =>
+  users.map(({ username, avatarURI, id }) => (
+    <UserCard
+      key={id}
+      id={id}
+      onClick={onClick}
+      username={username}
+      avatarURI={avatarURI}
+    />
+  ));
 
 /**
  * Component that containts index page
@@ -60,7 +61,8 @@ const IndexPage = () => {
       {
         id: 'test1',
         username: 'teste1',
-        avatarURI: 'https://static.quizur.com/i/b/570eca39a7a9c8.16476469manga-naruto.jpg',
+        avatarURI:
+          'https://static.quizur.com/i/b/570eca39a7a9c8.16476469manga-naruto.jpg',
       },
       {
         id: 'test2',
@@ -70,10 +72,10 @@ const IndexPage = () => {
     ]);
   }, []);
 
-  const handleClick = (id: string) : void => {
+  const handleClick = (id: string): void => {
     console.log(id);
   };
-  
+
   return (
     <Main>
       <SEO title="Authentication" />
@@ -84,10 +86,10 @@ const IndexPage = () => {
         <SmallText>{`Entre no ${appName} através IDa!`}</SmallText>
       </DescriptionWrapper>
       <Subtitle type="h3">Escolha uma conta para continuar</Subtitle>
-      <UserList>
-        {renderCards(users, handleClick)}
-      </UserList>
-      <ButtonText white small>Entrar com outra conta</ButtonText>
+      <UserList>{renderCards(users, handleClick)}</UserList>
+      <ButtonText white small>
+        Entrar com outra conta
+      </ButtonText>
     </Main>
   );
 };

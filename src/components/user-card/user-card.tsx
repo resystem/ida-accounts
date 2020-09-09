@@ -1,6 +1,6 @@
 import React from 'react';
-import Avatar from './components/avatar/avatar';
 import { Text } from '@resystem/design-system';
+import Avatar from './components/avatar/avatar';
 import { CardWrapper } from './user-card.style';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   username: string;
   avatarURI?: string | null;
   onClick(id: string): void;
-} 
+}
 
 /**
  * Component that containts default styles for all pages
@@ -17,16 +17,9 @@ interface Props {
  * @param {string} props.username user`s username
  * @param {avatarURI} props.avatarURI user`s avatar link
  */
-const Card = ({
-  id, username, avatarURI, onClick,
-}: Props) => (
-  <CardWrapper
-    onClick={() => onClick(id)}
-  >
-    <Avatar
-      username={username}
-      uri={avatarURI}
-    />
+const Card = ({ id, username, avatarURI, onClick }: Props) => (
+  <CardWrapper onClick={() => onClick(id)}>
+    <Avatar username={username} uri={avatarURI} />
     <Text>{username}</Text>
   </CardWrapper>
 );
