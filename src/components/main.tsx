@@ -49,6 +49,10 @@ interface Props {
   children: ReactNode
 }
 
+interface ListenerParams {
+  source: any
+}
+
 /**
  * Component that containts default styles for all pages
  * @param {ReactNode} children component that to will be render inside to Layout

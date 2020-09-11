@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { navigate } from "@reach/router"  
 import styled from 'styled-components';
 import { ButtonText, SmallText, Subtitle } from '@resystem/design-system';
@@ -7,6 +7,7 @@ import SEO from '../components/seo';
 import Brand from '../components/brand/brand';
 import UserCard from '../components/user-card/user-card';
 import { basicSignin } from '../controllers/user.controller';
+import { AppContext } from '../store';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -65,13 +66,12 @@ const renderCards = (users: User[], onClick: OnClickCallback) => users.map(({
  * Component that containts index page
  */
 const IndexPage = () => {
-  const [appName, setAppName] = useState<string>('');
+  const { appName, appSource } = useContext(AppContext);
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     const localUsers = window.localStorage.getItem('ida@users') || '{}';
     const parsedLocalUsers = JSON.parse(localUsers).users || [];
-    setAppName('SOM');
 
     if (parsedLocalUsers.length < 1) {
       navigate('/signin/auth');
@@ -86,11 +86,8 @@ const IndexPage = () => {
     })));
   }, []);
 
-  useEffect(() => {
-  }, [appName]);
-
   const handleClick = (token: string, id: string, username: string) : void => {
-    basicSignin({ username, token, ida: id, appSource: null });
+    basicSignin({ username, token, ida: id, appSource });
   };
   
   return (
