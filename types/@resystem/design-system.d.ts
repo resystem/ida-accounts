@@ -7,4 +7,6 @@ declare module '@resystem/design-system' {
   export const Subtitle: Any;
   export const ButtonText: Any;
   export const Button: Any;
+  export const CheckboxInput: Any;
+  export const IconButton: Any;
 }
