@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { defaultTheme } from '@resystem/design-system';
 import '../css/reset.css';
+import '@resystem/design-system/dist/main.css';
 
 interface ContentProps {
   theme: {
