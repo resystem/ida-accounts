@@ -80,7 +80,9 @@ const ChooseConfirmationMethod: React.FC<Props> = ({ goToStep }) => {
     <Wrapper>
       <Header>
         {/* <IconButton icon="arrow_back_ios" /> */}
-        <Text>Voltar</Text>
+        <div onClick={() => goToStep(1)}>
+          <Text>Voltar</Text>
+        </div>
       </Header>
       <Content>
         <SpaceXXS />
@@ -92,7 +94,7 @@ const ChooseConfirmationMethod: React.FC<Props> = ({ goToStep }) => {
         <IconButton icon="local_post_office">E-mail</IconButton> */}
         <IconContainer>
           <IconWrapper onClick={() => goToStep(3)}>SMS</IconWrapper>
-          <IconWrapper onClick={() => goToStep(4)}>E-mail</IconWrapper>
+          <IconWrapper onClick={() => goToStep(6)}>E-mail</IconWrapper>
         </IconContainer>
         <Space />
       </Content>

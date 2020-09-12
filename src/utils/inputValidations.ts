@@ -20,11 +20,11 @@ export function isEmail(input: string): boolean {
 }
 
 export function emailValidation(email: string): string {
-  return isEmail(email) ? 'formato de e-mail inválido' : '';
+  return isEmail(email) ? '' : 'formato de e-mail inválido';
 }
 
 export function phoneValidation(phone: string): string {
-  return isPhone(phone) ? 'número de celular inválido' : '';
+  return isPhone(phone) ? '' : 'número de celular inválido';
 }
 
 export function usernameValidation(username: string): string {

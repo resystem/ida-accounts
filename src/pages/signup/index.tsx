@@ -16,7 +16,9 @@ import TermsOfUse from './TermsOfUse';
 import InputFields from './InputFields';
 import ChooseConfirmationMethod from './ChooseConfirmationMethod';
 import SMSConfirmation from './SMSConfirmation';
+import SMSValidation from './SMSValidation';
 import EmailConfirmation from './EmailConfirmation';
+import SMSValidationEmail from './SMSValidationEmail';
 
 interface InputState {
   value: string;
@@ -34,6 +36,10 @@ const Signup: React.FC = () => {
     value: '',
     error: '',
   });
+  const [phone, setPhone] = useState<InputState>({
+    value: '',
+    error: '',
+  });
 
   const goToStep = (newStep: number) => setStep(newStep);
   const nextStep = () => setStep((prev: number) => prev + 1);
@@ -46,7 +52,7 @@ const Signup: React.FC = () => {
   return (
     <Main>
       <SEO title="Signup" />
-      {step === 0 && <TermsOfUse appName={appName} />}
+      {step === 0 && <TermsOfUse appName={appName} nextStep={nextStep} />}
       {step === 1 && (
         <InputFields
           appName={appName}
@@ -58,8 +64,21 @@ const Signup: React.FC = () => {
         />
       )}
       {step === 2 && <ChooseConfirmationMethod goToStep={goToStep} />}
-      {step === 3 && <SMSConfirmation goToStep={goToStep} />}
-      {step === 4 && <EmailConfirmation goToStep={goToStep} />}
+      {step === 3 && (
+        <SMSConfirmation
+          phone={phone}
+          setPhone={setPhone}
+          goToStep={goToStep}
+          nextStep={nextStep}
+        />
+      )}
+      {step === 4 && (
+        <SMSValidation phone={phone} goToStep={goToStep} nextStep={nextStep} />
+      )}
+      {step === 5 && <SMSValidationEmail appName={appName} />}
+      {step === 6 && (
+        <EmailConfirmation goToStep={goToStep} previousStep={previousStep} />
+      )}
     </Main>
   );
 };

@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { defaultTheme } from '@resystem/design-system';
 import '../css/reset.css';
+import GlobalStyles from '../css/GlobalStyles';
 
 const MainContent = styled.main`
   position: relative;
@@ -40,6 +41,7 @@ interface Props {
  */
 const Layout: React.FC<Props> = ({ children }) => (
   <ThemeProvider theme={defaultTheme}>
+    <GlobalStyles />
     <MainContent>
       <Wrapper>{children}</Wrapper>
     </MainContent>

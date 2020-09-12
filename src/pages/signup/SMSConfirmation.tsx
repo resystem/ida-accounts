@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {
-  ButtonText,
   SmallText,
   Subtitle,
   Button,
   Text,
-  IconButton,
+  TextInput,
 } from '@resystem/design-system';
 
 import Brand from '../../components/brand/brand';
+import { phoneMask } from '../../utils/inputValidations';
 
 const Wrapper = styled.div`
   display: grid;
@@ -70,35 +70,80 @@ const Footer = styled.footer`
 `;
 
 interface Props {
+  phone: InputState;
+  setPhone: (value: any) => void;
   goToStep: (newStep: number) => void;
+  nextStep: (newStep: number) => void;
 }
 
-const SMSConfirmation: React.FC<Props> = ({ goToStep }) => {
-  const tete = 1;
+interface InputState {
+  value: string;
+  error: string;
+}
+
+const inputTextValidation = (props: InputState): boolean => {
+  return props.error.length > 0 || !(props.value.length < 15);
+};
+
+const SMSConfirmation: React.FC<Props> = ({
+  phone,
+  setPhone,
+  goToStep,
+  nextStep,
+}) => {
+  const [buttonEnable, setButtonEnable] = useState(true);
+
+  const handlephoneChange = (value: string) => {
+    const error = '';
+    setPhone((prev: InputState) => ({
+      ...prev,
+      value: phoneMask(value),
+      error,
+    }));
+  };
+
+  useEffect(() => {
+    setButtonEnable(!inputTextValidation(phone));
+  }, [phone]);
 
   return (
     <Wrapper>
       <Header>
         {/* <IconButton icon="arrow_back_ios" /> */}
-        <Text onClick={() => goToStep(2)}>Voltar</Text>
+        <div onClick={() => goToStep(2)}>
+          <Text>Voltar</Text>
+        </div>
       </Header>
       <Content>
         <SpaceXXS />
-        <Subtitle type="h3">Agora precisamos confirmar sua identidade</Subtitle>
+        <Subtitle type="h3">Insira o seu celular para receber o SMS</Subtitle>
         <Space />
-        <Paragraph>Confirmar via</Paragraph>
-        <SpaceXXS />
-        {/* <IconButton icon="settings_cell">SMS</IconButton>
-        <IconButton icon="local_post_office">E-mail</IconButton> */}
-
-        <Space />
+        <TextInput
+          label="Nome do usuário"
+          value={phone.value}
+          error={phone.error}
+          onChange={(newValue: string) => handlephoneChange(newValue)}
+        />
       </Content>
+      <Footer>
+        <div>
+          <Button disabled={buttonEnable} onClick={nextStep}>
+            Enviar SMS
+          </Button>
+        </div>
+      </Footer>
     </Wrapper>
   );
 };
 
 SMSConfirmation.propTypes = {
   goToStep: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
+  phone: PropTypes.shape({
+    value: PropTypes.string.isRequired,
+    error: PropTypes.string.isRequired,
+  }).isRequired,
+  setPhone: PropTypes.func.isRequired,
 };
 
 export default SMSConfirmation;

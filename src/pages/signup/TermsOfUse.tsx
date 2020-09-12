@@ -48,6 +48,13 @@ const Footer = styled.footer`
   align-items: flex-end;
 `;
 
+const Paragraph = styled.p`
+  width: 100%;
+  color: #fff;
+  font-size: 16px;
+  line-height: 18px;
+`;
+
 const LindDecoration = styled.a`
   :link,
   :visited,
@@ -60,9 +67,10 @@ const LindDecoration = styled.a`
 
 interface Props {
   appName: string;
+  nextStep: () => void;
 }
 
-const TermsOfUse: React.FC<Props> = ({ appName }) => {
+const TermsOfUse: React.FC<Props> = ({ appName, nextStep }) => {
   const handleRedirectLogin = () => window.location.replace('/signin');
   const [checkbox, setCheckbox] = useState<boolean>(false);
 
@@ -78,7 +86,7 @@ const TermsOfUse: React.FC<Props> = ({ appName }) => {
       </Header>
       <Content>
         <SmallText>{`Inscreva-se no ${appName} através da IDa!`}</SmallText>
-        <Space />
+        <SpaceXXS />
         <ButtonText white small onClick={handleRedirectLogin}>
           Já é cadastrado? Faça login
         </ButtonText>
@@ -93,7 +101,7 @@ const TermsOfUse: React.FC<Props> = ({ appName }) => {
         <ButtonText white small>
           Saiba mais sobre a IDa
         </ButtonText>
-        <Space />
+        <SpaceXXS />
         <CheckboxWrapper>
           <CheckboxInput checked={checkbox} onClick={handleClickCheckbox} />
           <SmallText>
@@ -106,7 +114,7 @@ const TermsOfUse: React.FC<Props> = ({ appName }) => {
       </Content>
       <Footer>
         <div>
-          <Button>Proxímo</Button>
+          <Button onClick={nextStep}>Proxímo</Button>
         </div>
       </Footer>
     </Wrapper>
@@ -115,6 +123,7 @@ const TermsOfUse: React.FC<Props> = ({ appName }) => {
 
 TermsOfUse.propTypes = {
   appName: PropTypes.string.isRequired,
+  nextStep: PropTypes.func.isRequired,
 };
 
 export default TermsOfUse;

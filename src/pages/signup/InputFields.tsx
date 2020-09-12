@@ -61,7 +61,9 @@ interface Props {
   nextStep: (newStep: number) => void;
 }
 
-const verifyLength = ({ error }) => error.length > 0;
+const inputTextValidation = (props: InputState): boolean => {
+  return props.error.length > 0 || !(props.value.length > 0);
+};
 
 const InputFields: React.FC<Props> = ({
   appName,
@@ -71,8 +73,8 @@ const InputFields: React.FC<Props> = ({
   setPassword,
   nextStep,
 }) => {
-  const [hasError, setHasError] = useState(
-    verifyLength(username) || verifyLength(password)
+  const [buttonEnable, setButtonEnable] = useState(
+    inputTextValidation(username) || inputTextValidation(password)
   );
   const handleRedirectLogin = () => window.location.replace('/signin');
 
@@ -87,10 +89,10 @@ const InputFields: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (verifyLength(username) || verifyLength(password)) {
-      setHasError(true);
+    if (inputTextValidation(username) || inputTextValidation(password)) {
+      setButtonEnable(true);
     } else {
-      setHasError(false);
+      setButtonEnable(false);
     }
   }, [username, password]);
 
@@ -101,17 +103,17 @@ const InputFields: React.FC<Props> = ({
       </Header>
       <Content>
         <SmallText>{`Inscreva-se no ${appName} através da IDa!`}</SmallText>
-        <Space />
+        <SpaceXXS />
         <ButtonText white small onClick={handleRedirectLogin}>
           Já é cadastrado? Faça login
         </ButtonText>
-        <Space />
+        <SpaceXXS />
         <Subtitle type="h3">Criando sua IDa</Subtitle>
         <SpaceXXS />
         <ButtonText white small>
           Saiba mais sobre a IDa
         </ButtonText>
-        <Space />
+        <SpaceXXS />
         <TextInput
           label="Nome do usuário"
           value={username.value}
@@ -129,7 +131,7 @@ const InputFields: React.FC<Props> = ({
       </Content>
       <Footer>
         <div>
-          <Button disabled={hasError} onClick={nextStep}>
+          <Button disabled={buttonEnable} onClick={nextStep}>
             Proxímo
           </Button>
         </div>
