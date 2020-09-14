@@ -136,7 +136,7 @@ export const basicSignin = async ({
 
 interface SendResetPasswordEmailParams {
   email: string;
-  setEmailError(isValid: boolean): void;
+  setEmailError(error: string): void;
 }
 
 /**
