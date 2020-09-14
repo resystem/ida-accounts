@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import {
-  ButtonText, SmallText, Subtitle, Button,
+  ButtonText,
+  SmallText,
+  Subtitle,
+  Button,
   TextInput,
 } from '@resystem/design-system';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
+import { AppContext } from '../../store';
 import { signin } from '../../controllers/user.controller';
 
 const Header = styled.header`
@@ -55,8 +60,8 @@ interface Props {
 interface ThemeInterface {
   theme: {
     spacingStack: {
-      xxs: String,
-    },
+      xxs: String;
+    };
   };
 }
 
@@ -73,24 +78,17 @@ interface EventInterface {
  * Component that containts signin index page
  */
 const Auth = ({ location }: Props) => {
-  const [appName, setAppName] = useState<string>('');
-  const [appSource, setAppSource] = useState<any>(null);
+  const { appName, appSource } = useContext(AppContext);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
 
   useEffect(() => {
-    window.addEventListener("message", (data) => {
-      setAppSource(data.source);
-    }, false);
-
     if (location.state && location.state.username) {
       setUsername(location.state.username);
       setPassword('');
     }
-
-    setAppName('SOM');
   }, []);
 
   return (
@@ -103,13 +101,18 @@ const Auth = ({ location }: Props) => {
           </Header>
           <SmallText>{`Entre no ${appName} através IDa!`}</SmallText>
           <Space />
-          <Subtitle type="h3">Agora utilizamos a IDa para autenticar seu login</Subtitle>
+          <Subtitle type="h3">
+            Agora utilizamos a IDa para autenticar seu login
+          </Subtitle>
           <Form
             autoComplete="off"
             onSubmit={(e: EventInterface) => {
               e.preventDefault();
               signin({
-                username, password, setErrors, setLoading,
+                username,
+                password,
+                setErrors,
+                setLoading,
                 appSource,
               });
             }}
@@ -133,15 +136,27 @@ const Auth = ({ location }: Props) => {
         </Content>
         <Footer>
           <div>
-            <ButtonText white small>Esqueceu sua senha?</ButtonText>
+            <ButtonText
+              white
+              small
+              onClick={() => {
+                navigate('/forget-password', { replace: true });
+              }}
+            >
+              Esqueceu sua senha?
+            </ButtonText>
           </div>
           <SmallSpace />
           <div>
             <Button
               onClick={(e: EventInterface) => {
                 e.preventDefault();
+                console.log('here');
                 signin({
-                  username, password, setErrors, setLoading,
+                  username,
+                  password,
+                  setErrors,
+                  setLoading,
                   appSource,
                 });
               }}

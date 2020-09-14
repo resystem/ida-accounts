@@ -1,7 +1,14 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useContext, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import { createHistory } from "@reach/router"
+import queryString from 'query-string';
+import { verify } from '../controllers/app.controller';
 import { defaultTheme } from '@resystem/design-system';
+import { AppContext } from '../store';
 import '../css/reset.css';
+import '@resystem/design-system/dist/main.css';
+
+const history = createHistory(window);
 
 interface ContentProps {
   theme: {
@@ -49,18 +56,50 @@ interface Props {
   children: ReactNode
 }
 
+interface ListenerParams {
+  source: any
+}
+
+interface QueryInterface {
+  appKey: string;
+  appId: string;
+}
+
 /**
  * Component that containts default styles for all pages
  * @param {ReactNode} children component that to will be render inside to Layout
  */
-const Layout = ({ children }: Props) => (
-  <ThemeProvider theme={defaultTheme}>
-    <MainContent>
-      <Wrapper>
-        {children}
-      </Wrapper>
-    </MainContent>
-  </ThemeProvider>
-);
+const Layout = ({ children }: Props) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const { setAppName, setAppSource } = useContext(AppContext);
+
+  useEffect(() => {
+    const appKey: string = queryString.parse(history.location.search).appKey;
+    const appId: string = queryString.parse(history.location.search).appId;
+
+    verify({
+      setAppName,
+      setLoading,
+      appKey,
+      appId,
+    });
+
+    window.addEventListener("message", ({ source }: ListenerParams) => {
+      setAppSource(source);
+    }, false);
+  }, []);
+
+  if (loading) return <div />;
+
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <MainContent>
+        <Wrapper>
+          {children}
+        </Wrapper>
+      </MainContent>
+    </ThemeProvider>
+  );
+};
 
 export default Layout;
