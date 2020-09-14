@@ -80,7 +80,6 @@ export const signin = async ({
     }
 
     window.localStorage.setItem('ida@users', JSON.stringify({ users: parsedLocalUsers }));
-
     if (appSource) appSource.postMessage(stringifiedData, '*');
   }
   

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import {
   ButtonText, SmallText, Subtitle, Button,
@@ -7,6 +7,7 @@ import {
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
+import { AppContext } from '../../store';
 import { signin } from '../../controllers/user.controller';
 
 const Header = styled.header`
@@ -73,24 +74,17 @@ interface EventInterface {
  * Component that containts signin index page
  */
 const Auth = ({ location }: Props) => {
-  const [appName, setAppName] = useState<string>('');
-  const [appSource, setAppSource] = useState<any>(null);
+  const { appName, appSource } = useContext(AppContext);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
 
   useEffect(() => {
-    window.addEventListener("message", (data) => {
-      setAppSource(data.source);
-    }, false);
-
     if (location.state && location.state.username) {
       setUsername(location.state.username);
       setPassword('');
     }
-
-    setAppName('SOM');
   }, []);
 
   return (
@@ -140,6 +134,7 @@ const Auth = ({ location }: Props) => {
             <Button
               onClick={(e: EventInterface) => {
                 e.preventDefault();
+                console.log('here');
                 signin({
                   username, password, setErrors, setLoading,
                   appSource,

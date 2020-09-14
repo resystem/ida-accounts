@@ -20,11 +20,13 @@
     "gatsby-source-filesystem": "^2.3.25",
     "gatsby-transformer-sharp": "^2.5.13",
     "prop-types": "^15.7.2",
+    "query-string": "^6.13.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^6.1.0",
     "styled-components": "^5.1.1",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "url-parse": "^1.4.7"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.10.1",
