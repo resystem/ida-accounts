@@ -10,7 +10,7 @@ interface SigninData {
  * @param {object} data user information to be send with the request
  * @param {string} data.username user username
  * @param {string} data.password user password
- * @returns {Pomise} request response 
+ * @returns {Pomise} request response
  */
 export const signin = ({ username, password }: SigninData) => {
   return axios.post(
@@ -21,7 +21,7 @@ export const signin = ({ username, password }: SigninData) => {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-    },
+    }
   );
 };
 
@@ -35,27 +35,47 @@ interface SignupData {
  * @param {object} data user information to be send with the request
  * @param {string} data.username user username
  * @param {string} data.password user password
- * @returns {Pomise} request response 
+ * @returns {Pomise} request response
  */
 export const signup = ({ username, password }: SignupData) => {
   return axios.post(`${process.env.API_URI}/signup`, {
     username,
     password,
   });
-}
+};
 
 /**
  * function to request user verication by token on IDA api
  * @param {string} token user token to be send with the request
- * @returns {Pomise} request response 
+ * @returns {Pomise} request response
  */
-export const verifyToken = (token: string) => axios.post(
-  `${process.env.API_URI}/validate-token`,
-  { token },
-  {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-    },
-  },
-);
+export const verifyToken = (token: string) =>
+  axios.post(
+    `${process.env.API_URI}/validate-token`,
+    { token },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+export const requestResetPassword = async (input: string) => {
+  return axios.post(`${process.env.API_URI}/request-reset-password`, {
+    input,
+  });
+};
+
+export const validateResetPasswordToken = async (token: string) => {
+  return axios.post(`${process.env.API_URI}/validate-reset-password-token`, {
+    token,
+  });
+};
+
+export const resetPassword = async (token: string, password: string) => {
+  return axios.post(`${process.env.API_URI}/reset-password`, {
+    token,
+    password,
+  });
+};

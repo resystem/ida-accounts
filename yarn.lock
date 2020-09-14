@@ -1803,10 +1803,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@resystem/design-system@^0.0.19":
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/@resystem/design-system/-/design-system-0.0.19.tgz#87c0e1382a4c4968c7fee219ce46ac1e7182bc69"
-  integrity sha512-vEO7YUV7lqCHQE56XJjFLz28Ea21FrHBikGQF8+5XEe/9qenYzkZwuYDwnyX2Pv5rh0YxU9OVellnKzeeWeCmg==
+"@resystem/design-system@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@resystem/design-system/-/design-system-0.0.35.tgz#b97a8e138643ddcf21af2af7c1999be6adcd6cb9"
+  integrity sha512-orogY0k1DgLddpzCRjY5XtXMx1rIJFyhaMQk2Kcx2YJLzecxIVh0N4uHF27TykPACnomWJcxn3wQgOHgKVRf+g==
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
