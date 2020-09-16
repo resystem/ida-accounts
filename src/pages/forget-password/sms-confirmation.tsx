@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
-import { Subtitle, Button, TextInput } from '@resystem/design-system';
+import {
+  ButtonText,
+  SmallText,
+  Subtitle,
+  CodeInput,
+  Text,
+} from '@resystem/design-system';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
@@ -54,40 +60,55 @@ interface ThemeInterface {
 }
 
 /**
- * Component that containts newPassword index page
+ * Component that containts SMSConfirmation index page
  */
-const newPassword = () => {
-  const [password, setPassword] = useState<string>('');
-
+const SMSConfirmation = () => {
   return (
     <Main>
-      <SEO title="New Password" />
+      <SEO title="SMS Confirmation" />
       <Wrapper>
         <Content>
           <Header>
             <Brand />
           </Header>
-          <Subtitle type="h3">Crie uma nova senha</Subtitle>
+          <ButtonText
+            underline={false}
+            white
+            onClick={() => {
+              navigate('/forget-password');
+            }}
+          >
+            Voltar
+          </ButtonText>
+          <Space />
+          <Subtitle type="h3">SMS enviado!</Subtitle>
+          <Space />
+          <Text>Insira o código enviado para (21) 99999-9999</Text>
+          <Space />
           <Form>
-            <TextInput
-              type="password"
-              label="Senha"
-              value={password}
-              onChange={setPassword}
-            />
+            <div>
+              <CodeInput />
+            </div>
           </Form>
         </Content>
         <Footer>
-          <SmallSpace />
           <div>
-            <Button small disabled={!password}>
-              Próximo
-            </Button>
+            <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
+            <ButtonText
+              white
+              small
+              onClick={() => {
+                navigate('');
+              }}
+            >
+              Reenviar código
+            </ButtonText>
           </div>
+          <SmallSpace />
         </Footer>
       </Wrapper>
     </Main>
   );
 };
 
-export default newPassword;
+export default SMSConfirmation;

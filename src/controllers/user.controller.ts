@@ -1,5 +1,5 @@
 import { navigate } from '@reach/router';
-import { isEmail, isPhone } from '../utils/validations';
+import { isEmail, isPhone } from '../utils/inputValidations';
 import {
   signin as signinRepository,
   verifyToken as verifyTokenRepository,
@@ -161,24 +161,24 @@ export const sendResetPasswordEmail = async ({
     console.log(err);
     throw err;
   }
-   navigate('/forget-password/sent-email', { state: { email } })
+  navigate('/forget-password/sent-email', { state: { email } });
 };
 
 interface SendResetPasswordSMSParams {
   phone: string;
-  setValidPhone(isValid: boolean): void;
+  setPhoneError(isValid: boolean): void;
 }
 
 export const sendResetPasswordSMS = async ({
   phone,
-  setValidPhone,
+  setPhoneError,
 }: SendResetPasswordSMSParams) => {
   const isValidPhone = isPhone(phone);
   if (!phone) {
-    setValidPhone(isValidPhone);
+    setPhoneError(isValidPhone);
     return;
   }
-  setValidPhone(isValidPhone);
+  setPhoneError(isValidPhone);
   try {
     await requestResetPassword(phone);
   } catch (err) {

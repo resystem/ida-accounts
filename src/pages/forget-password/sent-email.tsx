@@ -68,18 +68,18 @@ const SentEmail = ({ location }) => {
           <Subtitle type="h2">Enviamos um e-mail para você!</Subtitle>
           <Space />
           <Text>
-            Acesse o e-mail enviado para {location.state.email} e clique no link para
-            redefinir sua senha
+            Acesse o e-mail enviado para {location.state.email} e clique no link
+            para redefinir sua senha
           </Text>
         </Content>
         <Footer>
           <div>
-            <SmallText>Não recebeu? </SmallText>
+            <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
             <ButtonText
               white
               small
               onClick={() => {
-                navigate('/signin/auth');
+                navigate('');
               }}
             >
               Reenviar email

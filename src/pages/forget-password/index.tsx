@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
+import {
+  isPhone,
+  phoneMask,
+  emailValidation,
+  phoneValidation,
+  isEmail,
+} from '../../utils/inputValidations';
 import {
   ButtonText,
   SmallText,
@@ -66,9 +73,23 @@ interface ThemeInterface {
 const ForgetPassword = () => {
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
-  const [isValidPhone, setValidPhone] = useState<boolean>(false);
+  const [phoneError, setPhoneError] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [selectedSwitch, setSelectedSwitch] = useState<number>(0);
+  const [buttonEnabled, setButtonEnabled] = useState<boolean>(true);
+
+  const hasError = (string: string) => string.length > 0;
+
+  const handleOnChangePhone = (value: string) => {
+    const mask = phoneMask(value);
+    setPhoneError(phoneValidation(mask));
+    setPhone(mask);
+  };
+
+  const handleOnChangeEmail = (value: string) => {
+    setEmailError(emailValidation(value));
+    setEmail(value);
+  };
 
   const handleClick = () => {
     switch (selectedSwitch) {
@@ -76,9 +97,25 @@ const ForgetPassword = () => {
         sendResetPasswordEmail({ setEmailError, email });
         break;
       default:
-        sendResetPasswordSMS({ setValidPhone, phone });
+        sendResetPasswordSMS({ setPhoneError, phone });
     }
   };
+
+  useEffect(() => {
+    if (selectedSwitch === 1) {
+      if (phone) {
+        setButtonEnabled(hasError(phoneError));
+      } else {
+        setButtonEnabled(true);
+      }
+    } else if (selectedSwitch === 0) {
+      if (email) {
+        setButtonEnabled(hasError(emailError));
+      } else {
+        setButtonEnabled(true);
+      }
+    }
+  }, [phoneError, emailError, selectedSwitch, phone, email]);
 
   return (
     <Main>
@@ -103,9 +140,10 @@ const ForgetPassword = () => {
               <TextInput
                 type="text"
                 label="Celular"
-                error={isValidPhone && 'Informe um celular válido'}
+                error={phoneError}
                 value={phone}
-                onChange={setPhone}
+                onChange={handleOnChangePhone}
+                id="celular"
               />
             ) : (
               <TextInput
@@ -113,14 +151,15 @@ const ForgetPassword = () => {
                 label="Email"
                 error={emailError}
                 value={email}
-                onChange={setEmail}
+                onChange={handleOnChangeEmail}
+                id="email"
               />
             )}
           </Form>
         </Content>
         <Footer>
           <div>
-            <SmallText>Lembrei! </SmallText>
+            <SmallText style={{ display: 'inline' }}>Lembrei! </SmallText>
             <ButtonText
               white
               small
@@ -133,7 +172,7 @@ const ForgetPassword = () => {
           </div>
           <SmallSpace />
           <div>
-            <Button small disabled={!email} onClick={handleClick}>
+            <Button small disabled={buttonEnabled} onClick={handleClick}>
               Próximo
             </Button>
           </div>
