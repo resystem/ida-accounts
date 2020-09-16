@@ -1,6 +1,6 @@
 import React from 'react';
-import Avatar from './components/avatar/avatar';
 import { Text } from '@resystem/design-system';
+import Avatar from './components/avatar/avatar';
 import { CardWrapper } from './user-card.style';
 
 interface Props {

@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import { verify } from '../controllers/app.controller';
 import { defaultTheme } from '@resystem/design-system';
 import { AppContext } from '../store';
+import GlobalStyles from '../css/GlobalStyles';
 import '../css/reset.css';
 import '@resystem/design-system/dist/main.css';
 
@@ -24,26 +25,24 @@ interface ContentProps {
 }
 
 const MainContent = styled.main`
-  ${({ theme }: ContentProps) => `
-    position: relative;
-    background-color: ${theme.brandColor.secondary.darkest};
-    padding: ${theme.spacingSquish.md};
-    height: 100vh;
+  position: relative;
+  background-color: ${({ theme }) => theme.brandColor.secondary.darkest};
+  padding: ${({ theme }) => theme.spacingSquish.md};
+  height: 100vh;
 
-    &:after {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('/static/images/bg.svg');
-      background-size: 100% auto;
-      background-repeat: no-repeat;
-      z-index: 1;
-    }
-  `}
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/images/bg.svg');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -53,7 +52,7 @@ const Wrapper = styled.div`
 `;
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
 interface ListenerParams {
@@ -69,13 +68,12 @@ interface QueryInterface {
  * Component that containts default styles for all pages
  * @param {ReactNode} children component that to will be render inside to Layout
  */
-const Layout = ({ children }: Props) => {
+const Layout: React.FC<Props> = ({ children }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { setAppName, setAppSource } = useContext(AppContext);
 
   useEffect(() => {
-    const appKey: string = queryString.parse(history.location.search).appKey;
-    const appId: string = queryString.parse(history.location.search).appId;
+    const { appKey, appId } = queryString.parse(history.location.search);
 
     verify({
       setAppName,
@@ -93,6 +91,7 @@ const Layout = ({ children }: Props) => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <GlobalStyles />
       <MainContent>
         <Wrapper>
           {children}

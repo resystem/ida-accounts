@@ -7,10 +7,7 @@ import { AvatarComponent, InitialUsername } from './avatar.style';
  * @param {string} username user`s username
  */
 const renderAvatar = (uri: string, username: string) => (
-  <AvatarComponent
-    src={uri}
-    alt={`Essa é a imagem de avatar do ${username}`}
-  />
+  <AvatarComponent src={uri} alt={`Essa é a imagem de avatar do ${username}`} />
 );
 
 /**
@@ -27,7 +24,7 @@ const renderUsernameInitial = (username: string) => (
 interface Props {
   username: string;
   uri?: string | null;
-} 
+}
 
 /**
  * Component that containts default styles for all pages
@@ -35,8 +32,7 @@ interface Props {
  * @param {string} props.username user`s username
  * @param {uri} props.uri user`s avatar link
  */
-const Avatar = ({ username, uri }: Props) => uri
-  ? renderAvatar(uri, username)
-  : renderUsernameInitial(username);
+const Avatar = ({ username, uri }: Props) =>
+  uri ? renderAvatar(uri, username) : renderUsernameInitial(username);
 
 export default Avatar;
