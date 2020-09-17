@@ -40,6 +40,8 @@ const Signup: React.FC = () => {
     value: '',
     error: '',
   });
+  const [ida, setIda] = useState<string>('');
+  const [token, setToken] = useState<string>('');
 
   const goToStep = (newStep: number) => setStep(newStep);
   const nextStep = () => setStep((prev: number) => prev + 1);
@@ -61,6 +63,8 @@ const Signup: React.FC = () => {
           password={password}
           setPassword={setPassword}
           nextStep={nextStep}
+          setIda={setIda}
+          setToken={setToken}
         />
       )}
       {step === 2 && <ChooseConfirmationMethod goToStep={goToStep} />}
