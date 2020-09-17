@@ -96,6 +96,7 @@ const ContentForm = (props: IContentForm): JSX.Element => {
     nextInternalStep,
     goToStep,
   } = props;
+  const handleSendEmail ()
   return (
     <>
       <Header>

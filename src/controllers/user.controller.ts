@@ -192,28 +192,41 @@ export const sendResetPasswordSMS = async ({
   }
 };
 
-type TypeUsename = {
+type TypeUsername = {
   username: string;
 };
 
+type DataSignUp = {
+  ida: string;
+  token: string;
+};
+
+type ErrorSignup = {
+  username?: string | null;
+  otherError?: string | null;
+};
+
 type SignupResponse = {
-  data: any;
-  error: string;
+  data: DataSignUp | null | undefined;
+  error: ErrorSignup | null | undefined;
 };
 export const signup = async ({
   username,
   password,
 }: UserLogin): Promise<SignupResponse> => {
   let promise;
-  const response: SignupResponse = { data: null, error: '' };
+  const response: SignupResponse = { data: null, error: null };
   try {
     promise = await signupRepository({ username, password });
   } catch (err) {
     const { error } = err.response.data;
 
     if (error && error === 'auth/duplicated-user') {
-      response.error = 'Nome de usuário já em uso';
+      response.error = {
+        username: 'Nome de usuário já em uso',
+      };
     }
+    return response;
     throw err;
   }
 

@@ -60,7 +60,7 @@ interface Props {
   setUsername: (value: any) => void;
   password: InputState;
   setPassword: (value: any) => void;
-  nextStep: (newStep: number) => void;
+  nextStep: () => void;
   setIda: (ida: string) => void;
   setToken: (token: string) => void;
 }
@@ -76,6 +76,8 @@ const InputFields: React.FC<Props> = ({
   password,
   setPassword,
   nextStep,
+  setIda,
+  setToken,
 }) => {
   const [buttonEnable, setButtonEnable] = useState(
     inputTextValidation(username) || inputTextValidation(password)
@@ -96,9 +98,18 @@ const InputFields: React.FC<Props> = ({
     signup({
       username: username.value,
       password: password.value,
-    })
-      .then((r) => console.log('then signup ', r))
-      .catch((r) => console.log('catch signup ', r));
+    }).then((r) => {
+      if (r.data) {
+        setIda(r.data.ida);
+        setToken(r.data.token);
+        nextStep();
+      } else if (r.error) {
+        setUsername((prev: InputState) => ({
+          ...prev,
+          error: r.error?.username,
+        }));
+      }
+    });
   };
 
   useEffect(() => {
@@ -166,6 +177,8 @@ InputFields.propTypes = {
   }).isRequired,
   setPassword: PropTypes.func.isRequired,
   nextStep: PropTypes.func.isRequired,
+  setIda: PropTypes.func.isRequired,
+  setToken: PropTypes.func.isRequired,
 };
 
 export default InputFields;

@@ -26,7 +26,7 @@ interface InputState {
 }
 
 const Signup: React.FC = () => {
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(2);
   const [appName, setAppName] = useState<string>('');
   const [username, setUsername] = useState<InputState>({
     value: '',
