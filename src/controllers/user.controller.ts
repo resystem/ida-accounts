@@ -2,6 +2,7 @@ import { navigate } from '@reach/router';
 import { isEmail, isPhone } from '../utils/validations';
 import {
   signin as signinRepository,
+  signup as signupRepository,
   verifyToken as verifyTokenRepository,
   requestResetPassword,
 } from '../repositories/user.repository';
@@ -12,9 +13,11 @@ interface Errors {
   password?: string;
 }
 
-interface SigninParams {
+interface UserLogin {
   username: string;
   password: string;
+}
+interface SigninParams extends UserLogin {
   appSource: any;
   setErrors(error: Errors): void;
   setLoading(status: boolean): void;
@@ -40,7 +43,7 @@ export const signin = async ({
   setErrors,
   setLoading,
   appSource,
-}: SigninParams) => {
+}: SigninParams): Promise<void> => {
   setLoading(true);
   setErrors({});
   let signinResponse;
@@ -55,6 +58,8 @@ export const signin = async ({
           return;
         case types.USER_NOT_FOUND:
           setErrors({ username: status[error] });
+          return;
+        default:
           return;
       }
     }
@@ -76,7 +81,7 @@ export const signin = async ({
     const localUsers = window.localStorage.getItem('ida@users') || '{}';
     const parsedLocalUsers = JSON.parse(localUsers).users || [];
     const index = parsedLocalUsers.findIndex(
-      (user: UserLocalStorage) => user.ida === ida
+      (userFounded: UserLocalStorage) => userFounded.ida === ida
     );
     const data = { ida, token, user };
 
@@ -161,7 +166,7 @@ export const sendResetPasswordEmail = async ({
     console.log(err);
     throw err;
   }
-   navigate('/forget-password/sent-email', { state: { email } })
+  navigate('/forget-password/sent-email', { state: { email } });
 };
 
 interface SendResetPasswordSMSParams {
@@ -185,4 +190,35 @@ export const sendResetPasswordSMS = async ({
     console.log(err);
     throw err;
   }
+};
+
+type TypeUsename = {
+  username: string;
+};
+
+type SignupResponse = {
+  data: any;
+  error: string;
+};
+export const signup = async ({
+  username,
+  password,
+}: UserLogin): Promise<SignupResponse> => {
+  let promise;
+  const response: SignupResponse = { data: null, error: '' };
+  try {
+    promise = await signupRepository({ username, password });
+  } catch (err) {
+    const { error } = err.response.data;
+
+    if (error && error === 'auth/duplicated-user') {
+      response.error = 'Nome de usuário já em uso';
+    }
+    throw err;
+  }
+
+  const { data } = promise;
+  response.data = data;
+
+  return response;
 };

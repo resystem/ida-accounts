@@ -17,6 +17,8 @@ import {
   passwordValidation,
 } from '../../utils/inputValidations';
 
+import { signup } from '../../controllers/user.controller';
+
 const Header = styled.header`
   height: 100%;
   width: 100%;
@@ -59,6 +61,8 @@ interface Props {
   password: InputState;
   setPassword: (value: any) => void;
   nextStep: (newStep: number) => void;
+  setIda: (ida: string) => void;
+  setToken: (token: string) => void;
 }
 
 const inputTextValidation = (props: InputState): boolean => {
@@ -86,6 +90,15 @@ const InputFields: React.FC<Props> = ({
   const handlePasswordChange = (value: string) => {
     const error = passwordValidation(value);
     setPassword((prev: InputState) => ({ ...prev, value, error }));
+  };
+
+  const handleButtonClick = () => {
+    signup({
+      username: username.value,
+      password: password.value,
+    })
+      .then((r) => console.log('then signup ', r))
+      .catch((r) => console.log('catch signup ', r));
   };
 
   useEffect(() => {
@@ -131,7 +144,7 @@ const InputFields: React.FC<Props> = ({
       </Content>
       <Footer>
         <div>
-          <Button disabled={buttonEnable} onClick={nextStep}>
+          <Button disabled={buttonEnable} onClick={() => handleButtonClick()}>
             Proxímo
           </Button>
         </div>
