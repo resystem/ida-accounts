@@ -40,8 +40,10 @@ const Signup: React.FC = () => {
     value: '',
     error: '',
   });
-  const [ida, setIda] = useState<string>('');
-  const [token, setToken] = useState<string>('');
+  const [ida, setIda] = useState<string>('5f63922a456bc52068ad0a5e');
+  const [token, setToken] = useState<string>(
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbGV0dGEiLCJpZGEiOiI1ZjYzOTIyYTQ1NmJjNTIwNjhhZDBhNWUiLCJpYXQiOjE2MDAzNjEwMDMsImV4cCI6MTYwMDM2NDYwM30.td443NqdJDyu4Ka5xOizIe1nX0ouUn0UMmVkM6dikJo'
+  );
 
   const goToStep = (newStep: number) => setStep(newStep);
   const nextStep = () => setStep((prev: number) => prev + 1);
@@ -70,6 +72,7 @@ const Signup: React.FC = () => {
       {step === 2 && <ChooseConfirmationMethod goToStep={goToStep} />}
       {step === 3 && (
         <SMSConfirmation
+          ida={ida}
           phone={phone}
           setPhone={setPhone}
           goToStep={goToStep}
@@ -77,11 +80,20 @@ const Signup: React.FC = () => {
         />
       )}
       {step === 4 && (
-        <SMSValidation phone={phone} goToStep={goToStep} nextStep={nextStep} />
+        <SMSValidation
+          ida={ida}
+          phone={phone}
+          goToStep={goToStep}
+          nextStep={nextStep}
+        />
       )}
       {step === 5 && <SMSValidationEmail appName={appName} />}
       {step === 6 && (
-        <EmailConfirmation goToStep={goToStep} previousStep={previousStep} />
+        <EmailConfirmation
+          goToStep={goToStep}
+          ida={ida}
+          previousStep={previousStep}
+        />
       )}
     </Main>
   );

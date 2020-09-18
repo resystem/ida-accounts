@@ -10,4 +10,5 @@ declare module '@resystem/design-system' {
   export const CheckboxInput: Any;
   export const IconButton: Any;
   export const SwitchButton: Any;
+  export const CodeInput: Any;
 }

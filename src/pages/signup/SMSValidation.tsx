@@ -7,9 +7,14 @@ import {
   Button,
   Text,
   TextInput,
+  CodeInput,
 } from '@resystem/design-system';
 
-import { phoneMask } from '../../utils/inputValidations';
+import { phoneMask, removePhoneMask } from '../../utils/inputValidations';
+import {
+  sendPhoneValidation,
+  sendPhoneValidationCode,
+} from '../../controllers/user.registry.controller';
 
 const Wrapper = styled.div`
   display: grid;
@@ -64,9 +69,10 @@ interface InputState {
 }
 
 interface Props {
+  ida: string;
   phone: InputState;
   goToStep: (newStep: number) => void;
-  nextStep: (newStep: number) => void;
+  nextStep: () => void;
 }
 
 const inputTextValidation = (props: InputState): boolean => {
@@ -103,12 +109,47 @@ const MessageSubtitle = (sentTime: number, phone: string): JSX.Element => {
   );
 };
 
-const SMSValidation: React.FC<Props> = ({ phone, goToStep, nextStep }) => {
+const SMSValidation: React.FC<Props> = ({ ida, phone, goToStep, nextStep }) => {
   const [sentTime, setSentTime] = useState<number>(0);
+  const [code, setCode] = useState<InputState>({
+    value: '',
+    error: '',
+  });
+  const codeSize = 6;
 
-  const handleSendCode = (event: React.SyntheticEvent<EventTarget>) => {
+  const handleValidateCode = (newCode: string) => {
+    if (newCode.length === codeSize) {
+      sendPhoneValidationCode(ida, '184890').then((r) => {
+        console.log('response ', r);
+        if (r.data) {
+          console.log('data ', r.data);
+          setCode(() => ({ value: newCode, error: '' }));
+          // nextStep();
+        } else if (r.error) {
+          console.log('set code error ', r.error);
+          const error = r.error.code;
+          setCode((prev: InputState) => ({
+            ...prev,
+            error: 'Código inválido',
+          }));
+        }
+      });
+    } else {
+      setCode((prev: InputState) => ({ ...prev, error: '' }));
+    }
+  };
+
+  const handleSendCodeToPhone = (event: React.SyntheticEvent<EventTarget>) => {
     event.preventDefault();
-    setSentTime((prev) => prev + 1);
+    sendPhoneValidation(ida, `+55${removePhoneMask(phone.value)}`).then((r) => {
+      if (r.data) {
+        console.log('data ', r.data);
+        setSentTime((prev) => prev + 1);
+      } else if (r.error) {
+        const error = r.error.phone;
+        setCode((prev: InputState) => ({ ...prev, error }));
+      }
+    });
   };
 
   return (
@@ -125,9 +166,14 @@ const SMSValidation: React.FC<Props> = ({ phone, goToStep, nextStep }) => {
         <SpaceXXS />
         {MessageSubtitle(sentTime, phone.value)}
         <Space />
+        <CodeInput
+          onChange={handleValidateCode}
+          codeSize={codeSize}
+          error={code.error}
+        />
         <Paragraph className="text-right">
           Não recebeu ?
-          <LindDecoration href="#" onClick={handleSendCode}>
+          <LindDecoration href="#" onClick={handleSendCodeToPhone}>
             Reenviar código
           </LindDecoration>
         </Paragraph>
@@ -137,6 +183,7 @@ const SMSValidation: React.FC<Props> = ({ phone, goToStep, nextStep }) => {
 };
 
 SMSValidation.propTypes = {
+  ida: PropTypes.string.isRequired,
   phone: PropTypes.shape({
     value: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,

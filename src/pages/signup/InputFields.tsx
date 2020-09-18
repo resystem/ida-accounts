@@ -17,7 +17,7 @@ import {
   passwordValidation,
 } from '../../utils/inputValidations';
 
-import { signup } from '../../controllers/user.controller';
+import { signup } from '../../controllers/user.registry.controller';
 
 const Header = styled.header`
   height: 100%;
@@ -40,6 +40,10 @@ const Space = styled.div`
 `;
 
 const SpaceXXS = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
+`;
+
+const SpaceXXXS = styled.div`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxxs};
 `;
 
@@ -95,13 +99,11 @@ const InputFields: React.FC<Props> = ({
   };
 
   const handleButtonClick = () => {
-    signup({
-      username: username.value,
-      password: password.value,
-    }).then((r) => {
+    signup(username.value, password.value).then((r) => {
       if (r.data) {
-        setIda(r.data.ida);
-        setToken(r.data.token);
+        console.log(r.data, 'data from send username');
+        setIda(r.data.ida.toString());
+        setToken(r.data.token.toString());
         nextStep();
       } else if (r.error) {
         setUsername((prev: InputState) => ({
@@ -127,13 +129,13 @@ const InputFields: React.FC<Props> = ({
       </Header>
       <Content>
         <SmallText>{`Inscreva-se no ${appName} através da IDa!`}</SmallText>
-        <SpaceXXS />
+        <SpaceXXXS />
         <ButtonText white small onClick={handleRedirectLogin}>
           Já é cadastrado? Faça login
         </ButtonText>
-        <SpaceXXS />
+        <SpaceXXXS />
         <Subtitle type="h3">Criando sua IDa</Subtitle>
-        <SpaceXXS />
+        <SpaceXXXS />
         <ButtonText white small>
           Saiba mais sobre a IDa
         </ButtonText>
@@ -144,7 +146,7 @@ const InputFields: React.FC<Props> = ({
           error={username.error}
           onChange={(newValue: string) => handleUsernameChange(newValue)}
         />
-        <SpaceXXS />
+        <SpaceXXXS />
         <TextInput
           label="Senha"
           type="password"

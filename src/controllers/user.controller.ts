@@ -1,10 +1,15 @@
 import { navigate } from '@reach/router';
+import { string } from 'prop-types';
 import { isEmail, isPhone } from '../utils/validations';
 import {
   signin as signinRepository,
   signup as signupRepository,
   verifyToken as verifyTokenRepository,
   requestResetPassword,
+  sendEmailValidation as sendEmailValidationRepository,
+  sendEmailValidationToken as sendEmailValidationTokenRepository,
+  sendPhoneValidation as sendPhoneValidationRepository,
+  sendPhoneValidationCode as sendPhoneValidationCodeRepository,
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
 
@@ -190,48 +195,4 @@ export const sendResetPasswordSMS = async ({
     console.log(err);
     throw err;
   }
-};
-
-type TypeUsername = {
-  username: string;
-};
-
-type DataSignUp = {
-  ida: string;
-  token: string;
-};
-
-type ErrorSignup = {
-  username?: string | null;
-  otherError?: string | null;
-};
-
-type SignupResponse = {
-  data: DataSignUp | null | undefined;
-  error: ErrorSignup | null | undefined;
-};
-export const signup = async ({
-  username,
-  password,
-}: UserLogin): Promise<SignupResponse> => {
-  let promise;
-  const response: SignupResponse = { data: null, error: null };
-  try {
-    promise = await signupRepository({ username, password });
-  } catch (err) {
-    const { error } = err.response.data;
-
-    if (error && error === 'auth/duplicated-user') {
-      response.error = {
-        username: 'Nome de usuário já em uso',
-      };
-    }
-    return response;
-    throw err;
-  }
-
-  const { data } = promise;
-  response.data = data;
-
-  return response;
 };

@@ -1,3 +1,7 @@
+export function removePhoneMask(input: string): string {
+  return input.replace(/[^\w\s]/gi, '').replace(' ', '');
+}
+
 export function phoneMask(input: string): string {
   let v = input;
   v = v.replace(/\D/g, '');

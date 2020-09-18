@@ -9,8 +9,8 @@ import {
   TextInput,
 } from '@resystem/design-system';
 
-import Brand from '../../components/brand/brand';
-import { phoneMask } from '../../utils/inputValidations';
+import { phoneMask, removePhoneMask } from '../../utils/inputValidations';
+import { sendPhoneValidation } from '../../controllers/user.registry.controller';
 
 const Wrapper = styled.div`
   display: grid;
@@ -70,10 +70,11 @@ const Footer = styled.footer`
 `;
 
 interface Props {
-  phone: InputState;
-  setPhone: (value: any) => void;
+  ida: string;
   goToStep: (newStep: number) => void;
-  nextStep: (newStep: number) => void;
+  nextStep: () => void;
+  setPhone: (value: any) => void;
+  phone: InputState;
 }
 
 interface InputState {
@@ -86,10 +87,11 @@ const inputTextValidation = (props: InputState): boolean => {
 };
 
 const SMSConfirmation: React.FC<Props> = ({
-  phone,
-  setPhone,
+  ida,
   goToStep,
   nextStep,
+  phone,
+  setPhone,
 }) => {
   const [buttonEnable, setButtonEnable] = useState(true);
 
@@ -102,9 +104,23 @@ const SMSConfirmation: React.FC<Props> = ({
     }));
   };
 
+  const handleButtonClick = () => {
+    sendPhoneValidation(ida, `+55${removePhoneMask(phone.value)}`).then((r) => {
+      if (r.data) {
+        console.log('data ', r.data);
+        setPhone((prev: InputState) => ({ ...prev, error: '' }));
+        nextStep();
+      } else if (r.error) {
+        const error = r.error.phone;
+        setPhone((prev: InputState) => ({ ...prev, error }));
+      }
+    });
+  };
+
   useEffect(() => {
+    console.log('ida ', ida);
     setButtonEnable(!inputTextValidation(phone));
-  }, [phone]);
+  }, [ida, phone]);
 
   return (
     <Wrapper>
@@ -119,7 +135,8 @@ const SMSConfirmation: React.FC<Props> = ({
         <Subtitle type="h3">Insira o seu celular para receber o SMS</Subtitle>
         <Space />
         <TextInput
-          label="Nome do usuário"
+          id="celular"
+          label="Celular"
           value={phone.value}
           error={phone.error}
           onChange={(newValue: string) => handlephoneChange(newValue)}
@@ -127,7 +144,7 @@ const SMSConfirmation: React.FC<Props> = ({
       </Content>
       <Footer>
         <div>
-          <Button disabled={buttonEnable} onClick={nextStep}>
+          <Button disabled={buttonEnable} onClick={handleButtonClick}>
             Enviar SMS
           </Button>
         </div>
@@ -137,6 +154,7 @@ const SMSConfirmation: React.FC<Props> = ({
 };
 
 SMSConfirmation.propTypes = {
+  ida: PropTypes.string.isRequired,
   goToStep: PropTypes.func.isRequired,
   nextStep: PropTypes.func.isRequired,
   phone: PropTypes.shape({
