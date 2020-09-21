@@ -12,13 +12,13 @@ import {
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
-import TermsOfUse from './TermsOfUse';
-import InputFields from './InputFields';
-import ChooseConfirmationMethod from './ChooseConfirmationMethod';
-import SMSConfirmation from './SMSConfirmation';
-import SMSValidation from './SMSValidation';
-import EmailConfirmation from './EmailConfirmation';
-import SMSValidationEmail from './SMSValidationEmail';
+import TermsOfUse from './components/TermsOfUse';
+import InputFields from './components/InputFields';
+import ChooseConfirmationMethod from './components/ChooseConfirmationMethod';
+import SMSConfirmation from './components/SMSConfirmation';
+import SMSValidation from './components/SMSValidation';
+import EmailConfirmation from './components/EmailConfirmation';
+import SMSValidationEmail from './components/SMSValidationEmail';
 
 interface InputState {
   value: string;
@@ -40,7 +40,7 @@ const Signup: React.FC = () => {
     value: '',
     error: '',
   });
-  const [ida, setIda] = useState<string>('5f63922a456bc52068ad0a5e');
+  const [ida, setIda] = useState<string>('5f640ecd87d74633b0d0ad8f');
   const [token, setToken] = useState<string>(
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbGV0dGEiLCJpZGEiOiI1ZjYzOTIyYTQ1NmJjNTIwNjhhZDBhNWUiLCJpYXQiOjE2MDAzNjEwMDMsImV4cCI6MTYwMDM2NDYwM30.td443NqdJDyu4Ka5xOizIe1nX0ouUn0UMmVkM6dikJo'
   );

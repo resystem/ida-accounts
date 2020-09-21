@@ -10,58 +10,21 @@ import {
   CodeInput,
 } from '@resystem/design-system';
 
-import { phoneMask, removePhoneMask } from '../../utils/inputValidations';
+import { phoneMask, removePhoneMask } from '../../../utils/inputValidations';
 import {
   sendPhoneValidation,
   sendPhoneValidationCode,
-} from '../../controllers/user.registry.controller';
+} from '../../../controllers/user.registry.controller';
 
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-rows: 40px auto 70px;
-  grid-auto-rows: min-content;
-  min-height: 100%;
-`;
-
-const Header = styled.header`
-  height: 100%;
-  width: 100%;
-`;
-
-const Content = styled.div`
-  padding-top: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const Space = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const SpaceXXS = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xxxs};
-`;
-
-const Paragraph = styled.p`
-  width: 100%;
-  color: #fff;
-  font-size: 16px;
-  line-height: 18px;
-`;
-
-const LindDecoration = styled.a`
-  :link,
-  :visited,
-  :hover,
-  :active {
-    text-decoration: underline;
-    color: ${({ theme }) => theme.brandColor.secondary.medium};
-  }
-`;
-
-const Footer = styled.footer`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-`;
+import {
+  Content,
+  Header,
+  LindDecoration,
+  Space,
+  SpaceXXS,
+  Paragraph,
+  Wrapper,
+} from '../styles';
 
 interface InputState {
   value: string;
@@ -119,18 +82,18 @@ const SMSValidation: React.FC<Props> = ({ ida, phone, goToStep, nextStep }) => {
 
   const handleValidateCode = (newCode: string) => {
     if (newCode.length === codeSize) {
-      sendPhoneValidationCode(ida, '184890').then((r) => {
+      sendPhoneValidationCode(ida, '554269').then((r) => {
         console.log('response ', r);
         if (r.data) {
           console.log('data ', r.data);
           setCode(() => ({ value: newCode, error: '' }));
-          // nextStep();
+          nextStep();
         } else if (r.error) {
           console.log('set code error ', r.error);
-          const error = r.error.code;
+          const errorCode = r.error?.code || '';
           setCode((prev: InputState) => ({
             ...prev,
-            error: 'Código inválido',
+            error: errorCode,
           }));
         }
       });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { navigate } from "@reach/router"  
+import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import {
   ButtonText,
@@ -75,7 +75,9 @@ const Signin: React.FC = () => {
         <Footer>
           <div>
             <Button
-              onClick={() => { navigate('/signin/auth'); }}
+              onClick={() => {
+                navigate('/signin/auth');
+              }}
             >
               Proxímo
             </Button>

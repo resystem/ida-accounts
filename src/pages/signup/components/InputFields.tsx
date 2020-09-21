@@ -10,48 +10,26 @@ import {
   TextInput,
 } from '@resystem/design-system';
 
-import Brand from '../../components/brand/brand';
+import Brand from '../../../components/brand/brand';
 
 import {
   usernameValidation,
   passwordValidation,
-} from '../../utils/inputValidations';
+} from '../../../utils/inputValidations';
 
-import { signup } from '../../controllers/user.registry.controller';
+import { signup } from '../../../controllers/user.registry.controller';
 
-const Header = styled.header`
-  height: 100%;
-  width: 100%;
-`;
-
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-rows: 70px auto 70px;
-  grid-auto-rows: min-content;
-  min-height: 100%;
-`;
-
-const Content = styled.div`
-  padding-top: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const Space = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const SpaceXXS = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
-`;
-
-const SpaceXXXS = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xxxs};
-`;
-
-const Footer = styled.footer`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-`;
+import {
+  Content,
+  Footer,
+  Header,
+  LindDecoration,
+  Paragraph,
+  Space,
+  SpaceXXS,
+  SpaceXXXS,
+  Wrapper,
+} from '../styles';
 
 interface InputState {
   value: string;

@@ -3,63 +3,20 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Subtitle, Text, Button, TextInput } from '@resystem/design-system';
 
-import { emailValidation } from '../../utils/inputValidations';
+import { emailValidation } from '../../../utils/inputValidations';
 
-import { sendEmailValidation } from '../../controllers/user.registry.controller';
+import { sendEmailValidation } from '../../../controllers/user.registry.controller';
 
-const Header = styled.header`
-  height: 100%;
-  width: 100%;
-`;
-
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-rows: 70px auto 70px;
-  grid-auto-rows: min-content;
-  min-height: 100%;
-`;
-
-const Content = styled.div`
-  padding-top: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const Space = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const SpaceXXS = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xxxs};
-`;
-
-const ButtonContainer = styled.div`
-  width: 100%;
-  button {
-    width: 100%;
-  }
-`;
-
-const Footer = styled.footer`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-`;
-
-const Paragraph = styled.p`
-  width: 100%;
-  color: #fff;
-  font-size: 16px;
-  line-height: 18px;
-`;
-
-const LindDecoration = styled.a`
-  :link,
-  :visited,
-  :hover,
-  :active {
-    text-decoration: underline;
-    color: ${({ theme }) => theme.brandColor.secondary.medium};
-  }
-`;
+import {
+  Content,
+  Footer,
+  Header,
+  LindDecoration,
+  Paragraph,
+  Space,
+  SpaceXXS,
+  Wrapper,
+} from '../styles';
 
 interface Props {
   goToStep: (newStep: number) => void;
