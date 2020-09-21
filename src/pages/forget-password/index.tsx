@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import {
-  isPhone,
   phoneMask,
   emailValidation,
   phoneValidation,
-  isEmail,
 } from '../../utils/inputValidations';
 import {
   ButtonText,
@@ -97,6 +95,7 @@ const ForgetPassword = () => {
         sendResetPasswordEmail({ email });
         break;
       default:
+        console.log(phone)
         sendResetPasswordSMS({ phone });
     }
   };

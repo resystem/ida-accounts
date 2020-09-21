@@ -62,7 +62,8 @@ interface ThemeInterface {
 /**
  * Component that containts SMSConfirmation index page
  */
-const SMSConfirmation = () => {
+const SMSConfirmation = ({ location }) => {
+ const { phone } = location.state;
   return (
     <Main>
       <SEO title="SMS Confirmation" />
@@ -83,7 +84,7 @@ const SMSConfirmation = () => {
           <Space />
           <Subtitle type="h3">SMS enviado!</Subtitle>
           <Space />
-          <Text>Insira o código enviado para (21) 99999-9999</Text>
+          <Text>Insira o código enviado para {phone}</Text>
           <Space />
           <Form>
             <div>

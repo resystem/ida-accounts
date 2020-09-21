@@ -159,6 +159,28 @@ export const sendResetPasswordEmail = async ({
   navigate('/forget-password/sent-email', { state: { email } });
 };
 
+interface SendResetPasswordSMSParams {
+  phone: string;
+}
+
+/**
+ * function to send phone password reset
+ * @param {object} data user information to send email password reset
+ * @param {string} data.email email
+ *
+ */
+export const sendResetPasswordSMS = async ({
+  phone,
+}: SendResetPasswordSMSParams) => {
+  try {
+    await requestResetPassword(`+55${phone.replace(/\D/g, '')}`);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+  navigate('/forget-password/sms-confirmation', { state: { phone } });
+};
+
 type ValidateResetPasswordTokenParams = {
   token: string;
 };

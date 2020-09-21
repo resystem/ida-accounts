@@ -5,10 +5,7 @@ import { Text, ButtonText, SmallText, Subtitle } from '@resystem/design-system';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
-import {
-  sendResetPasswordEmail,
-  sendResetPasswordSMS,
-} from '../../controllers/user.controller';
+import { sendResetPasswordEmail } from '../../controllers/user.controller';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -64,14 +61,14 @@ const SuccessMessageTitle = () => {
 };
 
 interface IButtonResendEmail {
-  handleClick: (value: string) => void;
+  onClick: (value: string) => void;
 }
 
-const ButtonResendEmail = ({ handleClick }: IButtonResendEmail) => {
+const ButtonResendEmail = ({ onClick }: IButtonResendEmail) => {
   return (
     <>
       <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
-      <ButtonText white small onClick={handleClick}>
+      <ButtonText white small onClick={onClick}>
         Reenviar email
       </ButtonText>
     </>
@@ -79,14 +76,14 @@ const ButtonResendEmail = ({ handleClick }: IButtonResendEmail) => {
 };
 
 interface IButtonCheckEmail {
-  handleClick: (value: string) => void;
+  onClick: (value: string) => void;
 }
 
-const ButtonCheckEmail = ({ handleClick }: IButtonCheckEmail) => {
+const ButtonCheckEmail = ({ onClick }: IButtonCheckEmail) => {
   return (
     <>
       <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
-      <ButtonText white small onClick={handleClick}>
+      <ButtonText white small onClick={onClick}>
         Conferir o endereço digitado
       </ButtonText>
     </>
@@ -101,7 +98,6 @@ const SentEmail = ({ location }) => {
   const { email } = location.state;
   const handleClick = () => {
     sendResetPasswordEmail({ email });
-    console.log('entrei aqui');
     setResendEmail(true);
   };
 
