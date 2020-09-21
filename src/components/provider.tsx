@@ -28,18 +28,11 @@ interface ListenerParams {
  * @param {ReactNode} children component that to will be render inside to Layout
  */
 const Provider = ({ children }: Props) => {
-  const [appSource, setAppSource] = useState(null);
+  const [appSource, setAppSource] = useState<any>(null);
   const [appName, setAppName] = useState('');
 
-  useEffect(() => {
-    setAppName('S.O.M');
-    window.addEventListener("message", ({ source }: ListenerParams) => {
-      setAppSource(source);
-    }, false);
-  }, []);
-
   return (
-    <AppContext.Provider value={{ appSource, appName }}>
+    <AppContext.Provider value={{ appSource, appName, setAppSource, setAppName }}>
       {children}
     </AppContext.Provider>
   );

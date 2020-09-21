@@ -1,7 +1,15 @@
-import { navigate } from "@reach/router";
+import { navigate } from '@reach/router';
+import { string } from 'prop-types';
+import { isEmail, isPhone } from '../utils/validations';
 import {
   signin as signinRepository,
+  signup as signupRepository,
   verifyToken as verifyTokenRepository,
+  requestResetPassword,
+  sendEmailValidation as sendEmailValidationRepository,
+  sendEmailValidationToken as sendEmailValidationTokenRepository,
+  sendPhoneValidation as sendPhoneValidationRepository,
+  sendPhoneValidationCode as sendPhoneValidationCodeRepository,
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
 
@@ -10,17 +18,19 @@ interface Errors {
   password?: string;
 }
 
-interface SigninParams {
+interface UserLogin {
   username: string;
   password: string;
+}
+interface SigninParams extends UserLogin {
   appSource: any;
-  setErrors(error: Errors): void; 
-  setLoading(status: boolean): void; 
+  setErrors(error: Errors): void;
+  setLoading(status: boolean): void;
 }
 
 interface UserLocalStorage {
-  ida: string
-  token: string
+  ida: string;
+  token: string;
 }
 
 /**
@@ -33,23 +43,28 @@ interface UserLocalStorage {
  * @param {string} data.appSource parent Window object
  */
 export const signin = async ({
-  username, password, setErrors, setLoading,
+  username,
+  password,
+  setErrors,
+  setLoading,
   appSource,
-}: SigninParams) => {
+}: SigninParams): Promise<void> => {
   setLoading(true);
   setErrors({});
   let signinResponse;
   try {
-    signinResponse = await signinRepository({ username, password })
+    signinResponse = await signinRepository({ username, password });
   } catch (err) {
     if (err.response && err.response.data && err.response.data.error) {
       const { error } = err.response.data;
       switch (error) {
-        case types.WRONG_PASSWORD: 
+        case types.WRONG_PASSWORD:
           setErrors({ password: status[error] });
           return;
         case types.USER_NOT_FOUND:
           setErrors({ username: status[error] });
+          return;
+        default:
           return;
       }
     }
@@ -70,7 +85,9 @@ export const signin = async ({
 
     const localUsers = window.localStorage.getItem('ida@users') || '{}';
     const parsedLocalUsers = JSON.parse(localUsers).users || [];
-    const index = parsedLocalUsers.findIndex((user: UserLocalStorage) => user.ida === ida);
+    const index = parsedLocalUsers.findIndex(
+      (userFounded: UserLocalStorage) => userFounded.ida === ida
+    );
     const data = { ida, token, user };
 
     if (index !== -1) {
@@ -79,11 +96,14 @@ export const signin = async ({
       parsedLocalUsers.push(data);
     }
 
-    window.localStorage.setItem('ida@users', JSON.stringify({ users: parsedLocalUsers }));
+    window.localStorage.setItem(
+      'ida@users',
+      JSON.stringify({ users: parsedLocalUsers })
+    );
 
     if (appSource) appSource.postMessage(stringifiedData, '*');
   }
-  
+
   setErrors({});
   setLoading(false);
 };
@@ -103,18 +123,76 @@ interface BaisSigninParams {
  * @param {string} data.ida user ida
  * @param {string} data.appSource parent Window object
  */
-export const basicSignin = async ({ username, ida, token, appSource }: BaisSigninParams) => {
+export const basicSignin = async ({
+  username,
+  ida,
+  token,
+  appSource,
+}: BaisSigninParams) => {
   try {
     await verifyTokenRepository(token);
-  } catch(err) {
+  } catch (err) {
     navigate('/signin/auth', { state: { username } });
     throw err;
   }
-  
+
   const stringifiedData = JSON.stringify({
     ida,
     token,
   });
 
   if (appSource) appSource.postMessage(stringifiedData, '*');
+};
+
+interface SendResetPasswordEmailParams {
+  email: string;
+  setEmailError(error: string): void;
+}
+
+/**
+ * function to send email password reset
+ * @param {object} data user information to send email password reset
+ * @param {string} data.email email
+ *
+ */
+export const sendResetPasswordEmail = async ({
+  email,
+  setEmailError,
+}: SendResetPasswordEmailParams) => {
+  const isValidEmail = isEmail(email);
+  if (!isValidEmail) {
+    setEmailError('Informe um e-mail válido');
+    return;
+  }
+  setEmailError('');
+  try {
+    await requestResetPassword(email);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+  navigate('/forget-password/sent-email', { state: { email } });
+};
+
+interface SendResetPasswordSMSParams {
+  phone: string;
+  setValidPhone(isValid: boolean): void;
+}
+
+export const sendResetPasswordSMS = async ({
+  phone,
+  setValidPhone,
+}: SendResetPasswordSMSParams) => {
+  const isValidPhone = isPhone(phone);
+  if (!phone) {
+    setValidPhone(isValidPhone);
+    return;
+  }
+  setValidPhone(isValidPhone);
+  try {
+    await requestResetPassword(phone);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 };

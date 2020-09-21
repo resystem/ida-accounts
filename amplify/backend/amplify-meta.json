@@ -1,0 +1,15 @@
+{
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-idaaccounts-prod-191423-authRole",
+            "UnauthRoleArn": "arn:aws:iam::032383812007:role/amplify-idaaccounts-prod-191423-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::032383812007:role/amplify-idaaccounts-prod-191423-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-idaaccounts-prod-191423-deployment",
+            "UnauthRoleName": "amplify-idaaccounts-prod-191423-unauthRole",
+            "StackName": "amplify-idaaccounts-prod-191423",
+            "StackId": "arn:aws:cloudformation:us-west-2:032383812007:stack/amplify-idaaccounts-prod-191423/28c56a90-f47c-11ea-9a3d-02c0a024eac5",
+            "AmplifyAppId": "d1l6tfzyviun7i"
+        }
+    }
+}
