@@ -76,7 +76,7 @@ const Layout = ({ children }: Props) => {
   useEffect(() => {
     const appKey: string = queryString.parse(history.location.search).appKey;
     const appId: string = queryString.parse(history.location.search).appId;
-
+   
     verify({
       setAppName,
       setLoading,

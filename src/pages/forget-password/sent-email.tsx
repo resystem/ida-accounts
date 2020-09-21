@@ -48,15 +48,63 @@ const Footer = styled.footer`
 interface ThemeInterface {
   theme: {
     spacingStack: {
-      xxs: String;
+      xxs: string;
     };
   };
 }
+
+const SuccessMessageTitle = () => {
+  return (
+    <>
+      <Subtitle type="h2" className="text-success">
+        E-mail reenviado!
+      </Subtitle>
+    </>
+  );
+};
+
+interface IButtonResendEmail {
+  handleClick: (value: string) => void;
+}
+
+const ButtonResendEmail = ({ handleClick }: IButtonResendEmail) => {
+  return (
+    <>
+      <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
+      <ButtonText white small onClick={handleClick}>
+        Reenviar email
+      </ButtonText>
+    </>
+  );
+};
+
+interface IButtonCheckEmail {
+  handleClick: (value: string) => void;
+}
+
+const ButtonCheckEmail = ({ handleClick }: IButtonCheckEmail) => {
+  return (
+    <>
+      <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
+      <ButtonText white small onClick={handleClick}>
+        Conferir o endereço digitado
+      </ButtonText>
+    </>
+  );
+};
 
 /**
  * Component that containts SentEmail index page
  */
 const SentEmail = ({ location }) => {
+  const [resendEmail, setResendEmail] = useState<boolean>(false);
+  const { email } = location.state;
+  const handleClick = () => {
+    sendResetPasswordEmail({ email });
+    console.log('entrei aqui');
+    setResendEmail(true);
+  };
+
   return (
     <Main>
       <SEO title="Forget Password" />
@@ -65,25 +113,26 @@ const SentEmail = ({ location }) => {
           <Header>
             <Brand />
           </Header>
-          <Subtitle type="h2">Enviamos um e-mail para você!</Subtitle>
+          {resendEmail && <SuccessMessageTitle />}
+          {!resendEmail && (
+            <Subtitle type="h2">Enviamos um e-mail para você!</Subtitle>
+          )}
           <Space />
           <Text>
-            Acesse o e-mail enviado para {location.state.email} e clique no link
-            para redefinir sua senha
+            Acesse o e-mail enviado para {email} e clique no link para redefinir
+            sua senha
           </Text>
         </Content>
         <Footer>
           <div>
-            <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
-            <ButtonText
-              white
-              small
-              onClick={() => {
-                navigate('');
-              }}
-            >
-              Reenviar email
-            </ButtonText>
+            {resendEmail && (
+              <ButtonCheckEmail
+                onClick={() => {
+                  navigate('/forget-password');
+                }}
+              />
+            )}
+            {!resendEmail && <ButtonResendEmail onClick={handleClick} />}
           </div>
           <SmallSpace />
         </Footer>

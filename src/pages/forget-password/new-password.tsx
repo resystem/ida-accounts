@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
-import { Subtitle, Button, TextInput } from '@resystem/design-system';
+import queryString from 'query-string';
+import { Subtitle, Button, TextInput, Text } from '@resystem/design-system';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import {
-  sendResetPasswordEmail,
-  sendResetPasswordSMS,
+  validateResetPasswordToken,
+  resetPassword,
 } from '../../controllers/user.controller';
+import { passwordValidation } from '../../utils/inputValidations';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -48,16 +50,67 @@ const Footer = styled.footer`
 interface ThemeInterface {
   theme: {
     spacingStack: {
-      xxs: String;
+      xxs: string;
     };
   };
 }
 
+interface QueryInterface {
+  token: string;
+}
+
+interface INewPasswordForm {
+  password: string;
+  onChange: (value: string) => void;
+  error: string;
+}
+
+const NewPasswordForm = ({ password, onChange, error }: INewPasswordForm) => {
+  return (
+    <>
+      <Subtitle type="h3">Crie uma nova senha</Subtitle>
+      <Form>
+        <TextInput
+          type="password"
+          label="Senha"
+          value={password}
+          onChange={onChange}
+          error={error}
+        />
+      </Form>
+    </>
+  );
+};
+
 /**
  * Component that containts newPassword index page
  */
-const newPassword = () => {
+const NewPassword = ({ location }) => {
   const [password, setPassword] = useState<string>('');
+  const [isValidToken, setIsValidToken] = useState<boolean>(false);
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [buttonEnabled, setButtonEnabled] = useState<boolean>(true);
+  const { token }: QueryInterface = queryString.parse(location.search);
+
+  const hasError = (string: string) => string.length > 0;
+
+  const handleOnChangePassword = (value: string) => {
+    setPasswordError(passwordValidation(value));
+    setPassword(value);
+  };
+
+  const handleOnClick = () => {
+    resetPassword({ password, token })
+      .then((res) => {
+        navigate('/forget-password/sucess-newpassword');
+      })
+      .catch((err) => console.log('erro'));
+  };
+  useEffect(() => {
+    const validate = validateResetPasswordToken({ token }).then((res) => {
+      if (res.data !== null) setIsValidToken(true);
+    });
+  }, []);
 
   return (
     <Main>
@@ -67,27 +120,28 @@ const newPassword = () => {
           <Header>
             <Brand />
           </Header>
-          <Subtitle type="h3">Crie uma nova senha</Subtitle>
-          <Form>
-            <TextInput
-              type="password"
-              label="Senha"
-              value={password}
-              onChange={setPassword}
+          {isValidToken && (
+            <NewPasswordForm
+              password={password}
+              onChange={handleOnChangePassword}
+              error={passwordError}
             />
-          </Form>
+          )}
+          {!isValidToken && <Text>Token invalido</Text>}
         </Content>
         <Footer>
           <SmallSpace />
-          <div>
-            <Button small disabled={!password}>
-              Próximo
-            </Button>
-          </div>
+          {isValidToken && (
+            <div>
+              <Button small disabled={!password} onClick={handleOnClick}>
+                Próximo
+              </Button>
+            </div>
+          )}
         </Footer>
       </Wrapper>
     </Main>
   );
 };
 
-export default newPassword;
+export default NewPassword;

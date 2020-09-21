@@ -62,7 +62,7 @@ const Footer = styled.footer`
 interface ThemeInterface {
   theme: {
     spacingStack: {
-      xxs: String;
+      xxs: string;
     };
   };
 }
@@ -94,10 +94,10 @@ const ForgetPassword = () => {
   const handleClick = () => {
     switch (selectedSwitch) {
       case 0:
-        sendResetPasswordEmail({ setEmailError, email });
+        sendResetPasswordEmail({ email });
         break;
       default:
-        sendResetPasswordSMS({ setPhoneError, phone });
+        sendResetPasswordSMS({ phone });
     }
   };
 

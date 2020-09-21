@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
-import {
-  ButtonText,
-  SmallText,
-  Subtitle,
-  CodeInput,
-  Text,
-} from '@resystem/design-system';
+import { Button, Subtitle } from '@resystem/design-system';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
-import {
-  sendResetPasswordEmail,
-  sendResetPasswordSMS,
-} from '../../controllers/user.controller';
+import iconSucess from '../../images/iconSucess.svg';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -28,6 +19,16 @@ const Wrapper = styled.div`
 `;
 
 const Content = styled.div``;
+
+const ContentMessage = styled.div`
+  display: flex;
+  justify-contet: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 100px auto;
+`;
+
+const ImgIcon = styled.img``;
 
 const Space = styled.div`
   margin-bottom: ${({ theme }) => theme.spacingStack.xs};
@@ -60,49 +61,33 @@ interface ThemeInterface {
 }
 
 /**
- * Component that containts SMSConfirmation index page
+ * Component that containts SucessNewPassword index page
  */
-const SMSConfirmation = () => {
+const SucessNewPassword = () => {
   return (
     <Main>
-      <SEO title="SMS Confirmation" />
+      <SEO title="Sucess new password" />
       <Wrapper>
         <Content>
           <Header>
             <Brand />
           </Header>
-          <ButtonText
-            underline={false}
-            white
-            onClick={() => {
-              navigate('/forget-password');
-            }}
-          >
-            Voltar
-          </ButtonText>
-          <Space />
-          <Subtitle type="h3">SMS enviado!</Subtitle>
-          <Space />
-          <Text>Insira o código enviado para (21) 99999-9999</Text>
-          <Space />
-          <Form>
-            <div>
-              <CodeInput />
-            </div>
-          </Form>
+          <ContentMessage>
+            <ImgIcon src={iconSucess} />
+            <Space />
+            <Subtitle type="h3">Senha criada com sucesso!</Subtitle>
+          </ContentMessage>
         </Content>
         <Footer>
           <div>
-            <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
-            <ButtonText
-              white
+            <Button
               small
               onClick={() => {
-                navigate('');
+                navigate('/signin/auth');
               }}
             >
-              Reenviar código
-            </ButtonText>
+              Entrar
+            </Button>
           </div>
           <SmallSpace />
         </Footer>
@@ -111,4 +96,4 @@ const SMSConfirmation = () => {
   );
 };
 
-export default SMSConfirmation;
+export default SucessNewPassword;
