@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { navigate } from "@reach/router"  
+import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import { ButtonText, SmallText, Subtitle } from '@resystem/design-system';
 import Main from '../components/main';
@@ -49,18 +49,17 @@ interface LocalUser {
 
 type OnClickCallback = (token: string, id: string, username: string) => void;
 
-const renderCards = (users: User[], onClick: OnClickCallback) => users.map(({
-  username, avatarURI, id, token,
-}) => (
-  <UserCard
-    key={id}
-    id={id}
-    token={token}
-    onClick={onClick}
-    username={username}
-    avatarURI={avatarURI}
-  />
-));
+const renderCards = (users: User[], onClick: OnClickCallback) =>
+  users.map(({ username, avatarURI, id, token }) => (
+    <UserCard
+      key={id}
+      id={id}
+      token={token}
+      onClick={onClick}
+      username={username}
+      avatarURI={avatarURI}
+    />
+  ));
 
 /**
  * Component that containts index page
@@ -78,15 +77,17 @@ const IndexPage = () => {
       return;
     }
 
-    setUsers(parsedLocalUsers.map(({ ida, token, user }: LocalUser) => ({
-      id: ida,
-      token,
-      username: user.username,
-      avatarURI: null,
-    })));
+    setUsers(
+      parsedLocalUsers.map(({ ida, token, user }: LocalUser) => ({
+        id: ida,
+        token,
+        username: user.username,
+        avatarURI: null,
+      }))
+    );
   }, []);
 
-  const handleClick = (token: string, id: string, username: string) : void => {
+  const handleClick = (token: string, id: string, username: string): void => {
     basicSignin({ username, token, ida: id, appSource });
   };
 
@@ -100,13 +101,13 @@ const IndexPage = () => {
         <SmallText>{`Entre no ${appName} através IDa!`}</SmallText>
       </DescriptionWrapper>
       <Subtitle type="h3">Escolha uma conta para continuar</Subtitle>
-      <UserList>
-        {renderCards(users, handleClick)}
-      </UserList>
+      <UserList>{renderCards(users, handleClick)}</UserList>
       <ButtonText
         white
         small
-        onClick={() => { navigate('/signin/auth'); }}
+        onClick={() => {
+          navigate('/signin/auth');
+        }}
       >
         Entrar com outra conta
       </ButtonText>

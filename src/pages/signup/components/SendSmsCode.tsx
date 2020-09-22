@@ -31,7 +31,7 @@ const inputTextValidation = (props: InputState): boolean => {
   return props.error.length > 0 || !(props.value.length < 15);
 };
 
-const SMSConfirmation: React.FC<Props> = ({
+const SendSmsCode: React.FC<Props> = ({
   ida,
   goToStep,
   nextStep,
@@ -98,7 +98,7 @@ const SMSConfirmation: React.FC<Props> = ({
   );
 };
 
-SMSConfirmation.propTypes = {
+SendSmsCode.propTypes = {
   ida: PropTypes.string.isRequired,
   goToStep: PropTypes.func.isRequired,
   nextStep: PropTypes.func.isRequired,
@@ -109,4 +109,4 @@ SMSConfirmation.propTypes = {
   setPhone: PropTypes.func.isRequired,
 };
 
-export default SMSConfirmation;
+export default SendSmsCode;

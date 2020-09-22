@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Subtitle, Text, Button, TextInput } from '@resystem/design-system';
+import { AppContext } from '../../../store';
 
 import Brand from '../../../components/brand/brand';
 
@@ -17,8 +18,11 @@ import {
   Wrapper,
 } from '../styles';
 
+import { signin } from '../../../controllers/user.controller';
+
 interface Props {
-  appName: string;
+  username: string;
+  password: string;
 }
 
 interface InputState {
@@ -33,7 +37,12 @@ interface IContentForm {
   nextStep: () => void;
 }
 
-type IContentSuccessMessage = Props;
+type IContentSuccessMessage = {
+  appName: string;
+  appSource: any;
+  password: string;
+  username: string;
+};
 
 const inputTextValidation = (props: InputState): boolean => {
   return props.error.length > 0 || !(props.value.length > 0);
@@ -69,7 +78,18 @@ const ContentForm = (props: IContentForm): JSX.Element => {
 };
 
 const ContentSuccessMessage = (props: IContentSuccessMessage): JSX.Element => {
-  const { appName } = props;
+  const { appName, appSource, password, username } = props;
+
+  function handleClick(): void {
+    signin({
+      username,
+      password,
+      setErrors: () => {},
+      setLoading: () => {},
+      appSource,
+    });
+  }
+
   return (
     <>
       <Subtitle type="h3">Seu cadastro foi confirmado!</Subtitle>
@@ -81,13 +101,14 @@ const ContentSuccessMessage = (props: IContentSuccessMessage): JSX.Element => {
       </Paragraph>
       <Space />
       <ButtonContainer>
-        <Button>Continuar para o {appName}</Button>
+        <Button onClick={handleClick}>Continuar para o {appName}</Button>
       </ButtonContainer>
     </>
   );
 };
 
-const SMSValidationEmail: React.FC<Props> = ({ appName }) => {
+const SendSmsEmail: React.FC<Props> = ({ username, password }) => {
+  const { appName, appSource } = useContext(AppContext);
   const [step, setStep] = useState<number>(0);
   const [email, setEmail] = useState<InputState>({
     value: '',
@@ -123,14 +144,22 @@ const SMSValidationEmail: React.FC<Props> = ({ appName }) => {
           />
         )}
 
-        {step === 1 && <ContentSuccessMessage appName={appName} />}
+        {step === 1 && (
+          <ContentSuccessMessage
+            appName={appName}
+            appSource={appSource}
+            password={password}
+            username={username}
+          />
+        )}
       </Content>
     </Wrapper>
   );
 };
 
-SMSValidationEmail.propTypes = {
-  appName: PropTypes.string.isRequired,
+SendSmsEmail.propTypes = {
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
 };
 
-export default SMSValidationEmail;
+export default SendSmsEmail;

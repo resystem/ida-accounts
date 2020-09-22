@@ -119,6 +119,7 @@ const InputFields: React.FC<Props> = ({
         </ButtonText>
         <SpaceXXS />
         <TextInput
+          id="nome"
           label="Nome do usuário"
           value={username.value}
           error={username.error}
@@ -126,6 +127,7 @@ const InputFields: React.FC<Props> = ({
         />
         <SpaceXXXS />
         <TextInput
+          id="senha"
           label="Senha"
           type="password"
           value={password.value}

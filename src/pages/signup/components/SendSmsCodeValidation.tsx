@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import {
-  SmallText,
-  Subtitle,
-  Button,
-  Text,
-  TextInput,
-  CodeInput,
-} from '@resystem/design-system';
+import { Subtitle, Text, CodeInput } from '@resystem/design-system';
 
 import { phoneMask, removePhoneMask } from '../../../utils/inputValidations';
 import {
@@ -72,7 +65,12 @@ const MessageSubtitle = (sentTime: number, phone: string): JSX.Element => {
   );
 };
 
-const SMSValidation: React.FC<Props> = ({ ida, phone, goToStep, nextStep }) => {
+const SendSmsCodeValidation: React.FC<Props> = ({
+  ida,
+  phone,
+  goToStep,
+  nextStep,
+}) => {
   const [sentTime, setSentTime] = useState<number>(0);
   const [code, setCode] = useState<InputState>({
     value: '',
@@ -145,7 +143,7 @@ const SMSValidation: React.FC<Props> = ({ ida, phone, goToStep, nextStep }) => {
   );
 };
 
-SMSValidation.propTypes = {
+SendSmsCodeValidation.propTypes = {
   ida: PropTypes.string.isRequired,
   phone: PropTypes.shape({
     value: PropTypes.string.isRequired,
@@ -155,4 +153,4 @@ SMSValidation.propTypes = {
   nextStep: PropTypes.func.isRequired,
 };
 
-export default SMSValidation;
+export default SendSmsCodeValidation;
