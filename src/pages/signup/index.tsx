@@ -17,7 +17,7 @@ import InputFields from './components/InputFields';
 import ChooseConfirmationMethod from './components/ChooseConfirmationMethod';
 import SendSmsCode from './components/SendSmsCode';
 import SendSmsCodeValidation from './components/SendSmsCodeValidation';
-import EmailConfirmation from './components/EmailConfirmation';
+import SendEmailConfirmation from './components/SendEmailConfirmation';
 import SendSmsEmail from './components/SendSmsEmail';
 
 interface InputState {
@@ -89,7 +89,7 @@ const Signup: React.FC = () => {
         <SendSmsEmail password={password.value} username={username.value} />
       )}
       {step === 6 && (
-        <EmailConfirmation
+        <SendEmailConfirmation
           goToStep={goToStep}
           ida={ida}
           previousStep={previousStep}

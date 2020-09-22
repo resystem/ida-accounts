@@ -168,7 +168,7 @@ const ContentSuccessMessage = (props: IContentSuccessMessage): JSX.Element => {
   );
 };
 
-const EmailConfirmation: React.FC<Props> = ({
+const SendEmailConfirmation: React.FC<Props> = ({
   goToStep,
   ida,
   previousStep,
@@ -239,10 +239,10 @@ const EmailConfirmation: React.FC<Props> = ({
   );
 };
 
-EmailConfirmation.propTypes = {
+SendEmailConfirmation.propTypes = {
   goToStep: PropTypes.func.isRequired,
   ida: PropTypes.string.isRequired,
   previousStep: PropTypes.func.isRequired,
 };
 
-export default EmailConfirmation;
+export default SendEmailConfirmation;
