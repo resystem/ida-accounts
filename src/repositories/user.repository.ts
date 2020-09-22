@@ -73,9 +73,66 @@ export const validateResetPasswordToken = async (token: string) => {
   });
 };
 
-export const resetPassword = async (token: string, password: string) => {
-  return axios.post(`${process.env.API_URI}/reset-password`, {
+/**
+ * function to send the IDA account verication by email on IDA api
+ * @param {string} ida user ida repesents the identity of the user
+ * @param {string} email user email to be send the validation
+ * @returns {Pomise} request response
+ */
+export const sendEmailValidation = async (
+  ida: string,
+  email: string
+): Promise<any> => {
+  return axios.post(`${process.env.API_URI}/send-email-validation`, {
+    ida,
+    email,
+  });
+};
+
+/**
+ * function to validate the IDA account verication by email on IDA api
+ * @param {string} ida user ida repesents the identity of the user
+ * @param {string} token user token to be validated
+ * @returns {Pomise} request response
+ */
+export const sendEmailValidationToken = async (
+  ida: string,
+  token: string
+): Promise<any> => {
+  return axios.post(`${process.env.API_URI}/validate-email-token`, {
+    ida,
     token,
-    password,
+  });
+};
+
+/**
+ * function to send IDA account verication code by phone on IDA api
+ * @param {string} ida user ida repesents the identity of the user
+ * @param {string} phone user to be send the code
+ * @returns {Pomise} request response
+ */
+export const sendPhoneValidation = async (
+  ida: string,
+  phone: string
+): Promise<any> => {
+  return axios.post(`${process.env.API_URI}/phone-generate-code`, {
+    ida,
+    phone,
+  });
+};
+
+/**
+ * function to validate IDA account verication code by phone on IDA api
+ * @param {string} ida user ida repesents the identity of the user
+ * @param {string} code use code to be validated
+ * @returns {Pomise} request response
+ */
+export const sendPhoneValidationCode = async (
+  ida: string,
+  code: string
+): Promise<any> => {
+  return axios.post(`${process.env.API_URI}/phone-validate-code`, {
+    ida,
+    code,
   });
 };

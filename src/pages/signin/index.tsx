@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { navigate } from "@reach/router"  
+import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import {
-  ButtonText, SmallText, Subtitle, Text,
+  ButtonText,
+  SmallText,
+  Subtitle,
+  Text,
   Button,
 } from '@resystem/design-system';
 import Main from '../../components/main';
@@ -26,14 +29,6 @@ const Space = styled.div`
   margin-bottom: ${({ theme }) => theme.spacingStack.xs};
 `;
 
-interface ThemeInterface {
-  theme: {
-    spacingStack: {
-      xxs: String,
-    },
-  },
-}
-
 const Footer = styled.footer`
   display: flex;
   justify-content: flex-end;
@@ -43,7 +38,7 @@ const Footer = styled.footer`
 /**
  * Component that containts signin index page
  */
-const Signin = () => {
+const Signin: React.FC = () => {
   const [appName, setAppName] = useState<string>('');
 
   useEffect(() => {
@@ -60,18 +55,29 @@ const Signin = () => {
           </Header>
           <SmallText>{`Entre no ${appName} através IDa!`}</SmallText>
           <Space />
-          <Subtitle type="h3">Agora utilizamos a IDa para autenticar seu login</Subtitle>
+          <Subtitle type="h3">
+            Agora utilizamos a IDa para autenticar seu login
+          </Subtitle>
           <Space />
-          <ButtonText white small>Ainda não tem conta? Cadastre-se!</ButtonText>
+          <ButtonText white small>
+            Ainda não tem conta? Cadastre-se!
+          </ButtonText>
           <Space />
-          <Text>Se você já tinha uma conta anteriormente, utilize os mesmos dados para efetuar o login.</Text>
+          <Text>
+            Se você já tinha uma conta anteriormente, utilize os mesmos dados
+            para efetuar o login.
+          </Text>
           <Space />
-          <ButtonText white small>Saiba mais sobre a IDa</ButtonText>
+          <ButtonText white small>
+            Saiba mais sobre a IDa
+          </ButtonText>
         </Content>
         <Footer>
           <div>
             <Button
-              onClick={() => { navigate('/signin/auth'); }}
+              onClick={() => {
+                navigate('/signin/auth');
+              }}
             >
               Proxímo
             </Button>

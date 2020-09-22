@@ -1,3 +1,7 @@
+export function removePhoneMask(input: string): string {
+  return input.replace(/[^\w\s]/gi, '').replace(' ', '');
+}
+
 export function phoneMask(input: string): string {
   let v = input;
   v = v.replace(/\D/g, '');
@@ -52,4 +56,8 @@ export function passwordValidation(password: string): string {
     'A senha deve conter no mínimo 8 caracteres, com pelo menos uma letra e um número';
   const points = passwordPoints(password);
   return points < 30 ? errorMessage : '';
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 5e5eb14e77d2b840829275f261e15ab0791adc25

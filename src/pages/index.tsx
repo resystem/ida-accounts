@@ -16,9 +16,9 @@ const Header = styled.header`
 interface ThemeInterface {
   theme: {
     spacingStack: {
-      xxs: String,
-    },
-  },
+      xxs: string;
+    };
+  };
 }
 
 const DescriptionWrapper = styled.div`
@@ -89,7 +89,7 @@ const IndexPage = () => {
   const handleClick = (token: string, id: string, username: string) : void => {
     basicSignin({ username, token, ida: id, appSource });
   };
-  
+
   return (
     <Main>
       <SEO title="Authentication" />

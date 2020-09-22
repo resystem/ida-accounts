@@ -1,11 +1,24 @@
 import { navigate } from '@reach/router';
+<<<<<<< HEAD
 import { isEmail, isPhone } from '../utils/inputValidations';
+=======
+import { string } from 'prop-types';
+import { isEmail, isPhone } from '../utils/validations';
+>>>>>>> 5e5eb14e77d2b840829275f261e15ab0791adc25
 import {
   signin as signinRepository,
+  signup as signupRepository,
   verifyToken as verifyTokenRepository,
   requestResetPassword,
+<<<<<<< HEAD
   validateResetPasswordToken as validateResetPasswordTokenRepository,
   resetPassword as resetPasswordRespository,
+=======
+  sendEmailValidation as sendEmailValidationRepository,
+  sendEmailValidationToken as sendEmailValidationTokenRepository,
+  sendPhoneValidation as sendPhoneValidationRepository,
+  sendPhoneValidationCode as sendPhoneValidationCodeRepository,
+>>>>>>> 5e5eb14e77d2b840829275f261e15ab0791adc25
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
 import { string } from 'prop-types';
@@ -15,9 +28,11 @@ interface Errors {
   password?: string;
 }
 
-interface SigninParams {
+interface UserLogin {
   username: string;
   password: string;
+}
+interface SigninParams extends UserLogin {
   appSource: any;
   setErrors(error: Errors): void;
   setLoading(status: boolean): void;
@@ -43,7 +58,7 @@ export const signin = async ({
   setErrors,
   setLoading,
   appSource,
-}: SigninParams) => {
+}: SigninParams): Promise<void> => {
   setLoading(true);
   setErrors({});
   let signinResponse;
@@ -58,6 +73,8 @@ export const signin = async ({
           return;
         case types.USER_NOT_FOUND:
           setErrors({ username: status[error] });
+          return;
+        default:
           return;
       }
     }
@@ -79,7 +96,7 @@ export const signin = async ({
     const localUsers = window.localStorage.getItem('ida@users') || '{}';
     const parsedLocalUsers = JSON.parse(localUsers).users || [];
     const index = parsedLocalUsers.findIndex(
-      (user: UserLocalStorage) => user.ida === ida
+      (userFounded: UserLocalStorage) => userFounded.ida === ida
     );
     const data = { ida, token, user };
 
@@ -139,6 +156,10 @@ export const basicSignin = async ({
 
 interface SendResetPasswordEmailParams {
   email: string;
+<<<<<<< HEAD
+=======
+  setEmailError(error: string): void;
+>>>>>>> 5e5eb14e77d2b840829275f261e15ab0791adc25
 }
 
 /**
