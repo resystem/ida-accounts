@@ -42,6 +42,10 @@ const Footer = styled.footer`
   align-items: flex-end;
 `;
 
+const ButtonContainer = styled.div`
+  text-align: right;
+`;
+
 interface ThemeInterface {
   theme: {
     spacingStack: {
@@ -82,10 +86,12 @@ interface IButtonCheckEmail {
 const ButtonCheckEmail = ({ onClick }: IButtonCheckEmail) => {
   return (
     <>
-      <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
-      <ButtonText white small onClick={onClick}>
-        Conferir o endereço digitado
-      </ButtonText>
+      <ButtonContainer>
+        <SmallText>Não recebeu? </SmallText>
+        <ButtonText white small onClick={onClick}>
+          Conferir o endereço digitado
+        </ButtonText>
+      </ButtonContainer>
     </>
   );
 };

@@ -95,7 +95,6 @@ const ForgetPassword = () => {
         sendResetPasswordEmail({ email });
         break;
       default:
-        console.log(phone)
         sendResetPasswordSMS({ phone });
     }
   };

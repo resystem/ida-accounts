@@ -8,6 +8,7 @@ import { AppContext } from '../store';
 import GlobalStyles from '../css/GlobalStyles';
 import '../css/reset.css';
 import '@resystem/design-system/dist/main.css';
+import GlobalStyles from '../css/GlobalStyles';
 
 const history = createHistory(window);
 

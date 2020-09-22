@@ -177,7 +177,7 @@ export const sendResetPasswordEmail = async ({
     console.log(err);
     throw err;
   }
-  navigate('/forget-password/sent-email', { state: { email } });
+  navigate('/forget-password/confirmation', { state: { email } });
 };
 
 interface SendResetPasswordSMSParams {
@@ -199,7 +199,7 @@ export const sendResetPasswordSMS = async ({
     console.log(err);
     throw err;
   }
-  navigate('/forget-password/sms-confirmation', { state: { phone } });
+  navigate('/forget-password/confirmation', { state: { phone } });
 };
 
 type ValidateResetPasswordTokenParams = {
