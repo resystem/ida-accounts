@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Subtitle, Text, Button, TextInput } from '@resystem/design-system';
+import {
+  Animation,
+  Subtitle,
+  Text,
+  Button,
+  TextInput,
+} from '@resystem/design-system';
 import { AppContext } from '../../../store';
 
 import Brand from '../../../components/brand/brand';
@@ -53,26 +59,28 @@ const ContentForm = (props: IContentForm): JSX.Element => {
   const handleButtonClick = () => nextStep();
   return (
     <>
-      <Subtitle type="h3">
-        Quase pronto! Agora só precisamos do seu e-mail
-      </Subtitle>
-      <Space />
-      <TextInput
-        id="email"
-        label="E-mail"
-        type="mail"
-        value={email.value}
-        error={email.error}
-        onChange={(newValue: string) => {
-          handleEmailChange(newValue);
-        }}
-      />
-      <SpaceXXS />
-      <ButtonContainer>
-        <Button disabled={buttonEnable} onClick={handleButtonClick}>
-          Finalizar
-        </Button>
-      </ButtonContainer>
+      <Animation>
+        <Subtitle type="h3">
+          Quase pronto! Agora só precisamos do seu e-mail
+        </Subtitle>
+        <Space />
+        <TextInput
+          id="email"
+          label="E-mail"
+          type="mail"
+          value={email.value}
+          error={email.error}
+          onChange={(newValue: string) => {
+            handleEmailChange(newValue);
+          }}
+        />
+        <SpaceXXS />
+        <ButtonContainer>
+          <Button disabled={buttonEnable} onClick={handleButtonClick}>
+            Finalizar
+          </Button>
+        </ButtonContainer>
+      </Animation>
     </>
   );
 };
@@ -92,17 +100,19 @@ const ContentSuccessMessage = (props: IContentSuccessMessage): JSX.Element => {
 
   return (
     <>
-      <Subtitle type="h3">Seu cadastro foi confirmado!</Subtitle>
-      <SpaceXXS />
-      <Paragraph className="text-left">
-        Você pode entrar no{' '}
-        <LindDecoration href="#"> portal da IDa </LindDecoration> a qualquer
-        momento para conhecer outras iniciativas
-      </Paragraph>
-      <Space />
-      <ButtonContainer>
-        <Button onClick={handleClick}>Continuar para o {appName}</Button>
-      </ButtonContainer>
+      <Animation>
+        <Subtitle type="h3">Seu cadastro foi confirmado!</Subtitle>
+        <SpaceXXS />
+        <Paragraph className="text-left">
+          Você pode entrar no{' '}
+          <LindDecoration href="#"> portal da IDa </LindDecoration> a qualquer
+          momento para conhecer outras iniciativas
+        </Paragraph>
+        <Space />
+        <ButtonContainer>
+          <Button onClick={handleClick}>Continuar para o {appName}</Button>
+        </ButtonContainer>
+      </Animation>
     </>
   );
 };
@@ -115,6 +125,7 @@ const SendSmsEmail: React.FC<Props> = ({ username, password }) => {
     error: '',
   });
   const [buttonEnable, setButtonEnable] = useState<boolean>(false);
+  const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
   const handleEmailChange = (value: string): void => {
     const error = emailValidation(value);

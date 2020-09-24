@@ -64,6 +64,7 @@ const InputFields: React.FC<Props> = ({
   const [buttonEnable, setButtonEnable] = useState(
     inputTextValidation(username) || inputTextValidation(password)
   );
+  const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
   const handleRedirectLogin = () => window.location.replace('/signin');
 
   const handleUsernameChange = (value: string) => {
@@ -77,19 +78,22 @@ const InputFields: React.FC<Props> = ({
   };
 
   const handleButtonClick = () => {
-    signup(username.value, password.value).then((r) => {
-      if (r.data) {
-        console.log(r.data, 'data from send username');
-        setIda(r.data.ida.toString());
-        setToken(r.data.token.toString());
-        nextStep();
-      } else if (r.error) {
-        setUsername((prev: InputState) => ({
-          ...prev,
-          error: r.error?.username,
-        }));
-      }
-    });
+    setIsButtonLoading(true);
+    signup(username.value, password.value)
+      .then((r) => {
+        if (r.data) {
+          console.log(r.data, 'data from send username');
+          setIda(r.data.ida.toString());
+          setToken(r.data.token.toString());
+          nextStep();
+        } else if (r.error) {
+          setUsername((prev: InputState) => ({
+            ...prev,
+            error: r.error?.username,
+          }));
+        }
+      })
+      .finally(() => setIsButtonLoading(true));
   };
 
   useEffect(() => {
@@ -124,6 +128,7 @@ const InputFields: React.FC<Props> = ({
           value={username.value}
           error={username.error}
           onChange={(newValue: string) => handleUsernameChange(newValue)}
+          autoComplete="off"
         />
         <SpaceXXXS />
         <TextInput
@@ -137,7 +142,11 @@ const InputFields: React.FC<Props> = ({
       </Content>
       <Footer>
         <div>
-          <Button disabled={buttonEnable} onClick={() => handleButtonClick()}>
+          <Button
+            disabled={buttonEnable}
+            isLoading={isButtonLoading}
+            onClick={() => handleButtonClick()}
+          >
             Proxímo
           </Button>
         </div>

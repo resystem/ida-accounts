@@ -26,7 +26,7 @@ interface InputState {
 }
 
 const Signup: React.FC = () => {
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(2);
   const [appName, setAppName] = useState<string>('');
   const [username, setUsername] = useState<InputState>({
     value: '',
@@ -40,8 +40,10 @@ const Signup: React.FC = () => {
     value: '',
     error: '',
   });
-  const [ida, setIda] = useState<string>('');
-  const [token, setToken] = useState<string>('');
+  const [ida, setIda] = useState<string>('5f6cfb38e1815518d4e42f20');
+  const [token, setToken] = useState<string>(
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbGV0dGEiLCJpZGEiOiI1ZjZjZmIzOGUxODE1NTE4ZDRlNDJmMjAiLCJpYXQiOjE2MDA5Nzc3MjAsImV4cCI6MTYwMDk4MTMyMH0.u8YP3KVUvpZRH9RTY561Z1t6ukeal_8zext_EYmbPvY'
+  );
 
   const goToStep = (newStep: number) => setStep(newStep);
   const nextStep = () => setStep((prev: number) => prev + 1);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Subtitle, Text, CodeInput } from '@resystem/design-system';
+import { Animation, Subtitle, Text, CodeInput } from '@resystem/design-system';
 
 import { phoneMask, removePhoneMask } from '../../../utils/inputValidations';
 import {
@@ -80,7 +80,7 @@ const SendSmsCodeValidation: React.FC<Props> = ({
 
   const handleValidateCode = (newCode: string) => {
     if (newCode.length === codeSize) {
-      sendPhoneValidationCode(ida, '554269').then((r) => {
+      sendPhoneValidationCode(ida, newCode).then((r) => {
         console.log('response ', r);
         if (r.data) {
           console.log('data ', r.data);
@@ -121,24 +121,26 @@ const SendSmsCodeValidation: React.FC<Props> = ({
           <Text>Voltar</Text>
         </div>
       </Header>
-      <Content>
-        <SpaceXXS />
-        {MessageTitle(sentTime)}
-        <SpaceXXS />
-        {MessageSubtitle(sentTime, phone.value)}
-        <Space />
-        <CodeInput
-          onChange={handleValidateCode}
-          codeSize={codeSize}
-          error={code.error}
-        />
-        <Paragraph className="text-right">
-          Não recebeu ?
-          <LindDecoration href="#" onClick={handleSendCodeToPhone}>
-            Reenviar código
-          </LindDecoration>
-        </Paragraph>
-      </Content>
+      <Animation>
+        <Content>
+          <SpaceXXS />
+          {MessageTitle(sentTime)}
+          <SpaceXXS />
+          {MessageSubtitle(sentTime, phone.value)}
+          <Space />
+          <CodeInput
+            onChange={handleValidateCode}
+            codeSize={codeSize}
+            error={code.error}
+          />
+          <Paragraph className="text-right">
+            Não recebeu ?
+            <LindDecoration href="#" onClick={handleSendCodeToPhone}>
+              Reenviar código
+            </LindDecoration>
+          </Paragraph>
+        </Content>
+      </Animation>
     </Wrapper>
   );
 };
