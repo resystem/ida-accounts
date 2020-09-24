@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {
+  Animation,
   SmallText,
   Subtitle,
   Button,
@@ -31,7 +32,7 @@ const inputTextValidation = (props: InputState): boolean => {
   return props.error.length > 0 || !(props.value.length < 15);
 };
 
-const SMSConfirmation: React.FC<Props> = ({
+const SendSmsCode: React.FC<Props> = ({
   ida,
   goToStep,
   nextStep,
@@ -39,6 +40,7 @@ const SMSConfirmation: React.FC<Props> = ({
   setPhone,
 }) => {
   const [buttonEnable, setButtonEnable] = useState(true);
+  const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
   const handlephoneChange = (value: string) => {
     const error = '';
@@ -50,16 +52,19 @@ const SMSConfirmation: React.FC<Props> = ({
   };
 
   const handleButtonClick = () => {
-    sendPhoneValidation(ida, `+55${removePhoneMask(phone.value)}`).then((r) => {
-      if (r.data) {
-        console.log('data ', r.data);
-        setPhone((prev: InputState) => ({ ...prev, error: '' }));
-        nextStep();
-      } else if (r.error) {
-        const error = r.error.phone;
-        setPhone((prev: InputState) => ({ ...prev, error }));
-      }
-    });
+    setIsLoadingButton(true);
+    sendPhoneValidation(ida, `+55${removePhoneMask(phone.value)}`)
+      .then((r) => {
+        if (r.data) {
+          console.log('data ', r.data);
+          setPhone((prev: InputState) => ({ ...prev, error: '' }));
+          nextStep();
+        } else if (r.error) {
+          const error = r.error.phone;
+          setPhone((prev: InputState) => ({ ...prev, error }));
+        }
+      })
+      .finally(() => setIsLoadingButton(false));
   };
 
   useEffect(() => {
@@ -75,21 +80,27 @@ const SMSConfirmation: React.FC<Props> = ({
           <Text>Voltar</Text>
         </div>
       </Header>
-      <Content>
-        <SpaceXXS />
-        <Subtitle type="h3">Insira o seu celular para receber o SMS</Subtitle>
-        <Space />
-        <TextInput
-          id="celular"
-          label="Celular"
-          value={phone.value}
-          error={phone.error}
-          onChange={(newValue: string) => handlephoneChange(newValue)}
-        />
-      </Content>
+      <Animation>
+        <Content>
+          <SpaceXXS />
+          <Subtitle type="h3">Insira o seu celular para receber o SMS</Subtitle>
+          <Space />
+          <TextInput
+            id="celular"
+            label="Celular"
+            value={phone.value}
+            error={phone.error}
+            onChange={(newValue: string) => handlephoneChange(newValue)}
+          />
+        </Content>
+      </Animation>
       <Footer>
         <div>
-          <Button disabled={buttonEnable} onClick={handleButtonClick}>
+          <Button
+            disabled={buttonEnable}
+            isLoading={isLoadingButton}
+            onClick={handleButtonClick}
+          >
             Enviar SMS
           </Button>
         </div>
@@ -98,7 +109,7 @@ const SMSConfirmation: React.FC<Props> = ({
   );
 };
 
-SMSConfirmation.propTypes = {
+SendSmsCode.propTypes = {
   ida: PropTypes.string.isRequired,
   goToStep: PropTypes.func.isRequired,
   nextStep: PropTypes.func.isRequired,
@@ -109,4 +120,4 @@ SMSConfirmation.propTypes = {
   setPhone: PropTypes.func.isRequired,
 };
 
-export default SMSConfirmation;
+export default SendSmsCode;
