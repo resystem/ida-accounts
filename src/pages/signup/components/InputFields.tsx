@@ -93,7 +93,7 @@ const InputFields: React.FC<Props> = ({
           }));
         }
       })
-      .finally(() => setIsButtonLoading(true));
+      .finally(() => setIsButtonLoading(false));
   };
 
   useEffect(() => {
