@@ -6,6 +6,7 @@ import { defaultTheme } from '@resystem/design-system';
 import { verify } from '../controllers/app.controller';
 import { AppContext } from '../store';
 import GlobalStyles from '../css/GlobalStyles';
+import Skeleton from './skeleton';
 import '../css/reset.css';
 // import '@resystem/design-system/dist/main.css';
 
@@ -91,7 +92,17 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
     );
   }, []);
 
-  if (loading) return <div />;
+  if (loading)
+    return (
+      <ThemeProvider theme={defaultTheme}>
+        <GlobalStyles />
+        <MainContent>
+          <Wrapper>
+            <Skeleton />
+          </Wrapper>
+        </MainContent>
+      </ThemeProvider>
+    );
 
   return (
     <ThemeProvider theme={defaultTheme}>
