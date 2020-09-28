@@ -1,14 +1,13 @@
 import React, { ReactNode, useEffect, useContext, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { createHistory } from "@reach/router"
+import { createHistory } from '@reach/router';
 import queryString from 'query-string';
 import { verify } from '../controllers/app.controller';
 import { defaultTheme } from '@resystem/design-system';
 import { AppContext } from '../store';
 import GlobalStyles from '../css/GlobalStyles';
 import '../css/reset.css';
-import '@resystem/design-system/dist/main.css';
-import GlobalStyles from '../css/GlobalStyles';
+// import '@resystem/design-system/dist/main.css';
 
 const history = createHistory(window);
 
@@ -16,13 +15,13 @@ interface ContentProps {
   theme: {
     brandColor: {
       secondary: {
-        darkest: String, 
-      },
-    },
+        darkest: String;
+      };
+    };
     spacingSquish: {
-      md: String,
-    },
-  },
+      md: String;
+    };
+  };
 }
 
 const MainContent = styled.main`
@@ -57,7 +56,7 @@ interface Props {
 }
 
 interface ListenerParams {
-  source: any
+  source: any;
 }
 
 interface QueryInterface {
@@ -83,9 +82,13 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
       appId,
     });
 
-    window.addEventListener("message", ({ source }: ListenerParams) => {
-      setAppSource(source);
-    }, false);
+    window.addEventListener(
+      'message',
+      ({ source }: ListenerParams) => {
+        setAppSource(source);
+      },
+      false
+    );
   }, []);
 
   if (loading) return <div />;
@@ -94,9 +97,7 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
       <MainContent>
-        <Wrapper>
-          {children}
-        </Wrapper>
+        <Wrapper>{children}</Wrapper>
       </MainContent>
     </ThemeProvider>
   );

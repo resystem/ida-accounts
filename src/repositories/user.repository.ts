@@ -62,14 +62,14 @@ export const verifyToken = (token: string) =>
   );
 
 export const requestResetPassword = async (input: string) => {
-  return axios.post(`${process.env.API_URI}/request-reset-password`, {
+  return axios.post(`${process.env.API_URI}/request-code`, {
     input,
   });
 };
 
-export const validateResetPasswordToken = async (token: string) => {
-  return axios.post(`${process.env.API_URI}/validate-reset-password-token`, {
-    token,
+export const validateResetPasswordCode = async (code: string) => {
+  return axios.post(`${process.env.API_URI}/validate-code`, {
+    code,
   });
 };
 

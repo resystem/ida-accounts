@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
-import { Button, Subtitle } from '@resystem/design-system';
+import { Button, Subtitle, Animation } from '@resystem/design-system';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
@@ -68,29 +68,31 @@ const SucessResetPassword = () => {
     <Main>
       <SEO title="Sucess reset password" />
       <Wrapper>
-        <Content>
-          <Header>
-            <Brand />
-          </Header>
-          <ContentMessage>
-            <ImgIcon src={iconSucess} />
-            <Space />
-            <Subtitle type="h3">Senha criada com sucesso!</Subtitle>
-          </ContentMessage>
-        </Content>
-        <Footer>
-          <div>
-            <Button
-              small
-              onClick={() => {
-                navigate('/signin/auth');
-              }}
-            >
-              Entrar
-            </Button>
-          </div>
-          <SmallSpace />
-        </Footer>
+        <Animation>
+          <Content>
+            <Header>
+              <Brand />
+            </Header>
+            <ContentMessage>
+              <ImgIcon src={iconSucess} />
+              <Space />
+              <Subtitle type="h3">Senha criada com sucesso!</Subtitle>
+            </ContentMessage>
+          </Content>
+          <Footer>
+            <div>
+              <Button
+                small
+                onClick={() => {
+                  navigate('/signin/auth');
+                }}
+              >
+                Entrar
+              </Button>
+            </div>
+            <SmallSpace />
+          </Footer>
+        </Animation>
       </Wrapper>
     </Main>
   );

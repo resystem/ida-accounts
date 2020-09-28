@@ -1,27 +1,17 @@
 import { navigate } from '@reach/router';
-<<<<<<< HEAD
-import { isEmail, isPhone } from '../utils/inputValidations';
-=======
 import { string } from 'prop-types';
-import { isEmail, isPhone } from '../utils/validations';
->>>>>>> 5e5eb14e77d2b840829275f261e15ab0791adc25
 import {
   signin as signinRepository,
   signup as signupRepository,
   verifyToken as verifyTokenRepository,
-  requestResetPassword,
-<<<<<<< HEAD
-  validateResetPasswordToken as validateResetPasswordTokenRepository,
-  resetPassword as resetPasswordRespository,
-=======
+  requestResetPassword as resetPasswordRespository,
+  validateResetPasswordCode as validateResetPasswordCodeRepository,
   sendEmailValidation as sendEmailValidationRepository,
   sendEmailValidationToken as sendEmailValidationTokenRepository,
   sendPhoneValidation as sendPhoneValidationRepository,
   sendPhoneValidationCode as sendPhoneValidationCodeRepository,
->>>>>>> 5e5eb14e77d2b840829275f261e15ab0791adc25
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
-import { string } from 'prop-types';
 
 interface Errors {
   username?: string;
@@ -154,73 +144,38 @@ export const basicSignin = async ({
   if (appSource) appSource.postMessage(stringifiedData, '*');
 };
 
-interface SendResetPasswordEmailParams {
-  email: string;
-<<<<<<< HEAD
-=======
-  setEmailError(error: string): void;
->>>>>>> 5e5eb14e77d2b840829275f261e15ab0791adc25
+interface SendResetPasswordParams {
+  input: string;
 }
 
-/**
- * function to send email password reset
- * @param {object} data user information to send email password reset
- * @param {string} data.email email
- *
- */
-export const sendResetPasswordEmail = async ({
-  email,
-}: SendResetPasswordEmailParams) => {
+export const sendResetPassword = async ({ input }: SendResetPasswordParams) => {
   try {
-    await requestResetPassword(email);
+    await resetPasswordRespository(input);
   } catch (err) {
     console.log(err);
     throw err;
   }
-  navigate('/forget-password/confirmation', { state: { email } });
 };
 
-interface SendResetPasswordSMSParams {
-  phone: string;
-}
-
-/**
- * function to send phone password reset
- * @param {object} data user information to send email password reset
- * @param {string} data.email email
- *
- */
-export const sendResetPasswordSMS = async ({
-  phone,
-}: SendResetPasswordSMSParams) => {
-  try {
-    await requestResetPassword(`+55${phone.replace(/\D/g, '')}`);
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-  navigate('/forget-password/confirmation', { state: { phone } });
+type ValidateResetPasswordCodeParams = {
+  code: string;
 };
 
-type ValidateResetPasswordTokenParams = {
-  token: string;
-};
-
-interface ValidateResetPasswordTokenResponse {
+interface ValidateResetPasswordCodeResponse {
   error: string | null;
-  data: any;
+  token: string | null;
 }
 
-export const validateResetPasswordToken = async ({
-  token,
-}: ValidateResetPasswordTokenParams) => {
-  const response: ValidateResetPasswordTokenResponse = {
+export const validateResetPasswordCode = async ({
+  code,
+}: ValidateResetPasswordCodeParams) => {
+  const response: ValidateResetPasswordCodeResponse = {
     error: null,
-    data: null,
+    token: null,
   };
   let promise = null;
   try {
-    promise = await validateResetPasswordTokenRepository(token);
+    promise = await validateResetPasswordCodeRepository(code);
   } catch (err) {
     const { error } = err.response.data;
     response.error = error;
@@ -228,7 +183,7 @@ export const validateResetPasswordToken = async ({
     throw err;
   }
   const { data } = promise;
-  response.data = data.data;
+  response.token = data.token;
   return response;
 };
 

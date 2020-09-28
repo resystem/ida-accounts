@@ -11,4 +11,5 @@ declare module '@resystem/design-system' {
   export const IconButton: Any;
   export const SwitchButton: Any;
   export const CodeInput: Any;
+  export const Animation: Any;
 }

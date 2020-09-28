@@ -2,25 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import {
-  phoneMask,
-  emailValidation,
-  phoneValidation,
-} from '../../utils/inputValidations';
-import {
   ButtonText,
   SmallText,
   Subtitle,
   Button,
   SwitchButton,
   TextInput,
+  Animation,
 } from '@resystem/design-system';
+import {
+  phoneMask,
+  emailValidation,
+  phoneValidation,
+  removePhoneMask,
+} from '../../utils/inputValidations';
+
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
-import {
-  sendResetPasswordEmail,
-  sendResetPasswordSMS,
-} from '../../controllers/user.controller';
+import { sendResetPassword } from '../../controllers/user.controller';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -75,6 +75,7 @@ const ForgetPassword = () => {
   const [emailError, setEmailError] = useState<string>('');
   const [selectedSwitch, setSelectedSwitch] = useState<number>(0);
   const [buttonEnabled, setButtonEnabled] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const hasError = (string: string) => string.length > 0;
 
@@ -90,12 +91,26 @@ const ForgetPassword = () => {
   };
 
   const handleClick = () => {
+    setIsLoading(true);
     switch (selectedSwitch) {
       case 0:
-        sendResetPasswordEmail({ email });
+        sendResetPassword({ input: email })
+          .then((res) => {
+            navigate('/forget-password/confirmation', { state: { email } });
+          })
+          .finally(() => setIsLoading(false));
         break;
-      default:
-        sendResetPasswordSMS({ phone });
+      default: {
+        const formatPhone = removePhoneMask(phone);
+        const input = `+55${formatPhone}`;
+        sendResetPassword({ input })
+          .then((res) => {
+            navigate('/forget-password/confirmation', {
+              state: { phone },
+            });
+          })
+          .finally(() => setIsLoading(false));
+      }
     }
   };
 
@@ -119,62 +134,69 @@ const ForgetPassword = () => {
     <Main>
       <SEO title="Forget Password" />
       <Wrapper>
-        <Content>
-          <Header>
-            <Brand />
-          </Header>
-          <SmallText>Esqueci minha senha</SmallText>
-          <Space />
-          <Subtitle type="h3">
-            Insira o seu e-mail ou celular cadastrado na IDa
-          </Subtitle>
-          <Form>
-            <SwitchButton
-              small
-              selectedIndex={selectedSwitch}
-              onClick={({ index }) => setSelectedSwitch(index)}
-            />
-            {selectedSwitch ? (
-              <TextInput
-                type="text"
-                label="Celular"
-                error={phoneError}
-                value={phone}
-                onChange={handleOnChangePhone}
-                id="celular"
+        <Animation>
+          <Content>
+            <Header>
+              <Brand />
+            </Header>
+            <SmallText>Esqueci minha senha</SmallText>
+            <Space />
+            <Subtitle type="h3">
+              Insira o seu e-mail ou celular cadastrado na IDa
+            </Subtitle>
+            <Form>
+              <SwitchButton
+                small
+                selectedIndex={selectedSwitch}
+                onClick={({ index }) => setSelectedSwitch(index)}
               />
-            ) : (
-              <TextInput
-                type="email"
-                label="Email"
-                error={emailError}
-                value={email}
-                onChange={handleOnChangeEmail}
-                id="email"
-              />
-            )}
-          </Form>
-        </Content>
-        <Footer>
-          <div>
-            <SmallText style={{ display: 'inline' }}>Lembrei! </SmallText>
-            <ButtonText
-              white
-              small
-              onClick={() => {
-                navigate('/signin/auth');
-              }}
-            >
-              Volta ao login
-            </ButtonText>
-          </div>
-          <SmallSpace />
-          <div>
-            <Button small disabled={buttonEnabled} onClick={handleClick}>
-              Próximo
-            </Button>
-          </div>
-        </Footer>
+              {selectedSwitch ? (
+                <TextInput
+                  type="text"
+                  label="Celular"
+                  error={phoneError}
+                  value={phone}
+                  onChange={handleOnChangePhone}
+                  id="celular"
+                />
+              ) : (
+                <TextInput
+                  type="email"
+                  label="Email"
+                  error={emailError}
+                  value={email}
+                  onChange={handleOnChangeEmail}
+                  id="email"
+                />
+              )}
+            </Form>
+          </Content>
+          <Footer>
+            <div>
+              <SmallText style={{ display: 'inline' }}>Lembrei! </SmallText>
+              <ButtonText
+                white
+                small
+                onClick={() => {
+                  navigate('/signin/auth');
+                }}
+              >
+                Volta ao login
+              </ButtonText>
+            </div>
+            <SmallSpace />
+            <div>
+              <Button
+                small
+                disabled={buttonEnabled}
+                onClick={handleClick}
+                isLoading={isLoading}
+              >
+                Próximo
+              </Button>
+            </div>
+          </Footer>
+        </Animation>
       </Wrapper>
     </Main>
   );

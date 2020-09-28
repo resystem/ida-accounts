@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import {
@@ -7,13 +7,14 @@ import {
   Subtitle,
   CodeInput,
   Text,
+  Animation,
 } from '@resystem/design-system';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import {
-  sendResetPasswordEmail,
-  sendResetPasswordSMS,
+  sendResetPassword,
+  validateResetPasswordCode,
 } from '../../controllers/user.controller';
 
 const Header = styled.header`
@@ -59,54 +60,99 @@ interface ThemeInterface {
   };
 }
 
+interface ISuccessMessageTitle {
+  email: string;
+}
+
+const SuccessMessageTitle = ({ email }: ISuccessMessageTitle) => {
+  return (
+    <>
+      <Subtitle type="h3" className="text-success">
+        {email ? 'Email' : 'SMS'} reenviado!
+      </Subtitle>
+    </>
+  );
+};
+
 /**
  * Component that containts Confirmation index page
  */
 const Confirmation = ({ location }) => {
- const { phone } = location.state;
+  const { phone, email } = location.state;
+  const [code, setCode] = useState<string>('');
+  const [resendCode, setResendCode] = useState<boolean>(false);
+  const [codeError, setCodeError] = useState<string>('');
+
+  const codeSize = 4;
+
+  const handleClick = () => {
+    sendResetPassword({ input: email || phone });
+    setResendCode(true);
+  };
+
+  const handleOnChange = (value: string) => {
+    setCode(value);
+  };
+
+  useEffect(() => {
+    if (codeSize === code.length) {
+      const validate = validateResetPasswordCode({ code }).then((res) => {
+        if (res.token) {
+          navigate('/forget-password/reset-password', {
+            state: { token: res.token },
+          });
+          setCodeError('');
+        } else {
+          setCodeError('Código inválido');
+        }
+      });
+    }
+  }, [code]);
+
   return (
     <Main>
-      <SEO title="SMS Confirmation" />
+      <SEO title="Code Confirmation" />
       <Wrapper>
-        <Content>
-          <Header>
-            <Brand />
-          </Header>
-          <ButtonText
-            underline={false}
-            white
-            onClick={() => {
-              navigate('/forget-password');
-            }}
-          >
-            Voltar
-          </ButtonText>
-          <Space />
-          <Subtitle type="h3">SMS enviado!</Subtitle>
-          <Space />
-          <Text>Insira o código enviado para {phone}</Text>
-          <Space />
-          <Form>
-            <div>
-              <CodeInput />
-            </div>
-          </Form>
-        </Content>
-        <Footer>
-          <div>
-            <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
+        <Animation>
+          <Content>
+            <Header>
+              <Brand />
+            </Header>
             <ButtonText
+              underline={false}
               white
-              small
               onClick={() => {
-                navigate('');
+                navigate('/forget-password');
               }}
             >
-              Reenviar código
+              Voltar
             </ButtonText>
-          </div>
-          <SmallSpace />
-        </Footer>
+            <Space />
+            {resendCode && <SuccessMessageTitle email={email} />}
+            {!resendCode && (
+              <Subtitle type="h3">
+                {email ? 'Email enviado!' : ' SMS enviado!'}
+              </Subtitle>
+            )}
+            <Space />
+            <Text>Insira o código enviado para {phone || email}</Text>
+            <Space />
+            <Form>
+              <div>
+                <CodeInput onChange={handleOnChange} error={codeError} />
+              </div>
+            </Form>
+          </Content>
+          <Footer>
+            <div>
+              <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
+              <ButtonText white small onClick={handleClick}>
+                Reenviar código
+              </ButtonText>
+            </div>
+            <SmallSpace />
+          </Footer>
+        </Animation>
       </Wrapper>
     </Main>
   );

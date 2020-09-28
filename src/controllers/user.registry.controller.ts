@@ -10,10 +10,6 @@ import { status, types } from '../utils/ida-error.util';
 interface GenericData<T> {
   [key: string]: T | boolean | number;
 }
-interface DataSignUp {
-  ida: string | null;
-  token: string;
-}
 interface GenericError {
   [key: string]: string;
 }
