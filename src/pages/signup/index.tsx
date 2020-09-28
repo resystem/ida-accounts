@@ -15,10 +15,10 @@ import Brand from '../../components/brand/brand';
 import TermsOfUse from './components/TermsOfUse';
 import InputFields from './components/InputFields';
 import ChooseConfirmationMethod from './components/ChooseConfirmationMethod';
-import SMSConfirmation from './components/SMSConfirmation';
-import SMSValidation from './components/SMSValidation';
-import EmailConfirmation from './components/EmailConfirmation';
-import SMSValidationEmail from './components/SMSValidationEmail';
+import SendSmsCode from './components/SendSmsCode';
+import SendSmsCodeValidation from './components/SendSmsCodeValidation';
+import SendEmailConfirmation from './components/SendEmailConfirmation';
+import SendSmsEmail from './components/SendSmsEmail';
 
 interface InputState {
   value: string;
@@ -40,9 +40,9 @@ const Signup: React.FC = () => {
     value: '',
     error: '',
   });
-  const [ida, setIda] = useState<string>('5f640ecd87d74633b0d0ad8f');
+  const [ida, setIda] = useState<string>('5f6cfb38e1815518d4e42f20');
   const [token, setToken] = useState<string>(
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbGV0dGEiLCJpZGEiOiI1ZjYzOTIyYTQ1NmJjNTIwNjhhZDBhNWUiLCJpYXQiOjE2MDAzNjEwMDMsImV4cCI6MTYwMDM2NDYwM30.td443NqdJDyu4Ka5xOizIe1nX0ouUn0UMmVkM6dikJo'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbGV0dGEiLCJpZGEiOiI1ZjZjZmIzOGUxODE1NTE4ZDRlNDJmMjAiLCJpYXQiOjE2MDA5Nzc3MjAsImV4cCI6MTYwMDk4MTMyMH0.u8YP3KVUvpZRH9RTY561Z1t6ukeal_8zext_EYmbPvY'
   );
 
   const goToStep = (newStep: number) => setStep(newStep);
@@ -71,7 +71,7 @@ const Signup: React.FC = () => {
       )}
       {step === 2 && <ChooseConfirmationMethod goToStep={goToStep} />}
       {step === 3 && (
-        <SMSConfirmation
+        <SendSmsCode
           ida={ida}
           phone={phone}
           setPhone={setPhone}
@@ -80,16 +80,18 @@ const Signup: React.FC = () => {
         />
       )}
       {step === 4 && (
-        <SMSValidation
+        <SendSmsCodeValidation
           ida={ida}
           phone={phone}
           goToStep={goToStep}
           nextStep={nextStep}
         />
       )}
-      {step === 5 && <SMSValidationEmail appName={appName} />}
+      {step === 5 && (
+        <SendSmsEmail password={password.value} username={username.value} />
+      )}
       {step === 6 && (
-        <EmailConfirmation
+        <SendEmailConfirmation
           goToStep={goToStep}
           ida={ida}
           previousStep={previousStep}

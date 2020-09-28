@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {
-  ButtonText,
+  Animation,
   SmallText,
   Subtitle,
   Button,
@@ -37,20 +37,24 @@ const ChooseConfirmationMethod: React.FC<Props> = ({ goToStep }) => {
           <Text>Voltar</Text>
         </div>
       </Header>
-      <Content>
-        <SpaceXXS />
-        <Subtitle type="h3">Agora precisamos confirmar sua identidade</Subtitle>
-        <Space />
-        <Paragraph>Confirmar via</Paragraph>
-        <SpaceXXS />
-        {/* <IconButton icon="settings_cell">SMS</IconButton>
+      <Animation>
+        <Content>
+          <SpaceXXS />
+          <Subtitle type="h3">
+            Agora precisamos confirmar sua identidade
+          </Subtitle>
+          <Space />
+          <Paragraph>Confirmar via</Paragraph>
+          <SpaceXXS />
+          {/* <IconButton icon="settings_cell">SMS</IconButton>
         <IconButton icon="local_post_office">E-mail</IconButton> */}
-        <IconContainer>
-          <IconWrapper onClick={() => goToStep(3)}>SMS</IconWrapper>
-          <IconWrapper onClick={() => goToStep(6)}>E-mail</IconWrapper>
-        </IconContainer>
-        <Space />
-      </Content>
+          <IconContainer>
+            <IconWrapper onClick={() => goToStep(3)}>SMS</IconWrapper>
+            <IconWrapper onClick={() => goToStep(6)}>E-mail</IconWrapper>
+          </IconContainer>
+          <Space />
+        </Content>
+      </Animation>
     </Wrapper>
   );
 };
