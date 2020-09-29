@@ -5,7 +5,7 @@ import { Button, Subtitle, Animation } from '@resystem/design-system';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
-import iconSucess from '../../images/iconSucess.svg';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -28,7 +28,9 @@ const ContentMessage = styled.div`
   margin: 100px auto;
 `;
 
-const ImgIcon = styled.img``;
+const IconSucess = styled(CheckCircleIcon)`
+  color: #84eaa7;
+`;
 
 const Space = styled.div`
   margin-bottom: ${({ theme }) => theme.spacingStack.xs};
@@ -74,7 +76,7 @@ const SucessResetPassword = () => {
               <Brand />
             </Header>
             <ContentMessage>
-              <ImgIcon src={iconSucess} />
+              <IconSucess style={{ width: '72px', height: '72px' }} />
               <Space />
               <Subtitle type="h3">Senha criada com sucesso!</Subtitle>
             </ContentMessage>

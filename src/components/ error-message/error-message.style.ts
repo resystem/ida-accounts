@@ -1,7 +1,15 @@
 import styled from 'styled-components';
+import ErrorIcon from '@material-ui/icons/Error';
 
-const Space = styled.div`
+export const Space = styled.div`
   margin-bottom: ${({ theme }) => theme.spacingStack.xs};
 `;
 
-export default Space;
+export const TitleContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const IconError = styled(ErrorIcon)`
+  color: ${({ theme }) => theme.alarmColor.warning.medium};
+`;

@@ -7,13 +7,13 @@ import {
   TextInput,
   Animation,
 } from '@resystem/design-system';
+import ErrorIcon from '@material-ui/icons/Error';
 import ErrorMessage from '../../components/ error-message/error-message';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import { resetPassword } from '../../controllers/user.controller';
 import { passwordValidation } from '../../utils/inputValidations';
-import iconSucess from '../../images/iconSucess.svg';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -28,12 +28,8 @@ const Wrapper = styled.div`
 
 const Content = styled.div``;
 
-const ContentMessage = styled.div`
-  display: flex;
-  justify-contet: center;
-  align-items: center;
-  flex-direction: column;
-  margin: 100px auto;
+const ContentForm = styled.div`
+  margin: 50px auto;
 `;
 
 const SmallSpace = styled.div`
@@ -83,24 +79,26 @@ const ResetPasswordForm = ({
 }: IResetPasswordForm) => {
   return (
     <>
-      <Subtitle type="h3">Crie uma nova senha</Subtitle>
-      <Form>
-        <TextInput
-          type="password"
-          label="Senha"
-          value={password}
-          onChange={onChange}
-          error={passwordError}
-        />
-      </Form>
-      <Footer>
-        <SmallSpace />
-        <div>
-          <Button small disabled={buttonEnabled} onClick={onClick}>
-            Próximo
-          </Button>
-        </div>
-      </Footer>
+      <ContentForm>
+        <Subtitle type="h3">Crie uma nova senha</Subtitle>
+        <Form>
+          <TextInput
+            type="password"
+            label="Senha"
+            value={password}
+            onChange={onChange}
+            error={passwordError}
+          />
+        </Form>
+        <Footer>
+          <SmallSpace />
+          <div>
+            <Button small disabled={buttonEnabled} onClick={onClick}>
+              Próximo
+            </Button>
+          </div>
+        </Footer>
+      </ContentForm>
     </>
   );
 };

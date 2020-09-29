@@ -9,6 +9,7 @@ import {
   Text,
   Animation,
 } from '@resystem/design-system';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorMessage from '../../components/ error-message/error-message';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
@@ -30,6 +31,10 @@ const Wrapper = styled.div`
 `;
 
 const Content = styled.div``;
+
+const IconSucess = styled(CheckCircleIcon)`
+  color: #84eaa7;
+`;
 
 const Space = styled.div`
   margin-bottom: ${({ theme }) => theme.spacingStack.xs};
@@ -53,6 +58,11 @@ const Footer = styled.footer`
   align-items: flex-end;
 `;
 
+const SucessMessageContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 interface ThemeInterface {
   theme: {
     spacingStack: {
@@ -68,9 +78,12 @@ interface ISuccessMessageTitle {
 const SuccessMessageTitle = ({ email }: ISuccessMessageTitle) => {
   return (
     <>
-      <Subtitle type="h3" className="text-success">
-        {email ? 'Email' : 'SMS'} reenviado!
-      </Subtitle>
+      <SucessMessageContent>
+        <Subtitle type="h3" className="text-success">
+          {email ? 'Email' : 'SMS'} reenviado!
+        </Subtitle>
+        <IconSucess />
+      </SucessMessageContent>
     </>
   );
 };
