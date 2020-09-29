@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
-import queryString from 'query-string';
 import {
   Subtitle,
   Button,
   TextInput,
-  Text,
   Animation,
 } from '@resystem/design-system';
+import ErrorMessage from '../../components/ error-message/error-message';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import { resetPassword } from '../../controllers/user.controller';
 import { passwordValidation } from '../../utils/inputValidations';
+import iconSucess from '../../images/iconSucess.svg';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -28,8 +28,12 @@ const Wrapper = styled.div`
 
 const Content = styled.div``;
 
-const Space = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xs};
+const ContentMessage = styled.div`
+  display: flex;
+  justify-contet: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 100px auto;
 `;
 
 const SmallSpace = styled.div`
@@ -62,14 +66,54 @@ interface QueryInterface {
   token: string;
 }
 
+interface IResetPasswordForm {
+  password: string;
+  passwordError: string;
+  buttonEnabled: boolean;
+  onClick: (value: string) => void;
+  onChange: (value: string) => void;
+}
+
+const ResetPasswordForm = ({
+  password,
+  passwordError,
+  onChange,
+  onClick,
+  buttonEnabled,
+}: IResetPasswordForm) => {
+  return (
+    <>
+      <Subtitle type="h3">Crie uma nova senha</Subtitle>
+      <Form>
+        <TextInput
+          type="password"
+          label="Senha"
+          value={password}
+          onChange={onChange}
+          error={passwordError}
+        />
+      </Form>
+      <Footer>
+        <SmallSpace />
+        <div>
+          <Button small disabled={buttonEnabled} onClick={onClick}>
+            Próximo
+          </Button>
+        </div>
+      </Footer>
+    </>
+  );
+};
+
 /**
- * Component that containts newPassword index page
+ * Component that containts ResetPassword index page
  */
 const ResetPassword = ({ location }) => {
-  const { token } = location.state;
+  const token = location.state ? location.state.token : null;
   const [password, setPassword] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const [buttonEnabled, setButtonEnabled] = useState<boolean>(true);
+  const [isErrorPage, setIsErrorPage] = useState<boolean>(false);
 
   const hasError = (string: string) => string.length > 0;
 
@@ -89,9 +133,10 @@ const ResetPassword = ({ location }) => {
 
   useEffect(() => {
     if (token === null) {
-      
+      setIsErrorPage(true);
     }
   }, [token]);
+
   return (
     <Main>
       <SEO title="New Password" />
@@ -101,25 +146,23 @@ const ResetPassword = ({ location }) => {
             <Header>
               <Brand />
             </Header>
-            <Subtitle type="h3">Crie uma nova senha</Subtitle>
-            <Form>
-              <TextInput
-                type="password"
-                label="Senha"
-                value={password}
-                onChange={handleOnChange}
-                error={passwordError}
+            {isErrorPage && (
+              <ErrorMessage
+                onClick={() => {
+                  navigate('/forget-password');
+                }}
               />
-            </Form>
+            )}
+            {!isErrorPage && (
+              <ResetPasswordForm
+                password={password}
+                passwordError={passwordError}
+                onChange={handleOnChange}
+                onClick={handleOnClick}
+                buttonEnabled={buttonEnabled}
+              />
+            )}
           </Content>
-          <Footer>
-            <SmallSpace />
-            <div>
-              <Button small disabled={buttonEnabled} onClick={handleOnClick}>
-                Próximo
-              </Button>
-            </div>
-          </Footer>
         </Animation>
       </Wrapper>
     </Main>
