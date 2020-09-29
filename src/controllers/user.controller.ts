@@ -12,6 +12,7 @@ import {
   sendPhoneValidationCode as sendPhoneValidationCodeRepository,
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
+import { saveUserOnLocalStorage } from '../utils/localStorage.util';
 
 interface Errors {
   username?: string;
@@ -80,26 +81,7 @@ export const signin = async ({
       token,
     });
 
-    window.localStorage.setItem('ida@id', ida);
-    window.localStorage.setItem('ida@token', token);
-
-    const localUsers = window.localStorage.getItem('ida@users') || '{}';
-    const parsedLocalUsers = JSON.parse(localUsers).users || [];
-    const index = parsedLocalUsers.findIndex(
-      (userFounded: UserLocalStorage) => userFounded.ida === ida
-    );
-    const data = { ida, token, user };
-
-    if (index !== -1) {
-      parsedLocalUsers.splice(index, 1, data);
-    } else {
-      parsedLocalUsers.push(data);
-    }
-
-    window.localStorage.setItem(
-      'ida@users',
-      JSON.stringify({ users: parsedLocalUsers })
-    );
+    saveUserOnLocalStorage({ ida, token, user });
 
     if (appSource) appSource.postMessage(stringifiedData, '*');
   }

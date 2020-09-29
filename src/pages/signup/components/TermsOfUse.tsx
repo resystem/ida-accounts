@@ -33,8 +33,7 @@ const TermsOfUse: React.FC<Props> = ({ appName, nextStep }) => {
   const [checkbox, setCheckbox] = useState<boolean>(false);
 
   const handleClickCheckbox = (e) => {
-    // setCheckbox((prev) => true);
-    console.log(e);
+    setCheckbox((prev) => !prev);
   };
 
   return (
@@ -61,7 +60,7 @@ const TermsOfUse: React.FC<Props> = ({ appName, nextStep }) => {
         </ButtonText>
         <SpaceXXS />
         <CheckboxWrapper>
-          <CheckboxInput checked={checkbox} onClick={handleClickCheckbox} />
+          <CheckboxInput checked={checkbox} onChange={handleClickCheckbox} />
           <SmallText>
             Li e concordo com os
             <LindDecoration href="#">

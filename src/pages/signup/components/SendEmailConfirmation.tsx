@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Subtitle, Text, Button, TextInput } from '@resystem/design-system';
+import {
+  Animation,
+  Subtitle,
+  Text,
+  Button,
+  TextInput,
+} from '@resystem/design-system';
 
 import { emailValidation } from '../../../utils/inputValidations';
 
@@ -35,6 +41,7 @@ interface IContentForm {
   handleEmailChange: (newValue: string) => void;
   handleSendCode: (event: React.SyntheticEvent) => void;
   ida: string;
+  isLoadingButton: boolean;
   goToStep: (newStep: number) => void;
 }
 
@@ -56,6 +63,7 @@ const ContentForm = (props: IContentForm): JSX.Element => {
     handleEmailChange,
     handleSendCode,
     ida,
+    isLoadingButton,
     goToStep,
   } = props;
 
@@ -67,27 +75,33 @@ const ContentForm = (props: IContentForm): JSX.Element => {
           <Text>Voltar</Text>
         </div>
       </Header>
-      <Content>
-        <SpaceXXS />
-        <Subtitle type="h3">
-          Digite seu e-mail para confirmar sua identidade
-        </Subtitle>
-        <Space />
-        <TextInput
-          id="email"
-          label="E-mail"
-          type="mail"
-          value={email.value}
-          error={email.error}
-          onChange={(newValue: string) => {
-            handleEmailChange(newValue);
-          }}
-        />
-        <SpaceXXS />
-      </Content>
+      <Animation>
+        <Content>
+          <SpaceXXS />
+          <Subtitle type="h3">
+            Digite seu e-mail para confirmar sua identidade
+          </Subtitle>
+          <Space />
+          <TextInput
+            id="email"
+            label="E-mail"
+            type="mail"
+            value={email.value}
+            error={email.error}
+            onChange={(newValue: string) => {
+              handleEmailChange(newValue);
+            }}
+          />
+          <SpaceXXS />
+        </Content>
+      </Animation>
       <Footer>
         <div>
-          <Button disabled={buttonEnable} onClick={handleSendCode}>
+          <Button
+            disabled={buttonEnable}
+            isLoading={isLoadingButton}
+            onClick={handleSendCode}
+          >
             Enviar e-mail
           </Button>
         </div>
@@ -149,16 +163,18 @@ const ContentSuccessMessage = (props: IContentSuccessMessage): JSX.Element => {
           <Text>Voltar</Text>
         </div>
       </Header>
-      <Content>
-        <SpaceXXS />
-        <MessageTitle sentParam={sentTime} />
-        <Space />
-        <Paragraph className="text-left">
-          Acesse o e-mail enviado para {email.value} e clique no link para
-          confirmar o seu cadastro
-        </Paragraph>
-        <Space />
-      </Content>
+      <Animation>
+        <Content>
+          <SpaceXXS />
+          <MessageTitle sentParam={sentTime} />
+          <Space />
+          <Paragraph className="text-left">
+            Acesse o e-mail enviado para {email.value} e clique no link para
+            confirmar o seu cadastro
+          </Paragraph>
+          <Space />
+        </Content>
+      </Animation>
       <Footer>
         <div>
           <MessageFooter sentParam={sentTime} />
@@ -168,7 +184,7 @@ const ContentSuccessMessage = (props: IContentSuccessMessage): JSX.Element => {
   );
 };
 
-const EmailConfirmation: React.FC<Props> = ({
+const SendEmailConfirmation: React.FC<Props> = ({
   goToStep,
   ida,
   previousStep,
@@ -179,26 +195,30 @@ const EmailConfirmation: React.FC<Props> = ({
     value: '',
     error: '',
   });
+  const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
   const [buttonEnable, setButtonEnable] = useState<boolean>(false);
   const nextInternalStep = () => setInternalStep((prev) => prev + 1);
   const previousInternalStep = () => setInternalStep((prev) => prev - 1);
 
   const handleSendCode = (event: React.SyntheticEvent<EventTarget>) => {
     event.preventDefault();
-    sendEmailValidation(ida, email.value).then((r) => {
-      if (r.data) {
-        console.log(r.data, ' ida ', ida);
-        setSentTime((prev) => prev + 1);
-        nextInternalStep();
-      } else {
-        const error: string = r?.error?.email || '';
-        console.log('handleSendCode data: ', r.data);
-        console.log('handleSendCode error: ', error);
-        console.log('handleSendCode ida ', ida);
+    setIsLoadingButton(true);
+    sendEmailValidation(ida, email.value)
+      .then((r) => {
+        if (r.data) {
+          console.log(r.data, ' ida ', ida);
+          setSentTime((prev) => prev + 1);
+          nextInternalStep();
+        } else {
+          const error: string = r?.error?.email || '';
+          console.log('handleSendCode data: ', r.data);
+          console.log('handleSendCode error: ', error);
+          console.log('handleSendCode ida ', ida);
 
-        setEmail((prev: InputState) => ({ ...prev, error }));
-      }
-    });
+          setEmail((prev: InputState) => ({ ...prev, error }));
+        }
+      })
+      .finally(() => setIsLoadingButton(false));
   };
 
   const handleEmailChange = (value: string): void => {
@@ -224,6 +244,7 @@ const EmailConfirmation: React.FC<Props> = ({
           handleSendCode={handleSendCode}
           handleEmailChange={handleEmailChange}
           ida={ida}
+          isLoadingButton={isLoadingButton}
         />
       )}
 
@@ -239,10 +260,10 @@ const EmailConfirmation: React.FC<Props> = ({
   );
 };
 
-EmailConfirmation.propTypes = {
+SendEmailConfirmation.propTypes = {
   goToStep: PropTypes.func.isRequired,
   ida: PropTypes.string.isRequired,
   previousStep: PropTypes.func.isRequired,
 };
 
-export default EmailConfirmation;
+export default SendEmailConfirmation;
