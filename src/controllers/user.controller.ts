@@ -49,7 +49,6 @@ export const signin = async ({
   setLoading,
   appSource,
 }: SigninParams): Promise<void> => {
-  console.log('test');
   setLoading(true);
   setErrors({});
   let signinResponse;
@@ -74,7 +73,9 @@ export const signin = async ({
     throw err;
   }
 
+
   if (signinResponse.data) {
+    console.log(signinResponse);
     const { ida, token, username } = signinResponse.data;
     const stringifiedData = JSON.stringify({
       ida,
@@ -82,6 +83,7 @@ export const signin = async ({
     });
 
     saveUserOnLocalStorage({ ida, token, user: { username } });
+
     if (appSource) appSource.postMessage(stringifiedData, '*');
   }
 
@@ -110,7 +112,6 @@ export const basicSignin = async ({
   token,
   appSource,
 }: BaisSigninParams) => {
-  console.log('test in basic signin');
   try {
     await verifyTokenRepository(token);
   } catch (err) {
@@ -124,7 +125,7 @@ export const basicSignin = async ({
   });
 
 
-  console.log('has app source', !!appSource);
+  console.log('has app source?', !!appSource);
   if (appSource) appSource.postMessage(stringifiedData, '*');
 };
 

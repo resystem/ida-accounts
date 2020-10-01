@@ -7,6 +7,7 @@ interface VerifyInterface {
   appKey: string;
   setAppName(appName: string): void;
   setLoading(loading: boolean): void; 
+  setCrendentials(credentials: any): void; 
 } 
 
 /**
@@ -17,7 +18,10 @@ interface VerifyInterface {
  * @param {string} data.setAppName function to set app on state
  * @param {string} data.setLoading function to set setLoading on state
  */
-export const verify = async ({ appId, appKey, setAppName, setLoading }: VerifyInterface) => {
+export const verify = async ({
+  appId, appKey, setAppName, setLoading,
+  setCrendentials,
+}: VerifyInterface) => {
   setLoading(true);
   let response;
   try {
@@ -28,6 +32,7 @@ export const verify = async ({ appId, appKey, setAppName, setLoading }: VerifyIn
     throw err;
   }
 
+  setCrendentials({ appId, appKey });
   setAppName(response.data.name);
   setLoading(false);
 }
