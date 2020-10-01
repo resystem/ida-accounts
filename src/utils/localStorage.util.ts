@@ -4,7 +4,9 @@ interface UserLocalStorage {
 }
 
 interface UserParams extends UserLocalStorage {
-  user: string;
+  user: {
+    username: string;
+  };
 }
 
 function saveUserOnLocalStorage({ ida, token, user }: UserParams): void {

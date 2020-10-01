@@ -23,7 +23,8 @@ export const verify = async ({ appId, appKey, setAppName, setLoading }: VerifyIn
   try {
     response = await verifyRepository({ appId, appKey });
   } catch (err) {
-    console.log([err]);
+    setAppName('NOT FOUND');
+    setLoading(false);
     throw err;
   }
 

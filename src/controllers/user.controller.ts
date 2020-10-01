@@ -1,5 +1,4 @@
 import { navigate } from '@reach/router';
-import { string } from 'prop-types';
 import { isEmail, isPhone } from '../utils/validations';
 import {
   signin as signinRepository,
@@ -50,6 +49,7 @@ export const signin = async ({
   setLoading,
   appSource,
 }: SigninParams): Promise<void> => {
+  console.log('test');
   setLoading(true);
   setErrors({});
   let signinResponse;
@@ -74,15 +74,14 @@ export const signin = async ({
     throw err;
   }
 
-  if (signinResponse.data.data) {
-    const { ida, token, user } = signinResponse.data.data;
+  if (signinResponse.data) {
+    const { ida, token, username } = signinResponse.data;
     const stringifiedData = JSON.stringify({
       ida,
       token,
     });
 
-    saveUserOnLocalStorage({ ida, token, user });
-
+    saveUserOnLocalStorage({ ida, token, user: { username } });
     if (appSource) appSource.postMessage(stringifiedData, '*');
   }
 
@@ -111,6 +110,7 @@ export const basicSignin = async ({
   token,
   appSource,
 }: BaisSigninParams) => {
+  console.log('test in basic signin');
   try {
     await verifyTokenRepository(token);
   } catch (err) {
@@ -123,6 +123,8 @@ export const basicSignin = async ({
     token,
   });
 
+
+  console.log('has app source', !!appSource);
   if (appSource) appSource.postMessage(stringifiedData, '*');
 };
 
@@ -174,7 +176,6 @@ export const sendResetPasswordSMS = async ({
   try {
     await requestResetPassword(phone);
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
