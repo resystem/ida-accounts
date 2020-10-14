@@ -1,3 +1,54 @@
 {
-    "javascript.validate.enable": false
+    "workbench.iconTheme": "material-icon-theme",
+    "[html]": {
+        "editor.defaultFormatter": "HookyQR.beautify"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.tabSize": 2,
+    },
+    "jshint.options": {
+        "esversion": 9
+    },
+    "window.zoomLevel": 0,
+    "javascript.updateImportsOnFileMove.enabled": "never",
+    "workbench.colorTheme": "Dracula",
+    "editor.suggestSelection": "first",
+    "editor.rulers": [
+        // 80,
+        120
+    ],
+    "editor.renderLineHighlight": "gutter",
+    "editor.tabSize": 2,
+    "terminal.integrated.fontSize": 14,
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact"
+    },
+    "emmet.syntaxProfiles": {
+        "javascript": "jsx",
+    },
+    "editor.parameterHints.enabled": false,
+    "breadcrumbs.enabled": true,
+    "javascript.suggest.autoImports": false,
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "files.eol": "\n",
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }

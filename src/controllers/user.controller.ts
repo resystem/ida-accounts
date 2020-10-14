@@ -2,19 +2,27 @@ import { navigate } from '@reach/router';
 import { isEmail, isPhone } from '../utils/validations';
 import {
   signin as signinRepository,
+  signup as signupRepository,
   verifyToken as verifyTokenRepository,
   requestResetPassword,
+  sendEmailValidation as sendEmailValidationRepository,
+  sendEmailValidationToken as sendEmailValidationTokenRepository,
+  sendPhoneValidation as sendPhoneValidationRepository,
+  sendPhoneValidationCode as sendPhoneValidationCodeRepository,
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
+import { saveUserOnLocalStorage } from '../utils/localStorage.util';
 
 interface Errors {
   username?: string;
   password?: string;
 }
 
-interface SigninParams {
+interface UserLogin {
   username: string;
   password: string;
+}
+interface SigninParams extends UserLogin {
   appSource: any;
   setErrors(error: Errors): void;
   setLoading(status: boolean): void;
@@ -40,7 +48,7 @@ export const signin = async ({
   setErrors,
   setLoading,
   appSource,
-}: SigninParams) => {
+}: SigninParams): Promise<void> => {
   setLoading(true);
   setErrors({});
   let signinResponse;
@@ -56,6 +64,8 @@ export const signin = async ({
         case types.USER_NOT_FOUND:
           setErrors({ username: status[error] });
           return;
+        default:
+          return;
       }
     }
 
@@ -63,33 +73,16 @@ export const signin = async ({
     throw err;
   }
 
-  if (signinResponse.data.data) {
-    const { ida, token, user } = signinResponse.data.data;
+
+  if (signinResponse.data) {
+    console.log(signinResponse);
+    const { ida, token, username } = signinResponse.data;
     const stringifiedData = JSON.stringify({
       ida,
       token,
     });
 
-    window.localStorage.setItem('ida@id', ida);
-    window.localStorage.setItem('ida@token', token);
-
-    const localUsers = window.localStorage.getItem('ida@users') || '{}';
-    const parsedLocalUsers = JSON.parse(localUsers).users || [];
-    const index = parsedLocalUsers.findIndex(
-      (user: UserLocalStorage) => user.ida === ida
-    );
-    const data = { ida, token, user };
-
-    if (index !== -1) {
-      parsedLocalUsers.splice(index, 1, data);
-    } else {
-      parsedLocalUsers.push(data);
-    }
-
-    window.localStorage.setItem(
-      'ida@users',
-      JSON.stringify({ users: parsedLocalUsers })
-    );
+    saveUserOnLocalStorage({ ida, token, user: { username } });
 
     if (appSource) appSource.postMessage(stringifiedData, '*');
   }
@@ -131,6 +124,8 @@ export const basicSignin = async ({
     token,
   });
 
+
+  console.log('has app source?', !!appSource);
   if (appSource) appSource.postMessage(stringifiedData, '*');
 };
 
@@ -161,7 +156,7 @@ export const sendResetPasswordEmail = async ({
     console.log(err);
     throw err;
   }
-   navigate('/forget-password/sent-email', { state: { email } })
+  navigate('/forget-password/sent-email', { state: { email } });
 };
 
 interface SendResetPasswordSMSParams {
@@ -182,7 +177,6 @@ export const sendResetPasswordSMS = async ({
   try {
     await requestResetPassword(phone);
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };

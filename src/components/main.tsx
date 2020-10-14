@@ -1,13 +1,14 @@
 import React, { ReactNode, useEffect, useContext, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { createHistory } from "@reach/router"
+import { createHistory } from '@reach/router';
 import queryString from 'query-string';
-import { verify } from '../controllers/app.controller';
 import { defaultTheme } from '@resystem/design-system';
+import { verify } from '../controllers/app.controller';
 import { AppContext } from '../store';
 import GlobalStyles from '../css/GlobalStyles';
+import Skeleton from './skeleton';
 import '../css/reset.css';
-import '@resystem/design-system/dist/main.css';
+// import '@resystem/design-system/dist/main.css';
 
 const history = createHistory(window);
 
@@ -15,13 +16,13 @@ interface ContentProps {
   theme: {
     brandColor: {
       secondary: {
-        darkest: String, 
-      },
-    },
+        darkest: string;
+      };
+    };
     spacingSquish: {
-      md: String,
-    },
-  },
+      md: string;
+    };
+  };
 }
 
 const MainContent = styled.main`
@@ -56,7 +57,7 @@ interface Props {
 }
 
 interface ListenerParams {
-  source: any
+  source: any;
 }
 
 interface QueryInterface {
@@ -70,7 +71,7 @@ interface QueryInterface {
  */
 const Layout: React.FC<Props> = ({ children }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { setAppName, setAppSource } = useContext(AppContext);
+  const { setAppName, setAppSource, setCrendentials } = useContext(AppContext);
 
   useEffect(() => {
     const { appKey, appId } = queryString.parse(history.location.search);
@@ -80,22 +81,35 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
       setLoading,
       appKey,
       appId,
+      setCrendentials,
     });
 
-    window.addEventListener("message", ({ source }: ListenerParams) => {
-      setAppSource(source);
-    }, false);
+    window.addEventListener(
+      'message',
+      ({ source }: ListenerParams) => {
+        setAppSource(source);
+      },
+      false
+    );
   }, []);
 
-  if (loading) return <div />;
+  if (loading)
+    return (
+      <ThemeProvider theme={defaultTheme}>
+        <GlobalStyles />
+        <MainContent>
+          <Wrapper>
+            <Skeleton />
+          </Wrapper>
+        </MainContent>
+      </ThemeProvider>
+    );
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
       <MainContent>
-        <Wrapper>
-          {children}
-        </Wrapper>
+        <Wrapper>{children}</Wrapper>
       </MainContent>
     </ThemeProvider>
   );

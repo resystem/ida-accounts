@@ -10,7 +10,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-env-variables`,
       options: {
-        allowList: ["API_URI"]
+        allowList: ['API_URI'],
       },
     },
     {

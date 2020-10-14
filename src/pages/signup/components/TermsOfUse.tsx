@@ -10,60 +10,18 @@ import {
   CheckboxInput,
 } from '@resystem/design-system';
 
-import Brand from '../../components/brand/brand';
+import Brand from '../../../components/brand/brand';
 
-const Header = styled.header`
-  height: 100%;
-  width: 100%;
-`;
-
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-rows: 70px auto 70px;
-  grid-auto-rows: min-content;
-  min-height: 100%;
-`;
-
-const Content = styled.div`
-  padding-top: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const Space = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const SpaceXXS = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xxxs};
-`;
-
-const CheckboxWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
-const Footer = styled.footer`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-`;
-
-const Paragraph = styled.p`
-  width: 100%;
-  color: #fff;
-  font-size: 16px;
-  line-height: 18px;
-`;
-
-const LindDecoration = styled.a`
-  :link,
-  :visited,
-  :hover,
-  :active {
-    text-decoration: underline;
-    color: ${({ theme }) => theme.brandColor.secondary.medium};
-  }
-`;
+import {
+  Content,
+  CheckboxWrapper,
+  Footer,
+  Header,
+  Space,
+  SpaceXXS,
+  LindDecoration,
+  Wrapper,
+} from '../styles';
 
 interface Props {
   appName: string;
@@ -75,8 +33,7 @@ const TermsOfUse: React.FC<Props> = ({ appName, nextStep }) => {
   const [checkbox, setCheckbox] = useState<boolean>(false);
 
   const handleClickCheckbox = (e) => {
-    // setCheckbox((prev) => true);
-    console.log(e);
+    setCheckbox((prev) => !prev);
   };
 
   return (
@@ -103,7 +60,7 @@ const TermsOfUse: React.FC<Props> = ({ appName, nextStep }) => {
         </ButtonText>
         <SpaceXXS />
         <CheckboxWrapper>
-          <CheckboxInput checked={checkbox} onClick={handleClickCheckbox} />
+          <CheckboxInput checked={checkbox} onChange={handleClickCheckbox} />
           <SmallText>
             Li e concordo com os
             <LindDecoration href="#">

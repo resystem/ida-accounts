@@ -10,42 +10,26 @@ import {
   TextInput,
 } from '@resystem/design-system';
 
-import Brand from '../../components/brand/brand';
+import Brand from '../../../components/brand/brand';
 
 import {
   usernameValidation,
   passwordValidation,
-} from '../../utils/inputValidations';
+} from '../../../utils/inputValidations';
 
-const Header = styled.header`
-  height: 100%;
-  width: 100%;
-`;
+import { signup } from '../../../controllers/user.registry.controller';
 
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-rows: 70px auto 70px;
-  grid-auto-rows: min-content;
-  min-height: 100%;
-`;
-
-const Content = styled.div`
-  padding-top: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const Space = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xs};
-`;
-
-const SpaceXXS = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacingStack.xxxs};
-`;
-
-const Footer = styled.footer`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-`;
+import {
+  Content,
+  Footer,
+  Header,
+  LindDecoration,
+  Paragraph,
+  Space,
+  SpaceXXS,
+  SpaceXXXS,
+  Wrapper,
+} from '../styles';
 
 interface InputState {
   value: string;
@@ -58,7 +42,9 @@ interface Props {
   setUsername: (value: any) => void;
   password: InputState;
   setPassword: (value: any) => void;
-  nextStep: (newStep: number) => void;
+  nextStep: () => void;
+  setIda: (ida: string) => void;
+  setToken: (token: string) => void;
 }
 
 const inputTextValidation = (props: InputState): boolean => {
@@ -72,10 +58,13 @@ const InputFields: React.FC<Props> = ({
   password,
   setPassword,
   nextStep,
+  setIda,
+  setToken,
 }) => {
   const [buttonEnable, setButtonEnable] = useState(
     inputTextValidation(username) || inputTextValidation(password)
   );
+  const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
   const handleRedirectLogin = () => window.location.replace('/signin');
 
   const handleUsernameChange = (value: string) => {
@@ -86,6 +75,25 @@ const InputFields: React.FC<Props> = ({
   const handlePasswordChange = (value: string) => {
     const error = passwordValidation(value);
     setPassword((prev: InputState) => ({ ...prev, value, error }));
+  };
+
+  const handleButtonClick = () => {
+    setIsButtonLoading(true);
+    signup(username.value, password.value)
+      .then((r) => {
+        if (r.data) {
+          console.log(r.data, 'data from send username');
+          setIda(r.data.ida.toString());
+          setToken(r.data.token.toString());
+          nextStep();
+        } else if (r.error) {
+          setUsername((prev: InputState) => ({
+            ...prev,
+            error: r.error?.username,
+          }));
+        }
+      })
+      .finally(() => setIsButtonLoading(false));
   };
 
   useEffect(() => {
@@ -103,25 +111,28 @@ const InputFields: React.FC<Props> = ({
       </Header>
       <Content>
         <SmallText>{`Inscreva-se no ${appName} através da IDa!`}</SmallText>
-        <SpaceXXS />
+        <SpaceXXXS />
         <ButtonText white small onClick={handleRedirectLogin}>
           Já é cadastrado? Faça login
         </ButtonText>
-        <SpaceXXS />
+        <SpaceXXXS />
         <Subtitle type="h3">Criando sua IDa</Subtitle>
-        <SpaceXXS />
+        <SpaceXXXS />
         <ButtonText white small>
           Saiba mais sobre a IDa
         </ButtonText>
         <SpaceXXS />
         <TextInput
+          id="nome"
           label="Nome do usuário"
           value={username.value}
           error={username.error}
           onChange={(newValue: string) => handleUsernameChange(newValue)}
+          autoComplete="off"
         />
-        <SpaceXXS />
+        <SpaceXXXS />
         <TextInput
+          id="senha"
           label="Senha"
           type="password"
           value={password.value}
@@ -131,7 +142,11 @@ const InputFields: React.FC<Props> = ({
       </Content>
       <Footer>
         <div>
-          <Button disabled={buttonEnable} onClick={nextStep}>
+          <Button
+            disabled={buttonEnable}
+            isLoading={isButtonLoading}
+            onClick={() => handleButtonClick()}
+          >
             Proxímo
           </Button>
         </div>
@@ -153,6 +168,8 @@ InputFields.propTypes = {
   }).isRequired,
   setPassword: PropTypes.func.isRequired,
   nextStep: PropTypes.func.isRequired,
+  setIda: PropTypes.func.isRequired,
+  setToken: PropTypes.func.isRequired,
 };
 
 export default InputFields;
