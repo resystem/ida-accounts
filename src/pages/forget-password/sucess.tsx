@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
-import { Subtitle, Button, TextInput } from '@resystem/design-system';
+import { Button, Subtitle, Animation } from '@resystem/design-system';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
-import {
-  sendResetPasswordEmail,
-  sendResetPasswordSMS,
-} from '../../controllers/user.controller';
+import iconSucess from '../../images/iconSucess.svg';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -22,6 +19,16 @@ const Wrapper = styled.div`
 `;
 
 const Content = styled.div``;
+
+const ContentMessage = styled.div`
+  display: flex;
+  justify-contet: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 100px auto;
+`;
+
+const ImgIcon = styled.img``;
 
 const Space = styled.div`
   margin-bottom: ${({ theme }) => theme.spacingStack.xs};
@@ -48,51 +55,47 @@ const Footer = styled.footer`
 interface ThemeInterface {
   theme: {
     spacingStack: {
-      xxs: String;
+      xxs: string;
     };
   };
 }
 
 /**
- * Component that containts newPassword index page
+ * Component that containts SucessResetPassword index page
  */
-const newPassword = () => {
-  const [password, setPassword] = useState<string>('');
-  const [isValidPassword, setIsValidPassword] = useState<boolean>(true);
-
+const SucessResetPassword = () => {
   return (
     <Main>
-      <SEO title="New Password" />
+      <SEO title="Sucess reset password" />
       <Wrapper>
-        <Content>
-          <Header>
-            <Brand />
-          </Header>
-          <Subtitle type="h3">Crie uma nova senha</Subtitle>
-          <Form>
-            <TextInput
-              type="password"
-              label="Senha"
-              error={
-                isValidPassword &&
-                'A senha deve conter no mínimo 8 caracteres, com pelo menos uma letra e um número'
-              }
-              value={password}
-              onChange={setPassword}
-            />
-          </Form>
-        </Content>
-        <Footer>
-          <SmallSpace />
-          <div>
-            <Button small disabled={!password}>
-              Próximo
-            </Button>
-          </div>
-        </Footer>
+        <Animation>
+          <Content>
+            <Header>
+              <Brand />
+            </Header>
+            <ContentMessage>
+              <ImgIcon src={iconSucess} />
+              <Space />
+              <Subtitle type="h3">Senha criada com sucesso!</Subtitle>
+            </ContentMessage>
+          </Content>
+          <Footer>
+            <div>
+              <Button
+                small
+                onClick={() => {
+                  navigate('/signin/auth');
+                }}
+              >
+                Entrar
+              </Button>
+            </div>
+            <SmallSpace />
+          </Footer>
+        </Animation>
       </Wrapper>
     </Main>
   );
 };
 
-export default newPassword;
+export default SucessResetPassword;

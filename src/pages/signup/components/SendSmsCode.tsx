@@ -12,6 +12,7 @@ import {
 
 import { phoneMask, removePhoneMask } from '../../../utils/inputValidations';
 import { sendPhoneValidation } from '../../../controllers/user.registry.controller';
+import { sendResetPassword } from '../../../controllers/user.controller';
 
 import { Content, Footer, Header, Space, SpaceXXS, Wrapper } from '../styles';
 
@@ -53,14 +54,14 @@ const SendSmsCode: React.FC<Props> = ({
 
   const handleButtonClick = () => {
     setIsLoadingButton(true);
-    sendPhoneValidation(ida, `+55${removePhoneMask(phone.value)}`)
+    sendResetPassword({ input: `+55${removePhoneMask(phone.value)}`, ida })
       .then((r) => {
         if (r.data) {
           console.log('data ', r.data);
           setPhone((prev: InputState) => ({ ...prev, error: '' }));
           nextStep();
         } else if (r.error) {
-          const error = r.error.phone;
+          const error = r.error.code;
           setPhone((prev: InputState) => ({ ...prev, error }));
         }
       })

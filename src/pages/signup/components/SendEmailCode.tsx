@@ -10,8 +10,8 @@ import {
   TextInput,
 } from '@resystem/design-system';
 
-import { phoneMask, removePhoneMask } from '../../../utils/inputValidations';
-import { sendPhoneValidation } from '../../../controllers/user.registry.controller';
+import { emailValidation } from '../../../utils/inputValidations';
+import { sendResetPassword } from '../../../controllers/user.controller';
 
 import { Content, Footer, Header, Space, SpaceXXS, Wrapper } from '../styles';
 
@@ -43,28 +43,26 @@ const SendSmsCode: React.FC<Props> = ({
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
   const handleEmailChange = (value: string) => {
-    const error = '';
-    setEmail((prev: InputState) => ({
-      ...prev,
-      value: email,
-      error,
-    }));
+    const error = emailValidation(value);
+    setEmail((prev) => ({ ...prev, value, error }));
   };
 
   const handleButtonClick = () => {
     setIsLoadingButton(true);
-    sendPhoneValidation(ida, email.value)
+    sendResetPassword({ input: email.value, ida })
       .then((r) => {
         if (r.data) {
-          console.log('data ', r.data);
+          console.log('send email code data ', r.data);
           setEmail((prev: InputState) => ({ ...prev, error: '' }));
           nextStep();
         } else if (r.error) {
-          const error = r.error.phone;
+          const error = r.error.code;
           setEmail((prev: InputState) => ({ ...prev, error }));
         }
       })
-      .finally(() => setIsLoadingButton(false));
+      .finally(() => {
+        setIsLoadingButton(false);
+      });
   };
 
   useEffect(() => {
@@ -88,8 +86,8 @@ const SendSmsCode: React.FC<Props> = ({
           </Subtitle>
           <Space />
           <TextInput
-            id="celular"
-            label="Celular"
+            id="email"
+            label="E-mail"
             value={email.value}
             error={email.error}
             onChange={(newValue: string) => handleEmailChange(newValue)}

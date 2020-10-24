@@ -61,15 +61,16 @@ export const verifyToken = (token: string) =>
     }
   );
 
-export const requestResetPassword = async (input: string) => {
-  return axios.post(`${process.env.API_URI}/request-reset-password`, {
+export const requestResetPassword = async (input: string, ida: string) => {
+  return axios.post(`${process.env.API_URI}/request-code`, {
     input,
+    ida,
   });
 };
 
-export const validateResetPasswordToken = async (token: string) => {
-  return axios.post(`${process.env.API_URI}/validate-reset-password-token`, {
-    token,
+export const validateResetPasswordCode = async (code: string) => {
+  return axios.post(`${process.env.API_URI}/validate-code`, {
+    code,
   });
 };
 
@@ -131,7 +132,7 @@ export const sendPhoneValidationCode = async (
   ida: string,
   code: string
 ): Promise<any> => {
-  return axios.post(`${process.env.API_URI}/phone-validate-code`, {
+  return axios.post(`${process.env.API_URI}/validate-code`, {
     ida,
     code,
   });
