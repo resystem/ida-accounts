@@ -76,10 +76,15 @@ export const signin = async ({
 
   if (signinResponse.data) {
     console.log(signinResponse);
-    const { ida, token, username } = signinResponse.data;
+    const {
+      ida, token, username, phone, email,
+    } = signinResponse.data;
     const stringifiedData = JSON.stringify({
+      username,
       ida,
       token,
+      phone,
+      email,
     });
 
     saveUserOnLocalStorage({ ida, token, user: { username } });
@@ -112,16 +117,22 @@ export const basicSignin = async ({
   token,
   appSource,
 }: BaisSigninParams) => {
+  let response;
+
   try {
-    await verifyTokenRepository(token);
+    response = await verifyTokenRepository(token);
   } catch (err) {
     navigate('/signin/auth', { state: { username } });
     throw err;
   }
 
+  const { email, phone } = response.data;
   const stringifiedData = JSON.stringify({
     ida,
     token,
+    username,
+    email,
+    phone,
   });
 
 
