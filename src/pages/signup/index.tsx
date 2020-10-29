@@ -12,13 +12,13 @@ import {
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
-import TermsOfUse from './components/TermsOfUse';
-import InputFields from './components/InputFields';
-import ChooseConfirmationMethod from './components/ChooseConfirmationMethod';
-import SendSmsCode from './components/SendSmsCode';
-import SendSmsCodeValidation from './components/SendSmsCodeValidation';
-import SendEmailConfirmation from './components/SendEmailConfirmation';
-import SendSmsEmail from './components/SendSmsEmail';
+import TermsOfUse from '../../components/signin-components/TermsOfUse';
+import InputFields from '../../components/signin-components/InputFields';
+import ChooseConfirmationMethod from '../../components/signin-components/ChooseConfirmationMethod';
+import SendSmsCode from '../../components/signin-components/SendSmsCode';
+import SendSmsCodeValidation from '../../components/signin-components/SendSmsCodeValidation';
+import SendEmailConfirmation from '../../components/signin-components/SendEmailConfirmation';
+import SendSmsEmail from '../../components/signin-components/SendSmsEmail';
 
 interface InputState {
   value: string;

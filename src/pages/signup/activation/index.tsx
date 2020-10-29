@@ -8,7 +8,7 @@ import Main from '../../../components/main';
 import SEO from '../../../components/seo';
 import Brand from '../../../components/brand/brand';
 
-import { Content, Header, Wrapper, Space } from '../styles';
+import { Content, Header, Wrapper, Space } from '../../../components/signin-components/styles';
 
 import { sendEmailValidationToken } from '../../../controllers/user.registry.controller';
 
