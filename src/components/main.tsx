@@ -8,7 +8,7 @@ import { AppContext } from '../store';
 import GlobalStyles from '../css/GlobalStyles';
 import Skeleton from './skeleton';
 import '../css/reset.css';
-// import '@resystem/design-system/dist/main.css';
+import '@resystem/design-system/dist/main.css';
 
 interface ContentProps {
   theme: {
