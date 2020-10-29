@@ -3615,10 +3615,10 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
 
-"@resystem/design-system@0.0.48":
-  version "0.0.48"
-  resolved "https://registry.yarnpkg.com/@resystem/design-system/-/design-system-0.0.48.tgz#8317abcc38ffe9b14b1c8bc246fff7359c70a817"
-  integrity sha512-7GQ0LT1aDuWtKPHeBkGL5Sy4S05Z+Ha4gZVfmMppmdxSxI4vVKnjNmM8HQxqMJho8uyEVJ1Hg6JhqqXxzzwHWA==
+"@resystem/design-system@^0.0.63":
+  version "0.0.63"
+  resolved "https://registry.yarnpkg.com/@resystem/design-system/-/design-system-0.0.63.tgz#0a966c108049545cdc1180813a956737d9a19ae2"
+  integrity sha512-HIogcGdmRkbh42cYy6WW98pKAcr9ALBejzBGONAc8orL7Hb0Gp88k2+U+vkCV7+7xhw1MIt8/rXr+HfIfMmMdQ==
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
