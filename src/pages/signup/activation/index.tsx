@@ -94,8 +94,6 @@ const Activation: React.FC = () => {
     const token = getToken(location.search);
     const ida = getIda(location.search);
 
-    console.log('ida token', ida, token);
-
     sendEmailValidationToken(ida, token).then((response) => {
       console.log('sendEmailValidationToken ', response);
 

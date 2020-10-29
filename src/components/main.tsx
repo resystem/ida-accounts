@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useContext, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { createHistory } from '@reach/router';
+import { useLocation } from '@reach/router';
 import queryString from 'query-string';
 import { defaultTheme } from '@resystem/design-system';
 import { verify } from '../controllers/app.controller';
@@ -9,8 +9,6 @@ import GlobalStyles from '../css/GlobalStyles';
 import Skeleton from './skeleton';
 import '../css/reset.css';
 // import '@resystem/design-system/dist/main.css';
-
-const history = createHistory(window);
 
 interface ContentProps {
   theme: {
@@ -71,10 +69,11 @@ interface QueryInterface {
  */
 const Layout: React.FC<Props> = ({ children }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const location = useLocation();
   const { setAppName, setAppSource, setCrendentials } = useContext(AppContext);
 
   useEffect(() => {
-    const { appKey, appId } = queryString.parse(history.location.search);
+    const { appKey, appId } = queryString.parse(location.search);
 
     verify({
       setAppName,

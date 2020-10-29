@@ -57,6 +57,7 @@ interface ThemeInterface {
  * Component that containts SentEmail index page
  */
 const SentEmail = ({ location }) => {
+  const email = location.state && location.state.email ? location.state.email : '#';
   return (
     <Main>
       <SEO title="Forget Password" />
@@ -68,7 +69,7 @@ const SentEmail = ({ location }) => {
           <Subtitle type="h2">Enviamos um e-mail para você!</Subtitle>
           <Space />
           <Text>
-            Acesse o e-mail enviado para {location.state.email} e clique no link para
+            Acesse o e-mail enviado para {email} e clique no link para
             redefinir sua senha
           </Text>
         </Content>
