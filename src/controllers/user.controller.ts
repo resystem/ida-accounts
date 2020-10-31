@@ -75,7 +75,6 @@ export const signin = async ({
 
 
   if (signinResponse.data) {
-    console.log(signinResponse);
     const {
       ida, token, username, phone, email,
     } = signinResponse.data;

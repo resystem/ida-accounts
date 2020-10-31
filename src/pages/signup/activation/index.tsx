@@ -4,7 +4,6 @@ import { useLocation } from '@reach/router';
 import queryString from 'query-string';
 
 import { Subtitle, Button, Text } from '@resystem/design-system';
-import Main from '../../../components/main';
 import SEO from '../../../components/seo';
 import Brand from '../../../components/brand/brand';
 
@@ -106,7 +105,7 @@ const Activation: React.FC = () => {
   }, [location]);
 
   return (
-    <Main>
+    <>
       <SEO title="Activation" />
       <Wrapper>
         <Header>
@@ -124,7 +123,7 @@ const Activation: React.FC = () => {
         </Content>
       </Wrapper>
       );
-    </Main>
+    </>
   );
 };
 

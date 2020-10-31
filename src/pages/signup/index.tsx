@@ -9,7 +9,6 @@ import {
   TextInput,
   CheckboxInput,
 } from '@resystem/design-system';
-import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import TermsOfUse from '../../components/signin-components/TermsOfUse';
@@ -54,7 +53,7 @@ const Signup: React.FC = () => {
   }, []);
 
   return (
-    <Main>
+    <>
       <SEO title="Signup" />
       {step === 0 && <TermsOfUse appName={appName} nextStep={nextStep} />}
       {step === 1 && (
@@ -97,7 +96,7 @@ const Signup: React.FC = () => {
           previousStep={previousStep}
         />
       )}
-    </Main>
+    </>
   );
 };
 

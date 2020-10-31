@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useContext, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { useLocation } from '@reach/router';
+import { createHistory } from '@reach/router';
 import queryString from 'query-string';
 import { defaultTheme } from '@resystem/design-system';
 import { verify } from '../controllers/app.controller';
@@ -9,6 +9,11 @@ import GlobalStyles from '../css/GlobalStyles';
 import Skeleton from './skeleton';
 import '../css/reset.css';
 import '@resystem/design-system/dist/main.css';
+
+let history: any = null;
+if (window instanceof Window) {
+  history = createHistory(window);
+}
 
 interface ContentProps {
   theme: {
@@ -52,6 +57,7 @@ const Wrapper = styled.div`
 
 interface Props {
   children: ReactNode;
+  location: any;
 }
 
 interface ListenerParams {
@@ -69,27 +75,28 @@ interface QueryInterface {
  */
 const Layout: React.FC<Props> = ({ children }: Props) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const location = useLocation();
   const { setAppName, setAppSource, setCrendentials } = useContext(AppContext);
 
   useEffect(() => {
-    const { appKey, appId } = queryString.parse(location.search);
-
-    window.addEventListener(
-      'message',
-      ({ source }: ListenerParams) => {
-        setAppSource(source);
-      },
-      false
-    );
+    if (history) {
+      const { appKey, appId } = queryString.parse(history.location.search);
+      window.addEventListener(
+        'message',
+        ({ source }: ListenerParams) => {
+          setAppSource(source);
+        },
+        false
+      );
+      
+      verify({
+        setAppName,
+        setLoading,
+        appKey,
+        appId,
+        setCrendentials,
+      });
+    }
     
-    verify({
-      setAppName,
-      setLoading,
-      appKey,
-      appId,
-      setCrendentials,
-    });
   }, []);
 
   if (loading)

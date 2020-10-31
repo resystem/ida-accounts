@@ -8,7 +8,6 @@ import {
   Text,
   Button,
 } from '@resystem/design-system';
-import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import { AppContext } from '../../store';
@@ -43,7 +42,7 @@ const Signin: React.FC = () => {
   const { appName } = useContext(AppContext);
 
   return (
-    <Main>
+    <>
       <SEO title="Signin" />
       <Wrapper>
         <Content>
@@ -81,7 +80,7 @@ const Signin: React.FC = () => {
           </div>
         </Footer>
       </Wrapper>
-    </Main>
+    </>
   );
 };
 

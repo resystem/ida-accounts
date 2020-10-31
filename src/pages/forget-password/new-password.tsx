@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import { Subtitle, Button, TextInput } from '@resystem/design-system';
-import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import {
@@ -61,7 +60,7 @@ const newPassword = () => {
   const [isValidPassword, setIsValidPassword] = useState<boolean>(true);
 
   return (
-    <Main>
+    <>
       <SEO title="New Password" />
       <Wrapper>
         <Content>
@@ -91,7 +90,7 @@ const newPassword = () => {
           </div>
         </Footer>
       </Wrapper>
-    </Main>
+    </>
   );
 };
 

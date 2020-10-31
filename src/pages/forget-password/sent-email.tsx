@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import { Text, ButtonText, SmallText, Subtitle } from '@resystem/design-system';
-import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import {
@@ -59,7 +58,7 @@ interface ThemeInterface {
 const SentEmail = ({ location }) => {
   const email = location.state && location.state.email ? location.state.email : '#';
   return (
-    <Main>
+    <>
       <SEO title="Forget Password" />
       <Wrapper>
         <Content>
@@ -89,7 +88,7 @@ const SentEmail = ({ location }) => {
           <SmallSpace />
         </Footer>
       </Wrapper>
-    </Main>
+    </>
   );
 };
 

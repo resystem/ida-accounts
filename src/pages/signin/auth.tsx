@@ -8,7 +8,6 @@ import {
   Button,
   TextInput,
 } from '@resystem/design-system';
-import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import { AppContext } from '../../store';
@@ -92,7 +91,7 @@ const Auth = ({ location }: Props) => {
   }, []);
 
   return (
-    <Main>
+    <>
       <SEO title="Auth" />
       <Wrapper>
         <Content>
@@ -167,7 +166,7 @@ const Auth = ({ location }: Props) => {
           </div>
         </Footer>
       </Wrapper>
-    </Main>
+    </>
   );
 };
 

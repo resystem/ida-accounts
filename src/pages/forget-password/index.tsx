@@ -9,7 +9,6 @@ import {
   SwitchButton,
   TextInput,
 } from '@resystem/design-system';
-import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import {
@@ -81,7 +80,7 @@ const ForgetPassword = () => {
   };
 
   return (
-    <Main>
+    <>
       <SEO title="Forget Password" />
       <Wrapper>
         <Content>
@@ -139,7 +138,7 @@ const ForgetPassword = () => {
           </div>
         </Footer>
       </Wrapper>
-    </Main>
+    </>
   );
 };
 

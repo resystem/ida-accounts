@@ -1,5 +1,6 @@
 import React, { ReactNode, useState, useEffect } from 'react';
 import { AppContext } from '../store';
+import Main from './main';
 
 interface ContentProps {
   theme: {
@@ -27,7 +28,7 @@ interface ListenerParams {
  * Component that containts default styles for all pages
  * @param {ReactNode} children component that to will be render inside to Layout
  */
-const Provider = ({ children }: Props) => {
+export const Provider = ({ children }: Props) => {
   const [appSource, setAppSource] = useState<any>(null);
   const [appName, setAppName] = useState('');
   const [credentials, setCrendentials] = useState<any>(null);
@@ -37,7 +38,9 @@ const Provider = ({ children }: Props) => {
       credentials, setCrendentials, appSource, appName,
       setAppSource, setAppName,
     }}>
-      {children}
+      <Main>
+        {children}
+      </Main>
     </AppContext.Provider>
   );
 };
