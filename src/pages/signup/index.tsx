@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import {
   ButtonText,
@@ -18,6 +18,7 @@ import SendSmsCode from '../../components/signin-components/SendSmsCode';
 import SendSmsCodeValidation from '../../components/signin-components/SendSmsCodeValidation';
 import SendEmailConfirmation from '../../components/signin-components/SendEmailConfirmation';
 import SendSmsEmail from '../../components/signin-components/SendSmsEmail';
+import { AppContext } from '../../store';
 
 interface InputState {
   value: string;
@@ -25,8 +26,8 @@ interface InputState {
 }
 
 const Signup: React.FC = () => {
-  const [step, setStep] = useState<number>(2);
-  const [appName, setAppName] = useState<string>('');
+  const { appName } = useContext(AppContext);
+  const [step, setStep] = useState<number>(1);
   const [username, setUsername] = useState<InputState>({
     value: '',
     error: '',
@@ -48,9 +49,7 @@ const Signup: React.FC = () => {
   const nextStep = () => setStep((prev: number) => prev + 1);
   const previousStep = () => setStep((prev: number) => prev - 1);
 
-  useEffect(() => {
-    setAppName('SOM');
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>

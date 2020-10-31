@@ -11,7 +11,7 @@ import '../css/reset.css';
 import '@resystem/design-system/dist/main.css';
 
 let history: any = null;
-if (window instanceof Window) {
+if (typeof window !== 'undefined') {
   history = createHistory(window);
 }
 

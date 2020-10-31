@@ -55,7 +55,13 @@ const Signin: React.FC = () => {
             Agora utilizamos a IDa para autenticar seu login
           </Subtitle>
           <Space />
-          <ButtonText white small>
+          <ButtonText
+            white
+            small
+            onClick={() => {
+              navigate('/signup');
+            }}
+          >
             Ainda não tem conta? Cadastre-se!
           </ButtonText>
           <Space />

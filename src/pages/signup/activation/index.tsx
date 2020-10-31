@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { useLocation } from '@reach/router';
 import queryString from 'query-string';
@@ -10,6 +10,7 @@ import Brand from '../../../components/brand/brand';
 import { Content, Header, Wrapper, Space } from '../../../components/signin-components/styles';
 
 import { sendEmailValidationToken } from '../../../controllers/user.registry.controller';
+import { AppContext } from '../../../store';
 
 const ButtonWrapper = styled.div`
   width: 100%;
@@ -73,7 +74,7 @@ const FailValidation = ({ appName, errorMessage }: IFailValidation) => {
 };
 
 const Activation: React.FC = () => {
-  const [appName, setAppName] = useState<string>('');
+  const { appName } = useContext(AppContext);
   const location = useLocation();
   const [wasValidated, setWasValidated] = useState<boolean>(false);
   const [validationMessage, setValidationMessage] = useState<string>('');
@@ -89,7 +90,6 @@ const Activation: React.FC = () => {
   }
 
   useEffect(() => {
-    setAppName('SOM');
     const token = getToken(location.search);
     const ida = getIda(location.search);
 
