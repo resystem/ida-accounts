@@ -75,14 +75,6 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
   useEffect(() => {
     const { appKey, appId } = queryString.parse(location.search);
 
-    verify({
-      setAppName,
-      setLoading,
-      appKey,
-      appId,
-      setCrendentials,
-    });
-
     window.addEventListener(
       'message',
       ({ source }: ListenerParams) => {
@@ -90,6 +82,14 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
       },
       false
     );
+    
+    verify({
+      setAppName,
+      setLoading,
+      appKey,
+      appId,
+      setCrendentials,
+    });
   }, []);
 
   if (loading)

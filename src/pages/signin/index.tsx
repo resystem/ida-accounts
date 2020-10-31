@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import {
@@ -11,6 +11,7 @@ import {
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
+import { AppContext } from '../../store';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -39,11 +40,7 @@ const Footer = styled.footer`
  * Component that containts signin index page
  */
 const Signin: React.FC = () => {
-  const [appName, setAppName] = useState<string>('');
-
-  useEffect(() => {
-    setAppName('SOM');
-  }, []);
+  const { appName } = useContext(AppContext);
 
   return (
     <Main>
