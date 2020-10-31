@@ -73,12 +73,10 @@ const IndexPage = () => {
     const parsedLocalUsers = JSON.parse(localUsers).users || [];
 
     if (parsedLocalUsers.length < 1) {
-      navigate('/signin/auth');
+      navigate('/signin');
       return;
     }
 
-    console.log(parsedLocalUsers);
-    
     setUsers(
       parsedLocalUsers.map(({ ida, token, user }: LocalUser) => ({
         id: ida,
