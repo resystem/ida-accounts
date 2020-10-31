@@ -68,7 +68,7 @@ interface QueryInterface {
  * @param {ReactNode} children component that to will be render inside to Layout
  */
 const Layout: React.FC<Props> = ({ children }: Props) => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const location = useLocation();
   const { setAppName, setAppSource, setCrendentials } = useContext(AppContext);
 
