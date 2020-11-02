@@ -198,8 +198,12 @@ export const sendPhoneValidationCode = async (
 
   const { data } = promise;
   response.data = {
-    // ida: data.data.ida,
+    ida: data.ida,
     phone: data.phone,
+    email: data.email,
+    usernamer: data.username,
+    token: data.token,
   };
+
   return response;
 };

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from "gatsby";
 import styled from 'styled-components';
 import { ButtonText, SmallText, Subtitle } from '@resystem/design-system';
-import Main from '../components/main';
 import SEO from '../components/seo';
 import Brand from '../components/brand/brand';
 import UserCard from '../components/user-card/user-card';
@@ -74,12 +73,10 @@ const IndexPage = () => {
     const parsedLocalUsers = JSON.parse(localUsers).users || [];
 
     if (parsedLocalUsers.length < 1) {
-      navigate('/signin/auth');
+      navigate('/signin');
       return;
     }
 
-    console.log(parsedLocalUsers);
-    
     setUsers(
       parsedLocalUsers.map(({ ida, token, user }: LocalUser) => ({
         id: ida,
@@ -95,7 +92,7 @@ const IndexPage = () => {
   };
 
   return (
-    <Main>
+    <>
       <SEO title="Authentication" />
       <Header>
         <Brand />
@@ -109,12 +106,12 @@ const IndexPage = () => {
         white
         small
         onClick={() => {
-          navigate('/signin/auth');
+          navigate('/signin/auth/');
         }}
       >
         Entrar com outra conta
       </ButtonText>
-    </Main>
+    </>
   );
 };
 

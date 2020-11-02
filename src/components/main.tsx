@@ -11,7 +11,12 @@ import '../css/reset.css';
 import '../css/main.css';
 // import '@resystem/design-system/dist/main.css';
 
-const history = createHistory(window);
+import '@resystem/design-system/dist/main.css';
+
+let history: any = null;
+if (typeof window !== 'undefined') {
+  history = createHistory(window);
+}
 
 interface ContentProps {
   theme: {
@@ -55,6 +60,7 @@ const Wrapper = styled.div`
 
 interface Props {
   children: ReactNode;
+  location: any;
 }
 
 interface ListenerParams {
@@ -71,26 +77,28 @@ interface QueryInterface {
  * @param {ReactNode} children component that to will be render inside to Layout
  */
 const Layout: React.FC<Props> = ({ children }: Props) => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const { setAppName, setAppSource, setCrendentials } = useContext(AppContext);
 
   useEffect(() => {
-    const { appKey, appId } = queryString.parse(history.location.search);
-    verify({
-      setAppName,
-      setLoading,
-      appKey,
-      appId,
-      setCrendentials,
-    });
+    if (history) {
+      const { appKey, appId } = queryString.parse(history.location.search);
+      window.addEventListener(
+        'message',
+        ({ source }: ListenerParams) => {
+          setAppSource(source);
+        },
+        false
+      );
 
-    window.addEventListener(
-      'message',
-      ({ source }: ListenerParams) => {
-        setAppSource(source);
-      },
-      false
-    );
+      verify({
+        setAppName,
+        setLoading,
+        appKey,
+        appId,
+        setCrendentials,
+      });
+    }
   }, []);
 
   if (loading)

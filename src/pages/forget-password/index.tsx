@@ -17,7 +17,6 @@ import {
   removePhoneMask,
 } from '../../utils/inputValidations';
 
-import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import { sendResetPassword } from '../../controllers/user.controller';
@@ -131,7 +130,7 @@ const ForgetPassword = () => {
   }, [phoneError, emailError, selectedSwitch, phone, email]);
 
   return (
-    <Main>
+    <>
       <SEO title="Forget Password" />
       <Wrapper>
         <Animation>
@@ -198,7 +197,7 @@ const ForgetPassword = () => {
           </Footer>
         </Animation>
       </Wrapper>
-    </Main>
+    </>
   );
 };
 

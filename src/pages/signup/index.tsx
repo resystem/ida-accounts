@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import {
   ButtonText,
@@ -9,19 +9,19 @@ import {
   TextInput,
   CheckboxInput,
 } from '@resystem/design-system';
-import Main from '../../components/main';
+import ConfirmationMessage from '../../components/signin-components/ConfirmationMessage';
+import SendEmailCode from '../../components/signin-components/SendEmailCode';
+import SendEmailCodeValidation from '../../components/signin-components/SendEmailCodeValidation';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
-import TermsOfUse from './components/TermsOfUse';
-import InputFields from './components/InputFields';
-import ChooseConfirmationMethod from './components/ChooseConfirmationMethod';
-import SendSmsCode from './components/SendSmsCode';
-import SendEmailCode from './components/SendEmailCode';
-import SendSmsCodeValidation from './components/SendSmsCodeValidation';
-import SendEmailCodeValidation from './components/SendEmailCodeValidation';
-import SendEmailConfirmation from './components/SendEmailConfirmation';
-import SendSmsEmail from './components/SendSmsEmail';
-import ConfirmationMessage from './components/ConfirmationMessage';
+import TermsOfUse from '../../components/signin-components/TermsOfUse';
+import InputFields from '../../components/signin-components/InputFields';
+import ChooseConfirmationMethod from '../../components/signin-components/ChooseConfirmationMethod';
+import SendSmsCode from '../../components/signin-components/SendSmsCode';
+import SendSmsCodeValidation from '../../components/signin-components/SendSmsCodeValidation';
+import SendEmailConfirmation from '../../components/signin-components/SendEmailConfirmation';
+import SendSmsEmail from '../../components/signin-components/SendSmsEmail';
+import { AppContext } from '../../store';
 
 interface InputState {
   value: string;
@@ -30,11 +30,11 @@ interface InputState {
 
 const Signup: React.FC = () => {
   const [step, setStep] = useState<number>(1);
-  const [appName, setAppName] = useState<string>('');
   const [email, setEmail] = useState<InputState>({
     value: '',
     error: '',
   });
+  const { appName } = useContext(AppContext);
   const [username, setUsername] = useState<InputState>({
     value: '',
     error: '',
@@ -47,21 +47,17 @@ const Signup: React.FC = () => {
     value: '',
     error: '',
   });
-  const [ida, setIda] = useState<string>('5f6cfb38e1815518d4e42f20');
-  const [token, setToken] = useState<string>(
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbGV0dGEiLCJpZGEiOiI1ZjZjZmIzOGUxODE1NTE4ZDRlNDJmMjAiLCJpYXQiOjE2MDA5Nzc3MjAsImV4cCI6MTYwMDk4MTMyMH0.u8YP3KVUvpZRH9RTY561Z1t6ukeal_8zext_EYmbPvY'
-  );
+  const [ida, setIda] = useState<string>('');
+  const [token, setToken] = useState<string>('');
 
   const goToStep = (newStep: number) => setStep(newStep);
   const nextStep = () => setStep((prev: number) => prev + 1);
   const previousStep = () => setStep((prev: number) => prev - 1);
 
-  useEffect(() => {
-    setAppName('SOM');
-  }, []);
+  useEffect(() => {}, []);
 
   return (
-    <Main>
+    <>
       <SEO title="Signup" />
       {step === 0 && <TermsOfUse appName={appName} nextStep={nextStep} />}
       {step === 1 && (
@@ -127,7 +123,7 @@ const Signup: React.FC = () => {
           password={password.value}
         />
       )}
-    </Main>
+    </>
   );
 };
 
