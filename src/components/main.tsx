@@ -83,13 +83,6 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
   useEffect(() => {
     if (history) {
       const { appKey, appId } = queryString.parse(history.location.search);
-      window.addEventListener(
-        'message',
-        ({ source }: ListenerParams) => {
-          setAppSource(source);
-        },
-        false
-      );
 
       verify({
         setAppName,
@@ -98,6 +91,14 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
         appId,
         setCrendentials,
       });
+      
+      window.addEventListener(
+        'message',
+        ({ source }: ListenerParams) => {
+          setAppSource(source);
+        },
+        false
+      );
     }
   }, []);
 
