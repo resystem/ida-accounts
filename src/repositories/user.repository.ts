@@ -21,7 +21,7 @@ export const signin = ({ username, password }: SigninData) => {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-    }
+    },
   );
 };
 
@@ -38,10 +38,19 @@ interface SignupData {
  * @returns {Pomise} request response
  */
 export const signup = ({ username, password }: SignupData) => {
-  return axios.post(`${process.env.API_URI}/signup`, {
-    username,
-    password,
-  });
+  return axios.post(
+    `${process.env.API_URI}/signup`,
+    {
+      username,
+      password,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
 };
 
 /**
@@ -62,15 +71,33 @@ export const verifyToken = (token: string) =>
   );
 
 export const requestResetPassword = async (input: string) => {
-  return axios.post(`${process.env.API_URI}/request-reset-password`, {
-    input,
-  });
+  return axios.post(
+    `${process.env.API_URI}/request-reset-password`,
+    {
+      input,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
 };
 
 export const validateResetPasswordToken = async (token: string) => {
-  return axios.post(`${process.env.API_URI}/validate-reset-password-token`, {
-    token,
-  });
+  return axios.post(
+    `${process.env.API_URI}/validate-reset-password-token`,
+    {
+      token,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
 };
 
 /**
@@ -83,10 +110,19 @@ export const sendEmailValidation = async (
   ida: string,
   email: string
 ): Promise<any> => {
-  return axios.post(`${process.env.API_URI}/send-email-validation`, {
-    ida,
-    email,
-  });
+  return axios.post(
+    `${process.env.API_URI}/send-email-validation`,
+    {
+      ida,
+      email,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
 };
 
 /**
@@ -99,10 +135,19 @@ export const sendEmailValidationToken = async (
   ida: string,
   token: string
 ): Promise<any> => {
-  return axios.post(`${process.env.API_URI}/validate-email-token`, {
-    ida,
-    token,
-  });
+  return axios.post(
+    `${process.env.API_URI}/validate-email-token`,
+    {
+      ida,
+      token,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
 };
 
 /**
@@ -115,10 +160,19 @@ export const sendPhoneValidation = async (
   ida: string,
   phone: string
 ): Promise<any> => {
-  return axios.post(`${process.env.API_URI}/phone-generate-code`, {
-    ida,
-    phone,
-  });
+  return axios.post(
+    `${process.env.API_URI}/phone-generate-code`,
+    {
+      ida,
+      phone,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
 };
 
 /**
@@ -131,8 +185,17 @@ export const sendPhoneValidationCode = async (
   ida: string,
   code: string
 ): Promise<any> => {
-  return axios.post(`${process.env.API_URI}/phone-validate-code`, {
-    ida,
-    code,
-  });
+  return axios.post(
+    `${process.env.API_URI}/phone-validate-code`,
+    {
+      ida,
+      code,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
 };
