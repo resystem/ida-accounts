@@ -5,9 +5,9 @@ import { Animation, Subtitle, Text, CodeInput } from '@resystem/design-system';
 
 import { phoneMask, removePhoneMask } from '../../../utils/inputValidations';
 import {
-  sendPhoneValidation,
-  sendPhoneValidationCode,
-} from '../../../controllers/user.registry.controller';
+  validateResetPasswordCode,
+  sendResetPassword,
+} from '../../../controllers/user.controller';
 
 import {
   Content,
@@ -26,7 +26,7 @@ interface InputState {
 
 interface Props {
   ida: string;
-  phone: InputState;
+  email: InputState;
   goToStep: (newStep: number) => void;
   nextStep: () => void;
 }
@@ -37,37 +37,37 @@ const inputTextValidation = (props: InputState): boolean => {
 
 const MessageTitle = (sentTime: number): JSX.Element => {
   if (sentTime < 1) {
-    return <Subtitle type="h3">SMS enviado!</Subtitle>;
+    return <Subtitle type="h3">E-mail enviado!</Subtitle>;
   }
   return (
     <Subtitle type="h3" className="text-success">
-      SMS reenviado!
+      E-mail reenviado!
     </Subtitle>
   );
 };
 
-const MessageSubtitle = (sentTime: number, phone: string): JSX.Element => {
+const MessageSubtitle = (sentTime: number, email: string): JSX.Element => {
   if (sentTime < 2) {
     return (
       <>
         <Paragraph className="text-left">
           Insira o código enviado para
         </Paragraph>
-        <Paragraph className="text-left">{phone}</Paragraph>
+        <Paragraph className="text-left">{email}</Paragraph>
       </>
     );
   }
   return (
     <>
-      <Paragraph className="text-left">Seu nº é {phone} ?</Paragraph>
+      <Paragraph className="text-left">Seu e-mail é {email} ?</Paragraph>
       <Paragraph className="text-left">Se não for, volte p/ corrigir</Paragraph>
     </>
   );
 };
 
-const SendSmsCodeValidation: React.FC<Props> = ({
+const SendEmailCodeValidation: React.FC<Props> = ({
   ida,
-  phone,
+  email,
   goToStep,
   nextStep,
 }) => {
@@ -80,15 +80,15 @@ const SendSmsCodeValidation: React.FC<Props> = ({
 
   const handleValidateCode = (newCode: string) => {
     if (newCode.length === codeSize) {
-      sendPhoneValidationCode(ida, newCode).then((r) => {
+      validateResetPasswordCode({ code: newCode }).then((r) => {
         console.log('response ', r);
-        if (r.data) {
-          console.log('data ', r.data);
+        if (r.token) {
+          console.log('data ', r.token);
           setCode(() => ({ value: newCode, error: '' }));
-          goToStep(7);
+          nextStep();
         } else if (r.error) {
           console.log('set code error ', r.error);
-          const errorCode = r.error?.code || '';
+          const errorCode = r.error || '';
           setCode((prev: InputState) => ({
             ...prev,
             error: errorCode,
@@ -100,15 +100,12 @@ const SendSmsCodeValidation: React.FC<Props> = ({
     }
   };
 
-  const handleSendCodeToPhone = (event: React.SyntheticEvent<EventTarget>) => {
+  const handleSendCodeToEmail = (event: React.SyntheticEvent<EventTarget>) => {
     event.preventDefault();
-    sendPhoneValidation(ida, `+55${removePhoneMask(phone.value)}`).then((r) => {
+    sendResetPassword({ input: email.value }).then((r) => {
       if (r.data) {
-        console.log('data ', r.data);
+        console.log('send email code data ', r.data);
         setSentTime((prev) => prev + 1);
-      } else if (r.error) {
-        const error = r.error.phone;
-        setCode((prev: InputState) => ({ ...prev, error }));
       }
     });
   };
@@ -117,7 +114,7 @@ const SendSmsCodeValidation: React.FC<Props> = ({
     <Wrapper>
       <Header>
         {/* <IconButton icon="arrow_back_ios" /> */}
-        <div onClick={() => goToStep(2)}>
+        <div onClick={() => goToStep(5)}>
           <Text>Voltar</Text>
         </div>
       </Header>
@@ -126,7 +123,7 @@ const SendSmsCodeValidation: React.FC<Props> = ({
           <SpaceXXS />
           {MessageTitle(sentTime)}
           <SpaceXXS />
-          {MessageSubtitle(sentTime, phone.value)}
+          {MessageSubtitle(sentTime, email.value)}
           <Space />
           <CodeInput
             onChange={handleValidateCode}
@@ -135,7 +132,7 @@ const SendSmsCodeValidation: React.FC<Props> = ({
           />
           <Paragraph className="text-right">
             Não recebeu ?
-            <LindDecoration href="#" onClick={handleSendCodeToPhone}>
+            <LindDecoration href="#" onClick={handleSendCodeToEmail}>
               Reenviar código
             </LindDecoration>
           </Paragraph>
@@ -145,9 +142,9 @@ const SendSmsCodeValidation: React.FC<Props> = ({
   );
 };
 
-SendSmsCodeValidation.propTypes = {
+SendEmailCodeValidation.propTypes = {
   ida: PropTypes.string.isRequired,
-  phone: PropTypes.shape({
+  email: PropTypes.shape({
     value: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
   }).isRequired,
@@ -155,4 +152,4 @@ SendSmsCodeValidation.propTypes = {
   nextStep: PropTypes.func.isRequired,
 };
 
-export default SendSmsCodeValidation;
+export default SendEmailCodeValidation;

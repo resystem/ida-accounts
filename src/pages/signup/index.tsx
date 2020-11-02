@@ -16,9 +16,12 @@ import TermsOfUse from './components/TermsOfUse';
 import InputFields from './components/InputFields';
 import ChooseConfirmationMethod from './components/ChooseConfirmationMethod';
 import SendSmsCode from './components/SendSmsCode';
+import SendEmailCode from './components/SendEmailCode';
 import SendSmsCodeValidation from './components/SendSmsCodeValidation';
+import SendEmailCodeValidation from './components/SendEmailCodeValidation';
 import SendEmailConfirmation from './components/SendEmailConfirmation';
 import SendSmsEmail from './components/SendSmsEmail';
+import ConfirmationMessage from './components/ConfirmationMessage';
 
 interface InputState {
   value: string;
@@ -26,8 +29,12 @@ interface InputState {
 }
 
 const Signup: React.FC = () => {
-  const [step, setStep] = useState<number>(2);
+  const [step, setStep] = useState<number>(1);
   const [appName, setAppName] = useState<string>('');
+  const [email, setEmail] = useState<InputState>({
+    value: '',
+    error: '',
+  });
   const [username, setUsername] = useState<InputState>({
     value: '',
     error: '',
@@ -87,7 +94,7 @@ const Signup: React.FC = () => {
           nextStep={nextStep}
         />
       )}
-      {step === 5 && (
+      {/* {step === 5 && (
         <SendSmsEmail password={password.value} username={username.value} />
       )}
       {step === 6 && (
@@ -95,6 +102,29 @@ const Signup: React.FC = () => {
           goToStep={goToStep}
           ida={ida}
           previousStep={previousStep}
+        />
+      )} */}
+      {step === 5 && (
+        <SendEmailCode
+          email={email}
+          goToStep={goToStep}
+          ida={ida}
+          nextStep={nextStep}
+          setEmail={setEmail}
+        />
+      )}
+      {step === 6 && (
+        <SendEmailCodeValidation
+          email={email}
+          goToStep={goToStep}
+          ida={ida}
+          nextStep={nextStep}
+        />
+      )}
+      {step === 7 && (
+        <ConfirmationMessage
+          username={username.value}
+          password={password.value}
         />
       )}
     </Main>

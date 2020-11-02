@@ -10,8 +10,7 @@ import {
   TextInput,
 } from '@resystem/design-system';
 
-import { phoneMask, removePhoneMask } from '../../../utils/inputValidations';
-import { sendPhoneValidation } from '../../../controllers/user.registry.controller';
+import { emailValidation } from '../../../utils/inputValidations';
 import { sendResetPassword } from '../../../controllers/user.controller';
 
 import { Content, Footer, Header, Space, SpaceXXS, Wrapper } from '../styles';
@@ -20,8 +19,8 @@ interface Props {
   ida: string;
   goToStep: (newStep: number) => void;
   nextStep: () => void;
-  setPhone: (value: any) => void;
-  phone: InputState;
+  setEmail: (value: any) => void;
+  email: InputState;
 }
 
 interface InputState {
@@ -37,41 +36,39 @@ const SendSmsCode: React.FC<Props> = ({
   ida,
   goToStep,
   nextStep,
-  phone,
-  setPhone,
+  email,
+  setEmail,
 }) => {
   const [buttonEnable, setButtonEnable] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
-  const handlephoneChange = (value: string) => {
-    const error = '';
-    setPhone((prev: InputState) => ({
-      ...prev,
-      value: phoneMask(value),
-      error,
-    }));
+  const handleEmailChange = (value: string) => {
+    const error = emailValidation(value);
+    setEmail((prev) => ({ ...prev, value, error }));
   };
 
   const handleButtonClick = () => {
     setIsLoadingButton(true);
-    sendResetPassword({ input: `+55${removePhoneMask(phone.value)}`, ida })
+    sendResetPassword({ input: email.value, ida })
       .then((r) => {
         if (r.data) {
-          console.log('data ', r.data);
-          setPhone((prev: InputState) => ({ ...prev, error: '' }));
+          console.log('send email code data ', r.data);
+          setEmail((prev: InputState) => ({ ...prev, error: '' }));
           nextStep();
         } else if (r.error) {
           const error = r.error.code;
-          setPhone((prev: InputState) => ({ ...prev, error }));
+          setEmail((prev: InputState) => ({ ...prev, error }));
         }
       })
-      .finally(() => setIsLoadingButton(false));
+      .finally(() => {
+        setIsLoadingButton(false);
+      });
   };
 
   useEffect(() => {
     console.log('ida ', ida);
-    setButtonEnable(!inputTextValidation(phone));
-  }, [ida, phone]);
+    setButtonEnable(!inputTextValidation(email));
+  }, [ida, email]);
 
   return (
     <Wrapper>
@@ -84,14 +81,16 @@ const SendSmsCode: React.FC<Props> = ({
       <Animation>
         <Content>
           <SpaceXXS />
-          <Subtitle type="h3">Insira o seu celular para receber o SMS</Subtitle>
+          <Subtitle type="h3">
+            Insira o seu email para receber o código
+          </Subtitle>
           <Space />
           <TextInput
-            id="celular"
-            label="Celular"
-            value={phone.value}
-            error={phone.error}
-            onChange={(newValue: string) => handlephoneChange(newValue)}
+            id="email"
+            label="E-mail"
+            value={email.value}
+            error={email.error}
+            onChange={(newValue: string) => handleEmailChange(newValue)}
           />
         </Content>
       </Animation>
@@ -102,7 +101,7 @@ const SendSmsCode: React.FC<Props> = ({
             isLoading={isLoadingButton}
             onClick={handleButtonClick}
           >
-            Enviar SMS
+            Enviar email
           </Button>
         </div>
       </Footer>
@@ -114,11 +113,11 @@ SendSmsCode.propTypes = {
   ida: PropTypes.string.isRequired,
   goToStep: PropTypes.func.isRequired,
   nextStep: PropTypes.func.isRequired,
-  phone: PropTypes.shape({
+  email: PropTypes.shape({
     value: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
   }).isRequired,
-  setPhone: PropTypes.func.isRequired,
+  setEmail: PropTypes.func.isRequired,
 };
 
 export default SendSmsCode;

@@ -9,6 +9,7 @@ import UserCard from '../components/user-card/user-card';
 import { basicSignin } from '../controllers/user.controller';
 import { AppContext } from '../store';
 
+
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
 `;

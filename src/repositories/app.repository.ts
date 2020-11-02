@@ -10,9 +10,10 @@ interface VerifyData {
  * @param {object} data user information to be send with the request
  * @param {string} data.appId application id to be verify
  * @param {string} data.appToken application token to be used on verification
- * @returns {Pomise} request response 
+ * @returns {Pomise} request response
  */
 export const verify = ({ appId, appKey }: VerifyData) => {
+  console.log('api uri ', `${process.env.API_URI}/verify-app`);
   return axios.post(
     `${process.env.API_URI}/verify-app`,
     { appId, appKey },
@@ -21,6 +22,6 @@ export const verify = ({ appId, appKey }: VerifyData) => {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-    },
+    }
   );
 };

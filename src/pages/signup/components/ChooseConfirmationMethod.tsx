@@ -50,7 +50,7 @@ const ChooseConfirmationMethod: React.FC<Props> = ({ goToStep }) => {
         <IconButton icon="local_post_office">E-mail</IconButton> */}
           <IconContainer>
             <IconWrapper onClick={() => goToStep(3)}>SMS</IconWrapper>
-            <IconWrapper onClick={() => goToStep(6)}>E-mail</IconWrapper>
+            <IconWrapper onClick={() => goToStep(5)}>E-mail</IconWrapper>
           </IconContainer>
           <Space />
         </Content>

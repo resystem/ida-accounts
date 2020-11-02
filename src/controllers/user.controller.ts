@@ -1,10 +1,12 @@
 import { navigate } from '@reach/router';
+import { string } from 'prop-types';
 import { isEmail, isPhone } from '../utils/validations';
 import {
   signin as signinRepository,
   signup as signupRepository,
   verifyToken as verifyTokenRepository,
-  requestResetPassword,
+  requestResetPassword as resetPasswordRespository,
+  validateResetPasswordCode as validateResetPasswordCodeRepository,
   sendEmailValidation as sendEmailValidationRepository,
   sendEmailValidationToken as sendEmailValidationTokenRepository,
   sendPhoneValidation as sendPhoneValidationRepository,
@@ -12,6 +14,18 @@ import {
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
 import { saveUserOnLocalStorage } from '../utils/localStorage.util';
+
+interface GenericData<T> {
+  [key: string]: T | boolean | number;
+}
+interface GenericError {
+  [key: string]: string;
+}
+
+type GenericResponse<T> = {
+  data: GenericData<T> | null | undefined;
+  error: GenericError | null | undefined;
+};
 
 interface Errors {
   username?: string;
@@ -73,13 +87,13 @@ export const signin = async ({
     throw err;
   }
 
-
   if (signinResponse.data) {
     console.log(signinResponse);
     const { ida, token, username } = signinResponse.data;
     const stringifiedData = JSON.stringify({
       ida,
       token,
+      redirect: true,
     });
 
     saveUserOnLocalStorage({ ida, token, user: { username } });
@@ -124,59 +138,99 @@ export const basicSignin = async ({
     token,
   });
 
-
   console.log('has app source?', !!appSource);
   if (appSource) appSource.postMessage(stringifiedData, '*');
 };
 
-interface SendResetPasswordEmailParams {
-  email: string;
-  setEmailError(error: string): void;
+interface SendResetPasswordParams {
+  input: string;
+  ida?: string;
 }
 
-/**
- * function to send email password reset
- * @param {object} data user information to send email password reset
- * @param {string} data.email email
- *
- */
-export const sendResetPasswordEmail = async ({
-  email,
-  setEmailError,
-}: SendResetPasswordEmailParams) => {
-  const isValidEmail = isEmail(email);
-  if (!isValidEmail) {
-    setEmailError('Informe um e-mail válido');
-    return;
-  }
-  setEmailError('');
+export const sendResetPassword = async ({
+  input,
+  ida,
+}: SendResetPasswordParams): Promise<GenericResponse<string>> => {
+  const response: GenericResponse<string> = { data: null, error: null };
+  const userIDA = ida || '';
+  let promise;
   try {
-    await requestResetPassword(email);
+    promise = await resetPasswordRespository(input, userIDA);
   } catch (err) {
     console.log(err);
-    throw err;
+    const { error } = err.response.data;
+    if (error === 'reset-code/invalid-input') {
+      response.error = {
+        code: 'Código inválido',
+      };
+    }
+    // throw err;
+    return response;
   }
-  navigate('/forget-password/sent-email', { state: { email } });
+  response.data = {
+    status: promise.data.status,
+  };
+  return response;
 };
 
-interface SendResetPasswordSMSParams {
-  phone: string;
-  setValidPhone(isValid: boolean): void;
+type ValidateResetPasswordCodeParams = {
+  code: string;
+};
+
+interface ValidateResetPasswordCodeResponse {
+  error: string | null;
+  token: string | null;
 }
 
-export const sendResetPasswordSMS = async ({
-  phone,
-  setValidPhone,
-}: SendResetPasswordSMSParams) => {
-  const isValidPhone = isPhone(phone);
-  if (!phone) {
-    setValidPhone(isValidPhone);
-    return;
-  }
-  setValidPhone(isValidPhone);
+export const validateResetPasswordCode = async ({
+  code,
+}: ValidateResetPasswordCodeParams) => {
+  const response: ValidateResetPasswordCodeResponse = {
+    error: null,
+    token: null,
+  };
+  let promise = null;
   try {
-    await requestResetPassword(phone);
+    promise = await validateResetPasswordCodeRepository(code);
   } catch (err) {
+    const { error } = err.response.data;
+    if (error === 'user/not_found') {
+      response.error = 'Código inválido';
+    } else {
+      response.error = error;
+    }
+    return response;
     throw err;
   }
+  const { data } = promise;
+  response.token = data.token;
+  return response;
+};
+
+interface ResetPasswordParams {
+  token: string;
+  password: string;
+}
+
+interface ResetPasswordResponse {
+  error: string | null;
+  ida: string | null;
+}
+
+export const resetPassword = async ({
+  token,
+  password,
+}: ResetPasswordParams): Promise<ResetPasswordResponse> => {
+  const response: ResetPasswordResponse = { error: null, ida: null };
+  let promise = null;
+  try {
+    promise = await resetPasswordRespository(token, password);
+  } catch (err) {
+    const { error } = err.response.data;
+    response.error = error;
+    return response;
+  }
+  const { data } = promise;
+  response.ida = data.data.ida;
+  return response;
 };

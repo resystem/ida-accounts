@@ -8,6 +8,7 @@ import { AppContext } from '../store';
 import GlobalStyles from '../css/GlobalStyles';
 import Skeleton from './skeleton';
 import '../css/reset.css';
+import '../css/main.css';
 // import '@resystem/design-system/dist/main.css';
 
 const history = createHistory(window);
@@ -75,7 +76,6 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
 
   useEffect(() => {
     const { appKey, appId } = queryString.parse(history.location.search);
-
     verify({
       setAppName,
       setLoading,

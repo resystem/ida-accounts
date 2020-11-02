@@ -10,10 +10,6 @@ import { status, types } from '../utils/ida-error.util';
 interface GenericData<T> {
   [key: string]: T | boolean | number;
 }
-interface DataSignUp {
-  ida: string | null;
-  token: string;
-}
 interface GenericError {
   [key: string]: string;
 }
@@ -202,8 +198,8 @@ export const sendPhoneValidationCode = async (
 
   const { data } = promise;
   response.data = {
-    ida: data.data.ida,
-    phone: data.data.phone,
+    // ida: data.data.ida,
+    phone: data.phone,
   };
   return response;
 };
