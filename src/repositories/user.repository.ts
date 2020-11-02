@@ -186,7 +186,7 @@ export const sendPhoneValidationCode = async (
   code: string
 ): Promise<any> => {
   return axios.post(
-    `${process.env.API_URI}/phone-validate-code`,
+    `${process.env.API_URI}/validate-code`,
     {
       ida,
       code,
