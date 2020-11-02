@@ -11,6 +11,8 @@ import {
   sendEmailValidationToken as sendEmailValidationTokenRepository,
   sendPhoneValidation as sendPhoneValidationRepository,
   sendPhoneValidationCode as sendPhoneValidationCodeRepository,
+  requestCodeRepository,
+  validateCodeRepository,
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
 import { saveUserOnLocalStorage } from '../utils/localStorage.util';
@@ -240,5 +242,56 @@ export const resetPassword = async ({
   }
   const { data } = promise;
   response.ida = data.data.ida;
+  return response;
+};
+
+export const requestCode = async ({
+  input,
+  ida,
+}: SendResetPasswordParams): Promise<GenericResponse<string>> => {
+  const response: GenericResponse<string> = { data: null, error: null };
+  const userIDA = ida || '';
+  let promise;
+  try {
+    promise = await requestCodeRepository(input, userIDA);
+  } catch (err) {
+    console.log(err);
+    const { error } = err.response.data;
+    if (error === 'reset-code/invalid-input') {
+      response.error = {
+        code: 'Código inválido',
+      };
+    }
+    // throw err;
+    return response;
+  }
+  response.data = {
+    status: promise.data.status,
+  };
+  return response;
+};
+
+export const validateCode = async ({
+  code,
+}: ValidateResetPasswordCodeParams) => {
+  const response: ValidateResetPasswordCodeResponse = {
+    error: null,
+    token: null,
+  };
+  let promise = null;
+  try {
+    promise = await validateCodeRepository(code);
+  } catch (err) {
+    const { error } = err.response.data;
+    if (error === 'user/not_found') {
+      response.error = 'Código inválido';
+    } else {
+      response.error = error;
+    }
+    return response;
+    throw err;
+  }
+  const { data } = promise;
+  response.token = data.token;
   return response;
 };

@@ -12,6 +12,7 @@ import {
 import { AppContext } from '../../store';
 import { phoneMask, removePhoneMask } from '../../utils/inputValidations';
 import { sendPhoneValidation } from '../../controllers/user.registry.controller';
+import { requestCode } from '../../controllers/user.controller';
 import { Content, Footer, Header, Space, SpaceXXS, Wrapper } from './styles';
 
 interface Props {
@@ -53,7 +54,7 @@ const SendSmsCode: React.FC<Props> = ({
 
   const handleButtonClick = () => {
     setIsLoadingButton(true);
-    sendPhoneValidation(ida, `+55${removePhoneMask(phone.value)}`)
+    requestCode({ ida, input: `+55${removePhoneMask(phone.value)}` })
       .then((r) => {
         if (r.data) {
           setAuth(r.data);

@@ -11,7 +11,11 @@ import {
 } from '@resystem/design-system';
 
 import { emailValidation } from '../../utils/inputValidations';
-import { sendResetPassword } from '../../controllers/user.controller';
+import {
+  sendResetPassword,
+  validateCode,
+  requestCode,
+} from '../../controllers/user.controller';
 
 import { Content, Footer, Header, Space, SpaceXXS, Wrapper } from './styles';
 
@@ -49,7 +53,7 @@ const SendSmsCode: React.FC<Props> = ({
 
   const handleButtonClick = () => {
     setIsLoadingButton(true);
-    sendResetPassword({ input: email.value, ida })
+    requestCode({ input: email.value, ida })
       .then((r) => {
         if (r.data) {
           console.log('send email code data ', r.data);

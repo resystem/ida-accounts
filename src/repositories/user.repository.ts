@@ -206,3 +206,27 @@ export const sendPhoneValidationCode = async (
     }
   );
 };
+
+/**
+ * function for send code for phone or email input
+ * @param {string} ida user ida repesents the identity of the user
+ * @param {string} input represents either the user's phone or email
+ * @returns {Pomise} request response
+ */
+export const requestCodeRepository = async (input: string, ida: string) => {
+  return axios.post(`${process.env.API_URI}/request-code`, {
+    input,
+    ida,
+  });
+};
+
+/**
+ * function for validate the code sent by user
+ * @param {string} code code received by the user
+ * @returns {Pomise} request response
+ */
+export const validateCodeRepository = async (code: string) => {
+  return axios.post(`${process.env.API_URI}/validate-code`, {
+    code,
+  });
+};

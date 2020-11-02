@@ -6,6 +6,7 @@ import {
   sendPhoneValidationCode as sendPhoneValidationCodeRepository,
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
+import { requestCode } from './user.controller';
 
 interface GenericData<T> {
   [key: string]: T | boolean | number;
@@ -138,7 +139,7 @@ export const sendPhoneValidation = async (
   let promise;
   const response: GenericResponse<string> = { data: null, error: null };
   try {
-    promise = await sendPhoneValidationRepository(ida, phone);
+    promise = await requestCode(ida, phone);
   } catch (err) {
     const { error } = err.response.data;
 
