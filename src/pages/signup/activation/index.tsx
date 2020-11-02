@@ -33,7 +33,9 @@ interface IFailValidation {
   errorMessage: string;
 }
 
-const SuccessValidation = ({ appName }: ISuccessValidation) => {
+const SuccessValidation = () => {
+  const { auth, appName, appSource } = useContext(AppContext);
+
   return (
     <>
       <Subtitle type="h3">Seu cadastro foi confirmado</Subtitle>
@@ -44,7 +46,13 @@ const SuccessValidation = ({ appName }: ISuccessValidation) => {
       </Text>
       <Space />
       <ButtonWrapper>
-        <Button disabled={false} onClick={() => {}}>
+        <Button
+          disabled={false}
+          onClick={() => {
+            const stringifiedData = JSON.stringify(auth);
+            if (appSource) appSource.postMessage(stringifiedData, '*');
+          }}
+        >
           Continuar para {`${appName}`}
         </Button>
       </ButtonWrapper>

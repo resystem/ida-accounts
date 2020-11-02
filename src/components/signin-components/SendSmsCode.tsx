@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {
@@ -9,10 +9,9 @@ import {
   Text,
   TextInput,
 } from '@resystem/design-system';
-
+import { AppContext } from '../../store';
 import { phoneMask, removePhoneMask } from '../../utils/inputValidations';
 import { sendPhoneValidation } from '../../controllers/user.registry.controller';
-
 import { Content, Footer, Header, Space, SpaceXXS, Wrapper } from './styles';
 
 interface Props {
@@ -39,6 +38,7 @@ const SendSmsCode: React.FC<Props> = ({
   phone,
   setPhone,
 }) => {
+  const { setAuth } = useContext(AppContext);
   const [buttonEnable, setButtonEnable] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
 
@@ -56,7 +56,7 @@ const SendSmsCode: React.FC<Props> = ({
     sendPhoneValidation(ida, `+55${removePhoneMask(phone.value)}`)
       .then((r) => {
         if (r.data) {
-          console.log('data ', r.data);
+          setAuth(r.data);
           setPhone((prev: InputState) => ({ ...prev, error: '' }));
           nextStep();
         } else if (r.error) {
