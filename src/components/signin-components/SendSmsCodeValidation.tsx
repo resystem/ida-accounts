@@ -76,7 +76,7 @@ const SendSmsCodeValidation: React.FC<Props> = ({
     value: '',
     error: '',
   });
-  const codeSize = 6;
+  const codeSize = 4;
 
   const handleValidateCode = (newCode: string) => {
     if (newCode.length === codeSize) {
