@@ -30,9 +30,13 @@ interface ListenerParams {
 const Provider = ({ children }: Props) => {
   const [appSource, setAppSource] = useState<any>(null);
   const [appName, setAppName] = useState('');
+  const [credentials, setCrendentials] = useState<any>(null);
 
   return (
-    <AppContext.Provider value={{ appSource, appName, setAppSource, setAppName }}>
+    <AppContext.Provider value={{
+      credentials, setCrendentials, appSource, appName,
+      setAppSource, setAppName,
+    }}>
       {children}
     </AppContext.Provider>
   );

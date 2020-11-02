@@ -78,6 +78,8 @@ const IndexPage = () => {
       return;
     }
 
+    console.log(parsedLocalUsers);
+    
     setUsers(
       parsedLocalUsers.map(({ ida, token, user }: LocalUser) => ({
         id: ida,

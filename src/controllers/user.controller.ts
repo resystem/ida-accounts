@@ -1,5 +1,6 @@
 import { navigate } from '@reach/router';
 import { string } from 'prop-types';
+import { isEmail, isPhone } from '../utils/validations';
 import {
   signin as signinRepository,
   signup as signupRepository,
@@ -86,14 +87,16 @@ export const signin = async ({
     throw err;
   }
 
-  if (signinResponse.data.data) {
-    const { ida, token, user } = signinResponse.data.data;
+  if (signinResponse.data) {
+    console.log(signinResponse);
+    const { ida, token, username } = signinResponse.data;
     const stringifiedData = JSON.stringify({
       ida,
       token,
+      redirect: true,
     });
 
-    saveUserOnLocalStorage({ ida, token, user });
+    saveUserOnLocalStorage({ ida, token, user: { username } });
 
     if (appSource) appSource.postMessage(stringifiedData, '*');
   }
@@ -135,6 +138,7 @@ export const basicSignin = async ({
     token,
   });
 
+  console.log('has app source?', !!appSource);
   if (appSource) appSource.postMessage(stringifiedData, '*');
 };
 
@@ -225,7 +229,6 @@ export const resetPassword = async ({
     const { error } = err.response.data;
     response.error = error;
     return response;
-    throw err;
   }
   const { data } = promise;
   response.ida = data.data.ida;

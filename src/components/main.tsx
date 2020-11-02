@@ -72,7 +72,7 @@ interface QueryInterface {
  */
 const Layout: React.FC<Props> = ({ children }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { setAppName, setAppSource } = useContext(AppContext);
+  const { setAppName, setAppSource, setCrendentials } = useContext(AppContext);
 
   useEffect(() => {
     const { appKey, appId } = queryString.parse(history.location.search);
@@ -81,6 +81,7 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
       setLoading,
       appKey,
       appId,
+      setCrendentials,
     });
 
     window.addEventListener(
