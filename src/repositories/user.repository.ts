@@ -116,7 +116,8 @@ export const validateResetPasswordToken = async (token: string) => {
 export const sendEmailValidation = async (
   ida: string,
   email: string
-): Promise<any> => {
+  ): Promise<any> => {
+  console.log('email', email);
   return axios.post(
     `${process.env.API_URI}/send-email-validation`,
     {

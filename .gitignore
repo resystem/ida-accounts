@@ -118,3 +118,13 @@ amplifyconfiguration.json
 amplify-build-config.json
 amplify-gradle-config.json
 amplifytools.xcconfig
+
+
+# next build
+public/page-data
+public/*.json
+public/*.html
+public/*.webmanifest
+public/*.js
+public/*.js.map
+public/*.txt
