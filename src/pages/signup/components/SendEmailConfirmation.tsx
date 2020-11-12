@@ -189,6 +189,7 @@ const SendEmailConfirmation: React.FC<Props> = ({
   ida,
   previousStep,
 }) => {
+  console.log('ida', ida);
   const [internalStep, setInternalStep] = useState<number>(0);
   const [sentTime, setSentTime] = useState<number>(0);
   const [email, setEmail] = useState<InputState>({

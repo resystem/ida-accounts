@@ -112,9 +112,15 @@ amplify/backend/awscloudformation
 build/
 dist/
 node_modules/
+amplify/
 aws-exports.js
 awsconfiguration.json
 amplifyconfiguration.json
 amplify-build-config.json
 amplify-gradle-config.json
 amplifytools.xcconfig
+
+public/**/*
+!public/icons
+!public/static
+!public/favicon*.png
