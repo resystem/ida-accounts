@@ -6,6 +6,7 @@ import {
   sendPhoneValidationCode as sendPhoneValidationCodeRepository,
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
+import { requestCode } from './user.controller';
 
 interface GenericData<T> {
   [key: string]: T | boolean | number;
@@ -138,7 +139,7 @@ export const sendPhoneValidation = async (
   let promise;
   const response: GenericResponse<string> = { data: null, error: null };
   try {
-    promise = await sendPhoneValidationRepository(ida, phone);
+    promise = await requestCode(ida, phone);
   } catch (err) {
     const { error } = err.response.data;
 
@@ -198,8 +199,12 @@ export const sendPhoneValidationCode = async (
 
   const { data } = promise;
   response.data = {
-    // ida: data.data.ida,
+    ida: data.ida,
     phone: data.phone,
+    email: data.email,
+    usernamer: data.username,
+    token: data.token,
   };
+
   return response;
 };

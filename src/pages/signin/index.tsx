@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import {
@@ -8,9 +8,9 @@ import {
   Text,
   Button,
 } from '@resystem/design-system';
-import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
+import { AppContext } from '../../store';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -39,14 +39,10 @@ const Footer = styled.footer`
  * Component that containts signin index page
  */
 const Signin: React.FC = () => {
-  const [appName, setAppName] = useState<string>('');
-
-  useEffect(() => {
-    setAppName('SOM');
-  }, []);
+  const { appName } = useContext(AppContext);
 
   return (
-    <Main>
+    <>
       <SEO title="Signin" />
       <Wrapper>
         <Content>
@@ -59,7 +55,13 @@ const Signin: React.FC = () => {
             Agora utilizamos a IDa para autenticar seu login
           </Subtitle>
           <Space />
-          <ButtonText white small>
+          <ButtonText
+            white
+            small
+            onClick={() => {
+              navigate('/signup');
+            }}
+          >
             Ainda não tem conta? Cadastre-se!
           </ButtonText>
           <Space />
@@ -84,7 +86,7 @@ const Signin: React.FC = () => {
           </div>
         </Footer>
       </Wrapper>
-    </Main>
+    </>
   );
 };
 

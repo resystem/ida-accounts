@@ -13,9 +13,8 @@ interface VerifyData {
  * @returns {Pomise} request response
  */
 export const verify = ({ appId, appKey }: VerifyData) => {
-  console.log('api uri ', `${process.env.API_URI}/verify-app`);
   return axios.post(
-    `${process.env.API_URI}/verify-app`,
+    `${process.env.GATSBY_API_URI}/verify-app`,
     { appId, appKey },
     {
       headers: {

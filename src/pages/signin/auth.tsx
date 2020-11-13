@@ -8,7 +8,6 @@ import {
   Button,
   TextInput,
 } from '@resystem/design-system';
-import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import { AppContext } from '../../store';
@@ -78,7 +77,8 @@ interface EventInterface {
  * Component that containts signin index page
  */
 const Auth = ({ location }: Props) => {
-  const { appName, appSource } = useContext(AppContext);
+  const { appName, appSource, socket, clientId } = useContext(AppContext);
+  console.log('Auth -> clientId', clientId);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -92,7 +92,7 @@ const Auth = ({ location }: Props) => {
   }, []);
 
   return (
-    <Main>
+    <>
       <SEO title="Auth" />
       <Wrapper>
         <Content>
@@ -109,6 +109,8 @@ const Auth = ({ location }: Props) => {
             onSubmit={(e: EventInterface) => {
               e.preventDefault();
               signin({
+                clientId,
+                socket,
                 username,
                 password,
                 setErrors,
@@ -151,8 +153,9 @@ const Auth = ({ location }: Props) => {
             <Button
               onClick={(e: EventInterface) => {
                 e.preventDefault();
-                console.log('here');
                 signin({
+                  clientId,
+                  socket,
                   username,
                   password,
                   setErrors,
@@ -167,7 +170,7 @@ const Auth = ({ location }: Props) => {
           </div>
         </Footer>
       </Wrapper>
-    </Main>
+    </>
   );
 };
 

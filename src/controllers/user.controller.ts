@@ -1,6 +1,6 @@
 import { navigate } from '@reach/router';
 import { string } from 'prop-types';
-import { isEmail, isPhone } from '../utils/validations';
+import { isEmail, isPhone } from '../utils/inputValidations';
 import {
   signin as signinRepository,
   signup as signupRepository,
@@ -11,6 +11,8 @@ import {
   sendEmailValidationToken as sendEmailValidationTokenRepository,
   sendPhoneValidation as sendPhoneValidationRepository,
   sendPhoneValidationCode as sendPhoneValidationCodeRepository,
+  requestCodeRepository,
+  validateCodeRepository,
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
 import { saveUserOnLocalStorage } from '../utils/localStorage.util';
@@ -38,6 +40,8 @@ interface UserLogin {
 }
 interface SigninParams extends UserLogin {
   appSource: any;
+  socket: any;
+  clientId: String,
   setErrors(error: Errors): void;
   setLoading(status: boolean): void;
 }
@@ -57,6 +61,8 @@ interface UserLocalStorage {
  * @param {string} data.appSource parent Window object
  */
 export const signin = async ({
+  socket,
+  clientId,
   username,
   password,
   setErrors,
@@ -68,7 +74,9 @@ export const signin = async ({
   let signinResponse;
   try {
     signinResponse = await signinRepository({ username, password });
+    console.log('signinResponse', signinResponse);
   } catch (err) {
+    console.log('err', err);
     if (err.response && err.response.data && err.response.data.error) {
       const { error } = err.response.data;
       switch (error) {
@@ -88,17 +96,20 @@ export const signin = async ({
   }
 
   if (signinResponse.data) {
-    console.log(signinResponse);
-    const { ida, token, username } = signinResponse.data;
-    const stringifiedData = JSON.stringify({
+    const { ida, token, username, phone, email } = signinResponse.data;
+    console.log('ida, token, username,', ida, token, username,);
+    const fiedData = {
+      username,
       ida,
       token,
       redirect: true,
-    });
+      phone,
+      email,
+    };
+    console.log('socket', socket);
+    socket.emit('update_auth', { user: fiedData, client_id: clientId })
 
     saveUserOnLocalStorage({ ida, token, user: { username } });
-
-    if (appSource) appSource.postMessage(stringifiedData, '*');
   }
 
   setErrors({});
@@ -108,8 +119,10 @@ export const signin = async ({
 interface BaisSigninParams {
   ida: string;
   token: string;
+  clientId: string;
   username: string;
   appSource: any;
+  socket: any;
 }
 
 /**
@@ -123,23 +136,31 @@ interface BaisSigninParams {
 export const basicSignin = async ({
   username,
   ida,
+  clientId,
   token,
   appSource,
+  socket,
 }: BaisSigninParams) => {
+  let response;
+
   try {
-    await verifyTokenRepository(token);
+    response = await verifyTokenRepository(token);
   } catch (err) {
     navigate('/signin/auth', { state: { username } });
     throw err;
   }
 
-  const stringifiedData = JSON.stringify({
+  const { email, phone } = response.data;
+  const fiedData = {
     ida,
     token,
-  });
+    username,
+    email,
+    phone,
+  };
 
   console.log('has app source?', !!appSource);
-  if (appSource) appSource.postMessage(stringifiedData, '*');
+  socket.emit('update_auth', { user: fiedData, client_id: clientId })
 };
 
 interface SendResetPasswordParams {
@@ -155,7 +176,7 @@ export const sendResetPassword = async ({
   const userIDA = ida || '';
   let promise;
   try {
-    promise = await resetPasswordRespository(input, userIDA);
+    promise = await resetPasswordRespository(input);
   } catch (err) {
     console.log(err);
     const { error } = err.response.data;
@@ -224,7 +245,7 @@ export const resetPassword = async ({
   const response: ResetPasswordResponse = { error: null, ida: null };
   let promise = null;
   try {
-    promise = await resetPasswordRespository(token, password);
+    promise = await resetPasswordRespository(token);
   } catch (err) {
     const { error } = err.response.data;
     response.error = error;
@@ -232,5 +253,56 @@ export const resetPassword = async ({
   }
   const { data } = promise;
   response.ida = data.data.ida;
+  return response;
+};
+
+export const requestCode = async ({
+  input,
+  ida,
+}: SendResetPasswordParams): Promise<GenericResponse<string>> => {
+  const response: GenericResponse<string> = { data: null, error: null };
+  const userIDA = ida || '';
+  let promise;
+  try {
+    promise = await requestCodeRepository(input, userIDA);
+  } catch (err) {
+    console.log(err);
+    const { error } = err.response.data;
+    if (error === 'reset-code/invalid-input') {
+      response.error = {
+        code: 'Código inválido',
+      };
+    }
+    // throw err;
+    return response;
+  }
+  response.data = {
+    status: promise.data.status,
+  };
+  return response;
+};
+
+export const validateCode = async ({
+  code,
+}: ValidateResetPasswordCodeParams) => {
+  const response: ValidateResetPasswordCodeResponse = {
+    error: null,
+    token: null,
+  };
+  let promise = null;
+  try {
+    promise = await validateCodeRepository(code);
+  } catch (err) {
+    const { error } = err.response.data;
+    if (error === 'user/not_found') {
+      response.error = 'Código inválido';
+    } else {
+      response.error = error;
+    }
+    return response;
+    throw err;
+  }
+  const { data } = promise;
+  response.token = data.token;
   return response;
 };

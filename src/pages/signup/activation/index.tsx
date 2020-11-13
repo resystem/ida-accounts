@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { useLocation } from '@reach/router';
 import queryString from 'query-string';
 
 import { Subtitle, Button, Text } from '@resystem/design-system';
-import Main from '../../../components/main';
 import SEO from '../../../components/seo';
 import Brand from '../../../components/brand/brand';
 
-import { Content, Header, Wrapper, Space } from '../styles';
+import { Content, Header, Wrapper, Space } from '../../../components/signin-components/styles';
 
 import { sendEmailValidationToken } from '../../../controllers/user.registry.controller';
+import { AppContext } from '../../../store';
 
 const ButtonWrapper = styled.div`
   width: 100%;
@@ -33,7 +33,9 @@ interface IFailValidation {
   errorMessage: string;
 }
 
-const SuccessValidation = ({ appName }: ISuccessValidation) => {
+const SuccessValidation = () => {
+  const { auth, appName, appSource, socket, clientId } = useContext(AppContext);
+
   return (
     <>
       <Subtitle type="h3">Seu cadastro foi confirmado</Subtitle>
@@ -44,7 +46,12 @@ const SuccessValidation = ({ appName }: ISuccessValidation) => {
       </Text>
       <Space />
       <ButtonWrapper>
-        <Button disabled={false} onClick={() => {}}>
+        <Button
+          disabled={false}
+          onClick={() => {
+            socket.emit('update_auth', { user: auth, client_id: clientId })
+          }}
+        >
           Continuar para {`${appName}`}
         </Button>
       </ButtonWrapper>
@@ -74,7 +81,7 @@ const FailValidation = ({ appName, errorMessage }: IFailValidation) => {
 };
 
 const Activation: React.FC = () => {
-  const [appName, setAppName] = useState<string>('');
+  const { appName } = useContext(AppContext);
   const location = useLocation();
   const [wasValidated, setWasValidated] = useState<boolean>(false);
   const [validationMessage, setValidationMessage] = useState<string>('');
@@ -90,11 +97,8 @@ const Activation: React.FC = () => {
   }
 
   useEffect(() => {
-    setAppName('SOM');
     const token = getToken(location.search);
     const ida = getIda(location.search);
-
-    console.log('ida token', ida, token);
 
     sendEmailValidationToken(ida, token).then((response) => {
       console.log('sendEmailValidationToken ', response);
@@ -108,7 +112,7 @@ const Activation: React.FC = () => {
   }, [location]);
 
   return (
-    <Main>
+    <>
       <SEO title="Activation" />
       <Wrapper>
         <Header>
@@ -116,7 +120,7 @@ const Activation: React.FC = () => {
         </Header>
         <Content>
           <Space />
-          {wasValidated && <SuccessValidation appName={appName} />}
+          {wasValidated && <SuccessValidation />}
           {!wasValidated && (
             <FailValidation
               appName={appName}
@@ -126,7 +130,7 @@ const Activation: React.FC = () => {
         </Content>
       </Wrapper>
       );
-    </Main>
+    </>
   );
 };
 

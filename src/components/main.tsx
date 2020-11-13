@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useContext, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { createHistory } from '@reach/router';
 import queryString from 'query-string';
+import socketClient from 'socket.io-client';
 import { defaultTheme } from '@resystem/design-system';
 import { verify } from '../controllers/app.controller';
 import { AppContext } from '../store';
@@ -11,7 +12,12 @@ import '../css/reset.css';
 import '../css/main.css';
 // import '@resystem/design-system/dist/main.css';
 
-const history = createHistory(window);
+import '@resystem/design-system/dist/main.css';
+
+let history: any = null;
+if (typeof window !== 'undefined') {
+  history = createHistory(window);
+}
 
 interface ContentProps {
   theme: {
@@ -24,6 +30,16 @@ interface ContentProps {
       md: string;
     };
   };
+}
+
+const initSocketConnection = async ({ setSocket, client_id }: Object) => {
+  console.log('client_id', client_id);
+  const socket = await socketClient(process.env.GATSBY_SOCKET_API, { transports: ['websocket'] });
+  // history
+  socket.emit('init', { client_type: 'ida', client_id  })
+  socket.on('error-listenner', (payload) => console.log('ERROR - payload: ', payload))
+  console.log('history', history.location);
+  setSocket(socket);
 }
 
 const MainContent = styled.main`
@@ -55,6 +71,7 @@ const Wrapper = styled.div`
 
 interface Props {
   children: ReactNode;
+  location: any;
 }
 
 interface ListenerParams {
@@ -71,26 +88,42 @@ interface QueryInterface {
  * @param {ReactNode} children component that to will be render inside to Layout
  */
 const Layout: React.FC<Props> = ({ children }: Props) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const { setAppName, setAppSource, setCrendentials } = useContext(AppContext);
+  const [loading, setLoading] = useState<boolean>(true);
+  const {
+    setAppName,
+    setAppSource,
+    setCrendentials,
+    socket,
+    clientId,
+    setClientId,
+    setSocket,
+  } = useContext(AppContext);
+  console.log('socket', socket);
 
   useEffect(() => {
-    const { appKey, appId } = queryString.parse(history.location.search);
-    verify({
-      setAppName,
-      setLoading,
-      appKey,
-      appId,
-      setCrendentials,
-    });
+    if (history) {
+      const { appKey, appId, client_id  } = queryString.parse(history.location.search);
 
-    window.addEventListener(
-      'message',
-      ({ source }: ListenerParams) => {
-        setAppSource(source);
-      },
-      false
-    );
+      verify({
+        setAppName,
+        setLoading,
+        appKey,
+        appId,
+        setCrendentials,
+        clientId: client_id,
+        setClientId,
+      });
+      
+      window.addEventListener(
+        'message',
+        ({ source }: ListenerParams) => {
+          setAppSource(source);
+        },
+        false
+      );
+      initSocketConnection({ setSocket, client_id });
+    }
+
   }, []);
 
   if (loading)

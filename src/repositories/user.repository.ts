@@ -13,8 +13,9 @@ interface SigninData {
  * @returns {Pomise} request response
  */
 export const signin = ({ username, password }: SigninData) => {
+  console.log('signin -> username, password', username, password);
   return axios.post(
-    `${process.env.API_URI}/login`,
+    `${process.env.GATSBY_API_URI}/login`,
     { username, password },
     {
       headers: {
@@ -38,10 +39,19 @@ interface SignupData {
  * @returns {Pomise} request response
  */
 export const signup = ({ username, password }: SignupData) => {
-  return axios.post(`${process.env.API_URI}/signup`, {
-    username,
-    password,
-  });
+  return axios.post(
+    `${process.env.GATSBY_API_URI}/signup`,
+    {
+      username,
+      password,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 };
 
 /**
@@ -51,7 +61,7 @@ export const signup = ({ username, password }: SignupData) => {
  */
 export const verifyToken = (token: string) =>
   axios.post(
-    `${process.env.API_URI}/validate-token`,
+    `${process.env.GATSBY_API_URI}/validate-token`,
     { token },
     {
       headers: {
@@ -61,17 +71,42 @@ export const verifyToken = (token: string) =>
     }
   );
 
-export const requestResetPassword = async (input: string, ida: string) => {
-  return axios.post(`${process.env.API_URI}/request-code`, {
-    input,
-    ida,
+export const validateResetPasswordCode = async (code: string) => {
+  return axios.post(`${process.env.GATSBY_API_URI}/validate-code`, {
+    code,
   });
 };
 
-export const validateResetPasswordCode = async (code: string) => {
-  return axios.post(`${process.env.API_URI}/validate-code`, {
-    code,
-  });
+export const requestResetPassword = async (input: string) => {
+  // ida: string
+  console.log('input', input);
+  return axios.post(
+    `${process.env.GATSBY_API_URI}/request-code`,
+    {
+      input, // ida
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+};
+
+export const validateResetPasswordToken = async (token: string) => {
+  return axios.post(
+    `${process.env.GATSBY_API_URI}/validate-reset-password-token`,
+    {
+      token,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 };
 
 /**
@@ -83,11 +118,21 @@ export const validateResetPasswordCode = async (code: string) => {
 export const sendEmailValidation = async (
   ida: string,
   email: string
-): Promise<any> => {
-  return axios.post(`${process.env.API_URI}/send-email-validation`, {
-    ida,
-    email,
-  });
+  ): Promise<any> => {
+  console.log('email', email);
+  return axios.post(
+    `${process.env.GATSBY_API_URI}/send-email-validation`,
+    {
+      ida,
+      email,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 };
 
 /**
@@ -100,10 +145,19 @@ export const sendEmailValidationToken = async (
   ida: string,
   token: string
 ): Promise<any> => {
-  return axios.post(`${process.env.API_URI}/validate-email-token`, {
-    ida,
-    token,
-  });
+  return axios.post(
+    `${process.env.GATSBY_API_URI}/validate-email-token`,
+    {
+      ida,
+      token,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 };
 
 /**
@@ -116,10 +170,19 @@ export const sendPhoneValidation = async (
   ida: string,
   phone: string
 ): Promise<any> => {
-  return axios.post(`${process.env.API_URI}/phone-generate-code`, {
-    ida,
-    phone,
-  });
+  return axios.post(
+    `${process.env.GATSBY_API_URI}/phone-generate-code`,
+    {
+      ida,
+      phone,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 };
 
 /**
@@ -132,8 +195,41 @@ export const sendPhoneValidationCode = async (
   ida: string,
   code: string
 ): Promise<any> => {
-  return axios.post(`${process.env.API_URI}/validate-code`, {
+  return axios.post(
+    `${process.env.GATSBY_API_URI}/validate-code`,
+    {
+      ida,
+      code,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+};
+
+/**
+ * function for send code for phone or email input
+ * @param {string} ida user ida repesents the identity of the user
+ * @param {string} input represents either the user's phone or email
+ * @returns {Pomise} request response
+ */
+export const requestCodeRepository = async (input: string, ida: string) => {
+  return axios.post(`${process.env.GATSBY_API_URI}/request-code`, {
+    input,
     ida,
+  });
+};
+
+/**
+ * function for validate the code sent by user
+ * @param {string} code code received by the user
+ * @returns {Pomise} request response
+ */
+export const validateCodeRepository = async (code: string) => {
+  return axios.post(`${process.env.GATSBY_API_URI}/validate-code`, {
     code,
   });
 };

@@ -5,9 +5,11 @@ import {
 interface VerifyInterface {
   appId: string;
   appKey: string;
+  clientId: string;
   setAppName(appName: string): void;
   setLoading(loading: boolean): void; 
   setCrendentials(credentials: any): void; 
+  setClientId(clientId: string): void; 
 } 
 
 /**
@@ -21,6 +23,8 @@ interface VerifyInterface {
 export const verify = async ({
   appId, appKey, setAppName, setLoading,
   setCrendentials,
+  setClientId,
+  clientId,
 }: VerifyInterface) => {
   setLoading(true);
   let response;
@@ -31,7 +35,8 @@ export const verify = async ({
     setLoading(false);
     throw err;
   }
-
+  
+  setClientId(clientId)
   setCrendentials({ appId, appKey });
   setAppName(response.data.name);
   setLoading(false);

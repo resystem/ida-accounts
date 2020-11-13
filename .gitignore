@@ -124,3 +124,12 @@ public/**/*
 !public/icons
 !public/static
 !public/favicon*.png
+
+# next build
+public/page-data
+public/*.json
+public/*.html
+public/*.webmanifest
+public/*.js
+public/*.js.map
+public/*.txt

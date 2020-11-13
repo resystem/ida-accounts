@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from "gatsby";
 import styled from 'styled-components';
 import { ButtonText, SmallText, Subtitle } from '@resystem/design-system';
-import Main from '../components/main';
 import SEO from '../components/seo';
 import Brand from '../components/brand/brand';
 import UserCard from '../components/user-card/user-card';
@@ -66,20 +65,20 @@ const renderCards = (users: User[], onClick: OnClickCallback) =>
  * Component that containts index page
  */
 const IndexPage = () => {
-  const { appName, appSource } = useContext(AppContext);
+  const { appName, appSource, clientId, socket } = useContext(AppContext);
   const [users, setUsers] = useState<User[]>([]);
+  console.log('IndexPage -> users', users);
 
   useEffect(() => {
     const localUsers = window.localStorage.getItem('ida@users') || '{}';
     const parsedLocalUsers = JSON.parse(localUsers).users || [];
+    console.log('IndexPage -> parsedLocalUsers', parsedLocalUsers);
 
     if (parsedLocalUsers.length < 1) {
-      navigate('/signin/auth');
+      navigate('/signin');
       return;
     }
 
-    console.log(parsedLocalUsers);
-    
     setUsers(
       parsedLocalUsers.map(({ ida, token, user }: LocalUser) => ({
         id: ida,
@@ -91,11 +90,11 @@ const IndexPage = () => {
   }, []);
 
   const handleClick = (token: string, id: string, username: string): void => {
-    basicSignin({ username, token, ida: id, appSource });
+    basicSignin({ username, token, ida: id, appSource, clientId, socket });
   };
 
   return (
-    <Main>
+    <>
       <SEO title="Authentication" />
       <Header>
         <Brand />
@@ -109,12 +108,12 @@ const IndexPage = () => {
         white
         small
         onClick={() => {
-          navigate('/signin/auth');
+          navigate('/signin/auth/');
         }}
       >
         Entrar com outra conta
       </ButtonText>
-    </Main>
+    </>
   );
 };
 

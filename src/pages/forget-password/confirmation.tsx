@@ -9,6 +9,8 @@ import {
   Text,
   Animation,
 } from '@resystem/design-system';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorMessage from '../../components/error-message/error-message';
 import Main from '../../components/main';
 import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
@@ -16,6 +18,8 @@ import {
   sendResetPassword,
   validateResetPasswordCode,
 } from '../../controllers/user.controller';
+import { removePhoneMask } from '../../utils/inputValidations';
+
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -29,6 +33,10 @@ const Wrapper = styled.div`
 `;
 
 const Content = styled.div``;
+
+const IconSucess = styled(CheckCircleIcon)`
+  color: #84eaa7;
+`;
 
 const Space = styled.div`
   margin-bottom: ${({ theme }) => theme.spacingStack.xs};
@@ -52,6 +60,11 @@ const Footer = styled.footer`
   align-items: flex-end;
 `;
 
+const SucessMessageContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 interface ThemeInterface {
   theme: {
     spacingStack: {
@@ -67,9 +80,70 @@ interface ISuccessMessageTitle {
 const SuccessMessageTitle = ({ email }: ISuccessMessageTitle) => {
   return (
     <>
-      <Subtitle type="h3" className="text-success">
-        {email ? 'Email' : 'SMS'} reenviado!
-      </Subtitle>
+      <SucessMessageContent>
+        <Subtitle type="h3" className="text-success">
+          {email ? 'Email' : 'SMS'} reenviado!
+        </Subtitle>
+        <IconSucess />
+      </SucessMessageContent>
+    </>
+  );
+};
+
+interface IConfirmantionForm {
+  resendCode: boolean;
+  email: string;
+  phone: string;
+  error: string;
+  onClick: (value: string) => void;
+  onChange: (value: string) => void;
+}
+
+const ConfirmantionForm = ({
+  email,
+  phone,
+  resendCode,
+  onClick,
+  onChange,
+  error,
+}: IConfirmantionForm) => {
+  return (
+    <>
+      <Content>
+        <ButtonText
+          underline={false}
+          white
+          onClick={() => {
+            navigate('/forget-password');
+          }}
+        >
+          Voltar
+        </ButtonText>
+        <Space />
+        {resendCode && <SuccessMessageTitle email={email} />}
+        {!resendCode && (
+          <Subtitle type="h3">
+            {email ? 'Email enviado!' : ' SMS enviado!'}
+          </Subtitle>
+        )}
+        <Space />
+        <Text>Insira o código enviado para {phone || email}</Text>
+        <Space />
+        <Form>
+          <div>
+            <CodeInput onChange={onChange} error={error} />
+          </div>
+        </Form>
+      </Content>
+      <Footer>
+        <div>
+          <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
+          <ButtonText white small onClick={onClick}>
+            Reenviar código
+          </ButtonText>
+        </div>
+        <SmallSpace />
+      </Footer>
     </>
   );
 };
@@ -78,15 +152,17 @@ const SuccessMessageTitle = ({ email }: ISuccessMessageTitle) => {
  * Component that containts Confirmation index page
  */
 const Confirmation = ({ location }) => {
-  const { phone, email } = location.state;
+  const phone = location.state ? location.state.phone : null;
+  const email = location.state ? location.state.email : null;
   const [code, setCode] = useState<string>('');
   const [resendCode, setResendCode] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<string>('');
+  const [isErrorPage, setIsErrorPage] = useState<boolean>(false);
 
   const codeSize = 4;
 
-  const handleClick = () => {
-    sendResetPassword({ input: email || phone });
+  const handleOnClick = () => {
+    sendResetPassword({ input: email || removePhoneMask(phone) });
     setResendCode(true);
   };
 
@@ -107,7 +183,11 @@ const Confirmation = ({ location }) => {
         }
       });
     }
-  }, [code]);
+
+    if (phone === null && email === null) {
+      setIsErrorPage(true);
+    }
+  }, [code, phone, email]);
 
   return (
     <Main>
@@ -118,44 +198,24 @@ const Confirmation = ({ location }) => {
             <Header>
               <Brand />
             </Header>
-            <ButtonText
-              underline={false}
-              white
-              onClick={() => {
-                navigate('/forget-password');
-              }}
-            >
-              Voltar
-            </ButtonText>
-            <Space />
-            {resendCode && <SuccessMessageTitle email={email} />}
-            {!resendCode && (
-              <Subtitle type="h3">
-                {email ? 'Email enviado!' : ' SMS enviado!'}
-              </Subtitle>
+            {isErrorPage && (
+              <ErrorMessage
+                onClick={() => {
+                  navigate('/forget-password');
+                }}
+              />
             )}
-            <Space />
-            <Text>Insira o código enviado para {phone || email}</Text>
-            <Space />
-            <Form>
-              <div>
-                <CodeInput
-                  onChange={handleOnChange}
-                  error={codeError}
-                  codeSize={4}
-                />
-              </div>
-            </Form>
+            {!isErrorPage && (
+              <ConfirmantionForm
+                email={email}
+                phone={phone}
+                onChange={handleOnChange}
+                onClick={handleOnClick}
+                resendCode={resendCode}
+                error={codeError}
+              />
+            )}
           </Content>
-          <Footer>
-            <div>
-              <SmallText style={{ display: 'inline' }}>Não recebeu? </SmallText>
-              <ButtonText white small onClick={handleClick}>
-                Reenviar código
-              </ButtonText>
-            </div>
-            <SmallSpace />
-          </Footer>
         </Animation>
       </Wrapper>
     </Main>
