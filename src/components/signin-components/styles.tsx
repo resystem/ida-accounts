@@ -39,6 +39,13 @@ export const IconWrapper = styled.div`
   border: 2px solid #fff;
   border-radius: 12px;
   cursor: pointer;
+  ${(props) => {
+    if (props.disabled) {
+      return `
+        opacity: 0.3;
+      `
+    }
+  }}
 `;
 
 export const IconContainer = styled.div`
