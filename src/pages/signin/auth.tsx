@@ -124,7 +124,7 @@ const Auth = ({ location }: Props) => {
               onChange={setUsername}
               autoComplete="off"
               error={errors.username}
-              label="Usuário ou e-mail"
+              label="Usuário"
             />
             <TextInput
               type="password"
