@@ -113,6 +113,16 @@ const IndexPage = () => {
       >
         Entrar com outra conta
       </ButtonText>
+      <ButtonText
+        white
+        small
+        customStyle="display: block; margin-top: 10px;"
+        onClick={() => {
+          navigate('/signup');
+        }}
+      >
+        cadastrar uma conta
+      </ButtonText>
     </>
   );
 };

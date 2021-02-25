@@ -23,7 +23,7 @@ const Content = styled.div``;
 
 const ContentMessage = styled.div`
   display: flex;
-  justify-contet: center;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   margin: 100px auto;
