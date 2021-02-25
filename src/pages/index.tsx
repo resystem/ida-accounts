@@ -121,7 +121,7 @@ const IndexPage = () => {
           navigate('/signup');
         }}
       >
-        cadastrar uma conta
+        Não é cadastrado? Cadastre-se
       </ButtonText>
     </>
   );

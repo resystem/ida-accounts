@@ -77,6 +77,21 @@ export const validateResetPasswordCode = async (code: string) => {
   });
 };
 
+export const sendNewPassword = async (token: string, password: string) => {
+  return axios.post(
+    `${process.env.GATSBY_API_URI}/reset-password`,
+    {
+      token, password,
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+};
+
 export const requestResetPassword = async (input: string) => {
   // ida: string
   console.log('input', input);

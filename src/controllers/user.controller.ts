@@ -13,6 +13,7 @@ import {
   sendPhoneValidationCode as sendPhoneValidationCodeRepository,
   requestCodeRepository,
   validateCodeRepository,
+  sendNewPassword,
 } from '../repositories/user.repository';
 import { status, types } from '../utils/ida-error.util';
 import { saveUserOnLocalStorage } from '../utils/localStorage.util';
@@ -245,7 +246,7 @@ export const resetPassword = async ({
   const response: ResetPasswordResponse = { error: null, ida: null };
   let promise = null;
   try {
-    promise = await resetPasswordRespository(token);
+    promise = await sendNewPassword(token, password);
   } catch (err) {
     const { error } = err.response.data;
     response.error = error;
