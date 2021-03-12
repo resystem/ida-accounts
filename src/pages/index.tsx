@@ -125,7 +125,7 @@ const IndexPage = () => {
       >
         Não é cadastrado? Cadastre-se
       </ButtonText>
-      <Loading idOpened={loading} />
+      <Loading isOpened={loading} />
     </>
   );
 };

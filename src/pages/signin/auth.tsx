@@ -12,6 +12,7 @@ import SEO from '../../components/seo';
 import Brand from '../../components/brand/brand';
 import { AppContext } from '../../store';
 import { signin } from '../../controllers/user.controller';
+import Loading from '../../components/loading/loading';
 
 const Header = styled.header`
   margin-bottom: ${({ theme }) => theme.spacingStack.xxs};
@@ -180,6 +181,7 @@ const Auth = ({ location }: Props) => {
             </Button>
           </div>
         </Footer>
+        <Loading isOpened={loading} />
       </Wrapper>
     </>
   );

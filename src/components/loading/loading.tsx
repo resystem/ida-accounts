@@ -3,11 +3,11 @@ import React from 'react';
 import { Wrapper, LoadingComponent } from './loading.syle';
 
 interface Props {
-  idOpened?: Boolean
+  isOpened?: Boolean
 }
 
-const Loading = ({ idOpened }: Props) => {
-    if (!idOpened) return null;
+const Loading = ({ isOpened }: Props) => {
+    if (!isOpened) return null;
   return (
     <Wrapper>
       <LoadingComponent src="https://storage-ida.s3-us-west-2.amazonaws.com/assets/ida/white-loading.svg" />
