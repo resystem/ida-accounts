@@ -10,7 +10,7 @@ const Loading = ({ idOpened }: Props) => {
     if (!idOpened) return null;
   return (
     <Wrapper>
-      <LoadingComponent src="/icons/white-loading.svg" />
+      <LoadingComponent src="https://storage-ida.s3-us-west-2.amazonaws.com/assets/ida/white-loading.svg" />
     </Wrapper>
   );
 };
