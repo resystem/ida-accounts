@@ -148,6 +148,17 @@ const Auth = ({ location }: Props) => {
               Esqueceu sua senha?
             </ButtonText>
           </div>
+          <div>
+            <ButtonText
+              white
+              small
+              onClick={() => {
+                navigate('/signup');
+              }}
+            >
+              Ainda não tem conta? Cadastre-se!
+            </ButtonText>
+          </div>
           <SmallSpace />
           <div>
             <Button

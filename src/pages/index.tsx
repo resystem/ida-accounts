@@ -5,6 +5,7 @@ import { ButtonText, SmallText, Subtitle } from '@resystem/design-system';
 import SEO from '../components/seo';
 import Brand from '../components/brand/brand';
 import UserCard from '../components/user-card/user-card';
+import Loading from '../components/loading/loading';
 import { basicSignin } from '../controllers/user.controller';
 import { AppContext } from '../store';
 
@@ -67,6 +68,7 @@ const renderCards = (users: User[], onClick: OnClickCallback) =>
 const IndexPage = () => {
   const { appName, appSource, clientId, socket } = useContext(AppContext);
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<Boolean>(false);
   console.log('IndexPage -> users', users);
 
   useEffect(() => {
@@ -123,6 +125,7 @@ const IndexPage = () => {
       >
         Não é cadastrado? Cadastre-se
       </ButtonText>
+      <Loading idOpened={true} />
     </>
   );
 };
