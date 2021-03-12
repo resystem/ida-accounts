@@ -92,7 +92,7 @@ const IndexPage = () => {
   }, []);
 
   const handleClick = (token: string, id: string, username: string): void => {
-    basicSignin({ username, token, ida: id, appSource, clientId, socket });
+    basicSignin({ username, token, ida: id, appSource, clientId, socket, setLoading });
   };
 
   return (
@@ -125,7 +125,7 @@ const IndexPage = () => {
       >
         Não é cadastrado? Cadastre-se
       </ButtonText>
-      <Loading idOpened={true} />
+      <Loading idOpened={loading} />
     </>
   );
 };

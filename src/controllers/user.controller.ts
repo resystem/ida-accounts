@@ -124,6 +124,7 @@ interface BaisSigninParams {
   username: string;
   appSource: any;
   socket: any;
+  setLoading: Function;
 }
 
 /**
@@ -141,16 +142,18 @@ export const basicSignin = async ({
   token,
   appSource,
   socket,
+  setLoading,
 }: BaisSigninParams) => {
   let response;
-
+  setLoading(true);
   try {
     response = await verifyTokenRepository(token);
   } catch (err) {
     navigate('/signin/auth', { state: { username } });
+    setLoading(false);
     throw err;
   }
-
+  
   const { email, phone } = response.data;
   const fiedData = {
     ida,
@@ -159,9 +162,10 @@ export const basicSignin = async ({
     email,
     phone,
   };
-
+  
   console.log('has app source?', !!appSource);
   socket.emit('update_auth', { user: fiedData, client_id: clientId })
+  setLoading(false);
 };
 
 interface SendResetPasswordParams {
