@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `Oasi`,
+    title: `IDA`,
     description: ``,
     author: `@resystem`,
   },
