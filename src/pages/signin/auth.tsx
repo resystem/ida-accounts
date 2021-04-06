@@ -100,7 +100,7 @@ const Auth = ({ location }: Props) => {
           <Header>
             <Brand />
           </Header>
-          <SmallText>{`Entre no ${appName} através IDa!`}</SmallText>
+          <SmallText>{`Entre no ${appName} através da IDa!`}</SmallText>
           <Space />
           <Subtitle type="h3">
             Agora utilizamos a IDa para autenticar seu login

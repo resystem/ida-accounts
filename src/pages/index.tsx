@@ -102,7 +102,7 @@ const IndexPage = () => {
         <Brand />
       </Header>
       <DescriptionWrapper>
-        <SmallText>{`Entre no ${appName} através IDa!`}</SmallText>
+        <SmallText>{`Entre no ${appName} através da IDa!`}</SmallText>
       </DescriptionWrapper>
       <Subtitle type="h3">Escolha uma conta para continuar</Subtitle>
       <UserList>{renderCards(users, handleClick)}</UserList>
